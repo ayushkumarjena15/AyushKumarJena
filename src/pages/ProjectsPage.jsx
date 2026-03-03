@@ -174,7 +174,7 @@ const ProjectsPage = () => {
                             <div className="hidden lg:flex flex-col items-center justify-center relative h-full order-2">
                                 <div className="w-[1px] h-full bg-white/10 absolute top-0 bottom-0" />
                                 <div className="w-8 h-8 rounded-full bg-[#1c1917] border-[3px] border-[#c2a07a] z-10 flex items-center justify-center overflow-hidden">
-                                    <div className="w-full h-full bg-[url('/profile.jpg')] bg-cover bg-center opacity-80" />
+                                    <div className="w-full h-full bg-[url('/profile.jpeg')] bg-cover bg-center opacity-80" />
                                 </div>
                                 {/* Highlight connecting line fragment - visually indicates progress */}
                                 <div className="w-[3px] rounded-full h-32 bg-gradient-to-b from-[#c2a07a] to-transparent absolute top-1/2 -translate-y-1/2" />

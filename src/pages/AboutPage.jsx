@@ -204,7 +204,7 @@ const AboutPage = () => {
                                 className="w-full h-full absolute inset-0 bg-surface border-white/10"
                                 style={{ backfaceVisibility: 'hidden' }}
                             >
-                                <img src="/profile.jpg" className="w-full h-full object-cover" alt="Ayush Kumar Jena" />
+                                <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush Kumar Jena" />
                             </motion.div>
 
                             <motion.div
@@ -470,7 +470,7 @@ const AboutPage = () => {
                     >
                         <div className="flex items-center justify-center gap-6 mb-8">
                             <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center overflow-hidden">
-                                <img src="/profile.jpg" className="w-full h-full object-cover filter grayscale" alt="Profile" />
+                                <img src="/profile.jpeg" className="w-full h-full object-cover filter grayscale" alt="Profile" />
                             </div>
                             <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">
                                 Let's create <br /> something real.

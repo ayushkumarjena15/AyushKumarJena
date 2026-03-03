@@ -39,12 +39,12 @@ const BentoGrid = () => {
     const [activeTag, setActiveTag] = useState(0);
 
     const galleryItems = [
-        { id: 1, type: 'emoji', content: '📸', gradient: 'from-blue-600/20 to-indigo-600/20' },
-        { id: 2, type: 'emoji', content: '🚀', gradient: 'from-emerald-600/20 to-teal-600/20' },
-        { id: 3, type: 'emoji', content: '💡', gradient: 'from-orange-600/20 to-amber-600/20' },
-        { id: 4, type: 'emoji', content: '🎮', gradient: 'from-pink-600/20 to-rose-600/20' },
+        { id: 1, type: 'image', content: '/profile.jpeg', gradient: 'from-accent1/20 to-accent1/5' },
+        { id: 2, type: 'image', content: '/gallery/sphere.jpg', gradient: 'from-blue-600/20 to-indigo-600/10' },
+        { id: 3, type: 'image', content: '/gallery/torus.jpg', gradient: 'from-blue-700/20 to-indigo-800/10' },
+        { id: 4, type: 'image', content: '/gallery/geometric.jpg', gradient: 'from-stone-600/20 to-stone-900/10' },
         { id: 5, type: 'emoji', content: '💻', gradient: 'from-purple-600/20 to-fuchsia-600/20' },
-        { id: 6, type: 'emoji', content: '🎨', gradient: 'from-cyan-600/20 to-blue-600/20' },
+        { id: 6, type: 'emoji', content: '💡', gradient: 'from-orange-600/20 to-amber-600/20' },
     ];
 
     const dragRef = useRef(null);
@@ -60,23 +60,24 @@ const BentoGrid = () => {
     const containerRef = useRef(null);
 
     // Track the width of a single set of items to handle looping
-    const setWidth = 432;
+    // 6 items * (140px + 12px gap) = 912px
+    const setWidth = 912;
 
     useAnimationFrame((t, delta) => {
         // Persistent auto-scroll
         const currentX = x.get();
-        x.set(currentX - 0.5); // Slow crawl
+        x.set(currentX - 0.6); // Slightly faster crawl for better feel
 
         if (currentX > 0) {
             x.set(currentX - setWidth);
-        } else if (currentX < -setWidth * 2) {
+        } else if (currentX < -setWidth) {
             x.set(currentX + setWidth);
         }
     });
 
     useEffect(() => {
-        // Start in the middle set
-        x.set(-setWidth);
+        // Start with a slight offset to center the items better
+        x.set(0);
     }, []);
 
     useEffect(() => {
@@ -113,10 +114,11 @@ const BentoGrid = () => {
 
                     {/* Draggable Photo Gallery - Circular Loop with 3D Animation */}
                     <div className="mt-8 relative" style={{ perspective: '1200px' }}>
-                        <div className="overflow-visible" ref={containerRef}>
+                        <div className="overflow-hidden" ref={containerRef}>
                             <motion.div
                                 drag="x"
                                 style={{ x, skewX: skew }}
+                                dragConstraints={{ left: -setWidth * 2, right: setWidth }}
                                 className="flex gap-3 cursor-grab active:cursor-grabbing"
                             >
                                 {/* Triplicate items for seamless looping */}
@@ -413,18 +415,18 @@ const AnalogClock = () => {
 
 // Gallery Item with 3D effects
 const GalleryItem = ({ item, containerX, index }) => {
-    const itemWidth = 138; // 33% of setWidth approx
+    const itemWidth = 140;
     const gap = 12;
     const offset = index * (itemWidth + gap);
 
-    // Calculate relative position to container center
+    // Calculate relative position to container center (approx 450/2 = 225)
     const relativeX = useTransform(containerX, (val) => val + offset + itemWidth / 2);
 
     // 3D rotation based on position
     const rotateY = useTransform(relativeX, [0, 450], [15, -15]);
     const z = useTransform(relativeX, [0, 225, 450], [-100, 0, -100]);
     const scale = useTransform(relativeX, [0, 225, 450], [0.85, 1.05, 0.85]);
-    const opacity = useTransform(relativeX, [0, 50, 400, 450], [0.1, 1, 1, 0.1]);
+    const opacity = useTransform(relativeX, [-100, 50, 400, 550], [0.1, 1, 1, 0.1]);
 
     return (
         <motion.div
@@ -435,15 +437,25 @@ const GalleryItem = ({ item, containerX, index }) => {
                 opacity,
                 background: `linear-gradient(to bottom right, rgba(255,255,255,0.05), rgba(255,255,255,0.01))`
             }}
-            className="flex-shrink-0 w-[calc(33.33%-0.5rem)] aspect-[3/4] rounded-2xl border border-white/5 flex items-center justify-center overflow-hidden hover:border-white/20 transition-all group relative preserve-3d"
+            className="flex-shrink-0 w-[140px] aspect-[3/4] rounded-2xl border border-white/5 flex items-center justify-center overflow-hidden hover:border-white/20 transition-all group relative preserve-3d"
         >
             <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-20 group-hover:opacity-60 transition-opacity duration-500`} />
-            <motion.span
-                className="text-4xl z-10 filter grayscale group-hover:grayscale-0 transition-all transform group-hover:scale-125 duration-700"
-                style={{ rotateY: useTransform(rotateY, (r) => -r) }} // Counter-rotate text for readability
-            >
-                {item.content}
-            </motion.span>
+
+            {item.type === 'image' ? (
+                <motion.img
+                    src={item.content}
+                    alt="Gallery item"
+                    className="w-full h-full object-cover z-10 transition-all duration-700 scale-110 group-hover:scale-100"
+                    style={{ rotateY: useTransform(rotateY, (r) => -r * 0.5) }} // Subtle parallax
+                />
+            ) : (
+                <motion.span
+                    className="text-4xl z-10 transition-all transform group-hover:scale-125 duration-700"
+                    style={{ rotateY: useTransform(rotateY, (r) => -r) }} // Counter-rotate text for readability
+                >
+                    {item.content}
+                </motion.span>
+            )}
 
             {/* Glossy shine effect */}
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
