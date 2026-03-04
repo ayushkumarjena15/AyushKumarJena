@@ -43,8 +43,8 @@ const BentoGrid = () => {
         { id: 2, type: 'image', content: '/gallery/sphere.jpg', gradient: 'from-blue-600/20 to-indigo-600/10' },
         { id: 3, type: 'image', content: '/gallery/torus.jpg', gradient: 'from-blue-700/20 to-indigo-800/10' },
         { id: 4, type: 'image', content: '/gallery/geometric.jpg', gradient: 'from-stone-600/20 to-stone-900/10' },
-        { id: 5, type: 'emoji', content: '💻', gradient: 'from-purple-600/20 to-fuchsia-600/20' },
-        { id: 6, type: 'emoji', content: '💡', gradient: 'from-orange-600/20 to-amber-600/20' },
+        { id: 5, type: 'image', content: '/gallery/ai_face.jpg', gradient: 'from-purple-600/20 to-fuchsia-600/20' },
+        { id: 6, type: 'image', content: '/gallery/abstract_gold.jpg', gradient: 'from-orange-600/20 to-amber-600/20' },
     ];
 
     const dragRef = useRef(null);
@@ -158,14 +158,17 @@ const BentoGrid = () => {
 
                 {/* Card 2: Philosophy/Interfaces */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 flex flex-col justify-between min-h-[180px]"
+                    className="bento-card p-6 md:p-8 flex flex-col justify-between min-h-[180px] relative overflow-hidden group/card"
                     custom={1}
                     variants={cardVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                 >
-                    <div>
+                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 group-hover/card:opacity-30 transition-opacity duration-700">
+                        <img src="/gallery/ai_face.jpg" className="w-full h-full object-cover grayscale brightness-125" alt="" />
+                    </div>
+                    <div className="relative z-10">
                         <div className="flex items-center gap-2 text-secondary text-[10px] uppercase tracking-[0.3em] font-bold mb-3">
                             <Sparkles size={12} className="text-accent1" />
                             <span>Detail-Driven UI</span>
@@ -178,7 +181,7 @@ const BentoGrid = () => {
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mt-4">
+                    <div className="flex flex-wrap gap-2 mt-4 relative z-10">
                         {philosophyTags.map((tag, i) => (
                             <span
                                 key={tag}
@@ -192,7 +195,7 @@ const BentoGrid = () => {
                         ))}
                     </div>
 
-                    <div className="mt-4">
+                    <div className="mt-4 relative z-10">
                         <p className="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Philosophy ✦</p>
                         <p className="text-sm font-bold text-white mt-1">Micro-interactions</p>
                         <p className="text-xs text-secondary mt-1 leading-relaxed">
@@ -272,15 +275,18 @@ const BentoGrid = () => {
 
                 {/* Card 5: Founder Card */}
                 <motion.div
-                    className="bento-card md:col-span-2 p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start min-h-[180px]"
+                    className="bento-card md:col-span-2 p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start min-h-[180px] relative overflow-hidden group/card"
                     custom={4}
                     variants={cardVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                 >
+                    <div className="absolute inset-0 opacity-5 group-hover/card:opacity-10 transition-opacity duration-1000">
+                        <img src="/gallery/abstract_gold.jpg" className="w-full h-full object-cover" alt="" />
+                    </div>
                     {/* Globe Section */}
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-4 relative z-10">
                         <p className="text-[10px] text-green-400 uppercase tracking-[0.3em] font-bold">Available Globally</p>
                         <h3 className="text-xl font-heading font-bold text-white">
                             Adaptable across<br />time zones
@@ -289,7 +295,7 @@ const BentoGrid = () => {
                             {['🇬🇧 UK', '🇮🇳 India', '🇺🇸 USA'].map((zone, i) => (
                                 <span
                                     key={zone}
-                                    className={`px-4 py-2 rounded-full text-xs font-bold border transition-all ${i === 1
+                                    className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-500 ${i === 1
                                         ? 'bg-accent1/20 border-accent1/40 text-accent1'
                                         : 'border-white/10 text-secondary'
                                         }`}
@@ -301,7 +307,10 @@ const BentoGrid = () => {
                     </div>
 
                     {/* Founder Info */}
-                    <div className="flex-1 text-right space-y-3">
+                    <div className="flex-1 text-right space-y-3 relative z-10">
+                        <div className="flex justify-end mb-4">
+                            <div className="w-16 h-1 bg-accent1 rounded-full opacity-50" />
+                        </div>
                         <h3 className="text-2xl md:text-3xl font-heading font-black text-white">
                             Creator of <span className="text-accent1 font-serif italic text-glow">SkillTwin</span>
                         </h3>
@@ -337,8 +346,14 @@ const AnalogClock = () => {
     const [time, setTime] = useState(new Date());
 
     useEffect(() => {
-        const interval = setInterval(() => setTime(new Date()), 1000);
-        return () => clearInterval(interval);
+        // Update at 60fps for sweeping second hand
+        let frame;
+        const update = () => {
+            setTime(new Date());
+            frame = requestAnimationFrame(update);
+        };
+        frame = requestAnimationFrame(update);
+        return () => cancelAnimationFrame(frame);
     }, []);
 
     // IST offset
@@ -346,67 +361,85 @@ const AnalogClock = () => {
     const ist = new Date(utc + (5.5 * 3600000));
 
     const seconds = ist.getSeconds();
+    const ms = ist.getMilliseconds();
     const minutes = ist.getMinutes();
-    const hours = ist.getHours() % 12;
+    const hours = ist.getHours();
+    const date = ist.getDate();
 
-    const secondDeg = seconds * 6;
-    const minuteDeg = minutes * 6 + seconds * 0.1;
-    const hourDeg = hours * 30 + minutes * 0.5;
+    const secondDeg = (seconds + ms / 1000) * 6;
+    const minuteDeg = (minutes + seconds / 60) * 6;
+    const hourDeg = ((hours % 12) + minutes / 60) * 30;
 
     return (
-        <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-b from-[#111] to-[#0a0a0a] min-h-[200px]">
-            <div className="relative w-40 h-40 md:w-48 md:h-48">
-                {/* Watch face */}
-                <div className="absolute inset-0 rounded-full border-2 border-white/10 bg-[#0a0a0a]">
-                    {/* Hour markers */}
-                    {[...Array(12)].map((_, i) => (
+        <div className="relative w-full h-full flex items-center justify-center bg-[#080808] min-h-[220px] select-none">
+            {/* Outer Case / Bezel */}
+            <div className="relative w-44 h-44 md:w-52 md:h-52 rounded-full p-1 bg-gradient-to-br from-[#222] via-[#111] to-[#333] shadow-[0_20px_50px_rgba(0,0,0,0.8),inset_0_-2px_5px_rgba(255,255,255,0.1)]">
+
+                {/* Watch Face */}
+                <div className="relative w-full h-full rounded-full bg-[#0c0c0c] overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,1)] border border-white/5">
+
+                    {/* Radial Texture / Sunburst effect */}
+                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_#fff_0%,_transparent_70%)]" />
+
+                    {/* Minute Markers */}
+                    {[...Array(60)].map((_, i) => (
                         <div
                             key={i}
                             className="absolute w-full h-full"
-                            style={{ transform: `rotate(${i * 30}deg)` }}
+                            style={{ transform: `rotate(${i * 6}deg)` }}
                         >
-                            <div className={`absolute top-2 left-1/2 -translate-x-1/2 ${i % 3 === 0 ? 'w-0.5 h-3 bg-white/80' : 'w-px h-2 bg-white/30'}`} />
+                            <div className={`absolute top-1.5 left-1/2 -translate-x-1/2 ${i % 5 === 0 ? 'w-[2px] h-3 bg-white/40' : 'w-[1px] h-1.5 bg-white/10'}`} />
                         </div>
                     ))}
 
-                    {/* Hour numbers */}
-                    {[12, 3, 6, 9].map((num) => {
-                        const angle = (num * 30 - 90) * (Math.PI / 180);
-                        const radius = 32;
-                        const x = 50 + radius * Math.cos(angle);
-                        const y = 50 + radius * Math.sin(angle);
-                        return (
-                            <span
-                                key={num}
-                                className="absolute text-[10px] font-bold text-white/60"
-                                style={{
-                                    left: `${x}%`,
-                                    top: `${y}%`,
-                                    transform: 'translate(-50%, -50%)',
-                                }}
-                            >
-                                {num}
-                            </span>
-                        );
-                    })}
+                    {/* Date Window */}
+                    <div className="absolute right-[22%] top-1/2 -translate-y-1/2 w-7 h-6 bg-[#111] border border-white/10 rounded flex items-center justify-center shadow-inner">
+                        <span className="text-[10px] font-mono font-bold text-accent1">{date}</span>
+                    </div>
 
-                    {/* Hour hand */}
-                    <div
-                        className="absolute bottom-1/2 left-1/2 w-[3px] h-[28%] bg-white rounded-full origin-bottom -translate-x-1/2 transition-transform"
-                        style={{ transform: `translateX(-50%) rotate(${hourDeg}deg)` }}
+                    {/* Branding */}
+                    <div className="absolute top-[28%] left-1/2 -translate-x-1/2 text-center">
+                        <p className="text-[7px] font-black tracking-[0.3em] text-white/40 uppercase">Quartz</p>
+                    </div>
+                    <div className="absolute bottom-[28%] left-1/2 -translate-x-1/2 text-center">
+                        <p className="text-[6px] font-bold tracking-[0.1em] text-accent1/60 uppercase">Chronograph</p>
+                    </div>
+
+                    {/* Hour Hand */}
+                    <motion.div
+                        className="absolute bottom-1/2 left-1/2 w-[4px] h-[25%] bg-gradient-to-t from-white to-white/80 rounded-full origin-bottom z-20"
+                        animate={{ rotate: hourDeg }}
+                        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                        style={{ x: "-50%", boxShadow: '0 0 10px rgba(0,0,0,0.5)' }}
                     />
-                    {/* Minute hand */}
-                    <div
-                        className="absolute bottom-1/2 left-1/2 w-[2px] h-[36%] bg-white/80 rounded-full origin-bottom -translate-x-1/2 transition-transform"
-                        style={{ transform: `translateX(-50%) rotate(${minuteDeg}deg)` }}
+
+                    {/* Minute Hand */}
+                    <motion.div
+                        className="absolute bottom-1/2 left-1/2 w-[3px] h-[35%] bg-white/90 rounded-full origin-bottom z-30"
+                        animate={{ rotate: minuteDeg }}
+                        transition={{ type: "spring", stiffness: 50, damping: 20 }}
+                        style={{ x: "-50%", boxShadow: '0 0 10px rgba(0,0,0,0.5)' }}
                     />
-                    {/* Second hand */}
+
+                    {/* Second Hand (Sweeping) */}
                     <div
-                        className="absolute bottom-1/2 left-1/2 w-px h-[40%] bg-accent1 rounded-full origin-bottom -translate-x-1/2"
-                        style={{ transform: `translateX(-50%) rotate(${secondDeg}deg)` }}
-                    />
-                    {/* Center dot */}
-                    <div className="absolute top-1/2 left-1/2 w-2 h-2 bg-accent1 rounded-full -translate-x-1/2 -translate-y-1/2 z-10" />
+                        className="absolute bottom-1/2 left-1/2 w-[1.5px] h-[42%] bg-accent1 rounded-full origin-bottom z-40"
+                        style={{
+                            transform: `translateX(-50%) rotate(${secondDeg}deg)`,
+                            boxShadow: '0 0 5px rgba(194,160,122,0.3)'
+                        }}
+                    >
+                        {/* Counter-weight */}
+                        <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[1.5px] h-4 bg-accent1" />
+                    </div>
+
+                    {/* Center Pin / Cap */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#1a1a1a] rounded-full z-50 shadow-lg border border-white/20 flex items-center justify-center">
+                        <div className="w-1 h-1 bg-accent1 rounded-full" />
+                    </div>
+
+                    {/* Glass Reflection Overlay */}
+                    <div className="absolute inset-0 pointer-events-none opacity-30 bg-gradient-to-tr from-transparent via-white/5 to-white/10" />
                 </div>
             </div>
         </div>
