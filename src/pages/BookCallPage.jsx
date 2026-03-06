@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PhoneCall, MessageSquare, Clock, Video, Globe2, ChevronLeft, ChevronRight, Send } from 'lucide-react';
+import { PhoneCall, MessageSquare, Clock, Video, Globe2, ChevronLeft, ChevronRight, Send, CheckCircle2, Loader2 } from 'lucide-react';
+import { supabase } from '../supabaseClient';
 
 const CalendarUI = () => {
     // Generate dates for March 2026 starting on Sunday (March 1st is Sunday)
@@ -105,7 +106,63 @@ const CalendarUI = () => {
     );
 };
 
+
 const ContactFormUI = () => {
+    const [status, setStatus] = useState('idle'); // idle, loading, success, error
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setStatus('loading');
+
+        try {
+            const { error } = await supabase
+                .from('messages')
+                .insert([
+                    {
+                        name: formData.name || 'Anonymous',
+                        email: formData.email,
+                        message: formData.message,
+                    }
+                ]);
+
+            if (error) throw error;
+            setStatus('success');
+            setFormData({ name: '', email: '', message: '' });
+        } catch (error) {
+            console.error('Error sending message:', error.message);
+            setStatus('error');
+        }
+    };
+
+    if (status === 'success') {
+        return (
+            <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-2xl mx-auto mt-20 flex flex-col items-center text-center p-12 bg-[#0a0a0a] rounded-3xl border border-white/10"
+            >
+                <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6">
+                    <CheckCircle2 size={40} className="text-green-500" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-4">Message Sent!</h2>
+                <p className="text-white/60 mb-8 max-w-md">
+                    Thank you for reaching out. I've received your message and will get back to you as soon as possible.
+                </p>
+                <button
+                    onClick={() => setStatus('idle')}
+                    className="bg-white text-black font-bold px-8 py-3 rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                    Send Another
+                </button>
+            </motion.div>
+        );
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -118,13 +175,15 @@ const ContactFormUI = () => {
                 <p className="text-white/60">Have a question or want to work together? Drop me a message!</p>
             </div>
 
-            <form className="w-full flex flex-col gap-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
                 <div className="flex flex-col gap-2">
                     <label className="text-sm font-bold text-white/90 ml-1">Name <span className="text-white/40 font-normal">(optional)</span></label>
                     <input
                         type="text"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Your name"
-                        className="w-full bg-[#111] border border-white/5 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-white/20 transition-colors"
+                        className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-white/30 transition-all focus:ring-1 focus:ring-white/10"
                     />
                 </div>
 
@@ -132,30 +191,51 @@ const ContactFormUI = () => {
                     <label className="text-sm font-bold text-white/90 ml-1">Email <span className="text-red-500">*</span></label>
                     <input
                         type="email"
-                        placeholder="your@email.com"
                         required
-                        className="w-full bg-[#111] border border-white/5 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-white/20 transition-colors"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        placeholder="your@email.com"
+                        className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-white/30 transition-all focus:ring-1 focus:ring-white/10"
                     />
                 </div>
 
                 <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center ml-1">
                         <label className="text-sm font-bold text-white/90">Message <span className="text-red-500">*</span></label>
-                        <span className="text-xs text-white/30">0/1000</span>
+                        <span className={`text-xs ${formData.message.length > 950 ? 'text-red-400' : 'text-white/30'}`}>
+                            {formData.message.length}/1000
+                        </span>
                     </div>
                     <textarea
-                        placeholder="What would you like to discuss?"
                         required
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        placeholder="What would you like to discuss?"
                         rows={6}
-                        className="w-full bg-[#111] border border-white/5 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-white/20 transition-colors resize-none"
+                        maxLength={1000}
+                        className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-5 py-4 text-white placeholder-white/20 focus:outline-none focus:border-white/30 transition-all focus:ring-1 focus:ring-white/10 resize-none"
                     ></textarea>
                 </div>
 
+                {status === 'error' && (
+                    <p className="text-red-400 text-sm font-medium text-center">
+                        Something went wrong. Please try again or check your connection.
+                    </p>
+                )}
+
                 <button
                     type="submit"
-                    className="w-full bg-white text-black font-bold text-lg rounded-xl py-4 mt-4 flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors shadow-lg active:scale-[0.98]"
+                    disabled={status === 'loading'}
+                    className="w-full bg-white text-black font-bold text-lg rounded-xl py-4 mt-4 flex items-center justify-center gap-2 hover:bg-gray-200 transition-all shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
                 >
-                    <Send size={18} /> Send Message
+                    {status === 'loading' ? (
+                        <Loader2 size={22} className="animate-spin" />
+                    ) : (
+                        <>
+                            <Send size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                            Send Message
+                        </>
+                    )}
                 </button>
             </form>
         </motion.div>
