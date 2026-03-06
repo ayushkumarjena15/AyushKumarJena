@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 
 const skillRows = [
     ['ReactJS', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Motion', 'Sanity'],
@@ -17,24 +18,245 @@ const skillEmojis = {
     'Firebase': '🔥', 'Linux': '🐧',
 };
 
+/* ─── Realistic Wheel / Gear Animation ─── */
+const SpinningWheel = () => {
+    const cx = 150, cy = 150;
+    const gold = '#c2a07a';
+    const goldLight = '#d4b896';
+    const goldDim = '#8a7560';
+
+    // Generate gear teeth path
+    const gearTeeth = useMemo(() => {
+        const teeth = 24;
+        const outerR = 120;
+        const innerR = 110;
+        const points = [];
+        for (let i = 0; i < teeth; i++) {
+            const a1 = (i / teeth) * Math.PI * 2;
+            const a2 = ((i + 0.3) / teeth) * Math.PI * 2;
+            const a3 = ((i + 0.5) / teeth) * Math.PI * 2;
+            const a4 = ((i + 0.7) / teeth) * Math.PI * 2;
+            points.push(`${cx + Math.cos(a1) * innerR},${cy + Math.sin(a1) * innerR}`);
+            points.push(`${cx + Math.cos(a2) * outerR},${cy + Math.sin(a2) * outerR}`);
+            points.push(`${cx + Math.cos(a3) * outerR},${cy + Math.sin(a3) * outerR}`);
+            points.push(`${cx + Math.cos(a4) * innerR},${cy + Math.sin(a4) * innerR}`);
+        }
+        return `M ${points.join(' L ')} Z`;
+    }, []);
+
+    // Spokes
+    const spokeCount = 12;
+    const spokes = useMemo(() => {
+        return Array.from({ length: spokeCount }, (_, i) => {
+            const angle = (i / spokeCount) * Math.PI * 2;
+            return {
+                x1: cx + Math.cos(angle) * 22,
+                y1: cy + Math.sin(angle) * 22,
+                x2: cx + Math.cos(angle) * 100,
+                y2: cy + Math.sin(angle) * 100,
+            };
+        });
+    }, []);
+
+    // Small orbiting dots
+    const orbitDots = [
+        { r: 135, dur: 10, size: 2.5, delay: 0 },
+        { r: 135, dur: 10, size: 2, delay: 5 },
+        { r: 140, dur: 14, size: 1.5, delay: 2 },
+        { r: 145, dur: 18, size: 1.2, delay: 7 },
+    ];
+
+    return (
+        <svg viewBox="0 0 300 300" className="w-full h-full" style={{ overflow: 'visible' }}>
+            <defs>
+                <radialGradient id="wheelGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor={gold} stopOpacity="0.12" />
+                    <stop offset="70%" stopColor={gold} stopOpacity="0.04" />
+                    <stop offset="100%" stopColor={gold} stopOpacity="0" />
+                </radialGradient>
+                <filter id="goldGlow">
+                    <feGaussianBlur stdDeviation="3" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+                <filter id="softGlow">
+                    <feGaussianBlur stdDeviation="2" result="blur" />
+                    <feMerge>
+                        <feMergeNode in="blur" />
+                        <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                </filter>
+            </defs>
+
+            {/* Background radial glow */}
+            <circle cx={cx} cy={cy} r="148" fill="url(#wheelGlow)" />
+
+            {/* ── Outer gear ring (clockwise) ── */}
+            <motion.g
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+            >
+                <path
+                    d={gearTeeth}
+                    fill="none"
+                    stroke={gold}
+                    strokeWidth="1.5"
+                    opacity={0.5}
+                    filter="url(#softGlow)"
+                />
+            </motion.g>
+
+            {/* ── Outer rim ring ── */}
+            <motion.circle
+                cx={cx} cy={cy} r="105"
+                fill="none"
+                stroke={gold}
+                strokeWidth="1.2"
+                opacity={0.35}
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+            />
+
+            {/* ── Decorative dashed ring ── */}
+            <motion.circle
+                cx={cx} cy={cy} r="95"
+                fill="none"
+                stroke={goldDim}
+                strokeWidth="0.8"
+                strokeDasharray="4 8"
+                opacity={0.3}
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+            />
+
+            {/* ── Spokes (counter-clockwise) ── */}
+            <motion.g
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            >
+                {spokes.map((s, i) => (
+                    <line
+                        key={i}
+                        x1={s.x1} y1={s.y1}
+                        x2={s.x2} y2={s.y2}
+                        stroke={gold}
+                        strokeWidth={i % 3 === 0 ? '1.2' : '0.6'}
+                        opacity={i % 3 === 0 ? 0.4 : 0.18}
+                    />
+                ))}
+            </motion.g>
+
+            {/* ── Inner ring (clockwise, faster) ── */}
+            <motion.circle
+                cx={cx} cy={cy} r="70"
+                fill="none"
+                stroke={goldLight}
+                strokeWidth="0.8"
+                opacity={0.25}
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+            />
+
+            {/* ── Inner decorative ring with ticks ── */}
+            <motion.g
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
+            >
+                <circle cx={cx} cy={cy} r="55" fill="none" stroke={goldDim} strokeWidth="0.6" opacity={0.2} />
+                {Array.from({ length: 36 }, (_, i) => {
+                    const angle = (i / 36) * Math.PI * 2;
+                    const r1 = 52;
+                    const r2 = i % 3 === 0 ? 47 : 50;
+                    return (
+                        <line
+                            key={i}
+                            x1={cx + Math.cos(angle) * r1}
+                            y1={cy + Math.sin(angle) * r1}
+                            x2={cx + Math.cos(angle) * r2}
+                            y2={cy + Math.sin(angle) * r2}
+                            stroke={goldDim}
+                            strokeWidth={i % 3 === 0 ? '1' : '0.5'}
+                            opacity={i % 3 === 0 ? 0.35 : 0.15}
+                        />
+                    );
+                })}
+            </motion.g>
+
+            {/* ── Hub ring ── */}
+            <motion.circle
+                cx={cx} cy={cy} r="20"
+                fill="none"
+                stroke={gold}
+                strokeWidth="2"
+                opacity={0.5}
+                filter="url(#goldGlow)"
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+            />
+
+            {/* ── Center hub dot (pulsing) ── */}
+            <motion.circle
+                cx={cx} cy={cy} r="5"
+                fill={gold}
+                filter="url(#goldGlow)"
+                style={{ transformOrigin: `${cx}px ${cy}px` }}
+                animate={{
+                    scale: [1, 1.5, 1],
+                    opacity: [0.4, 0.8, 0.4],
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            />
+
+            {/* ── Orbiting particles ── */}
+            {orbitDots.map((dot, i) => (
+                <motion.circle
+                    key={i}
+                    r={dot.size}
+                    fill={i % 2 === 0 ? gold : goldLight}
+                    filter="url(#softGlow)"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 0.8, 0] }}
+                    transition={{
+                        duration: dot.dur * 0.4,
+                        repeat: Infinity,
+                        delay: dot.delay,
+                        ease: 'easeInOut',
+                    }}
+                >
+                    <animateMotion
+                        dur={`${dot.dur}s`}
+                        repeatCount="indefinite"
+                        begin={`${dot.delay}s`}
+                        path={`M ${cx + dot.r} ${cy} A ${dot.r} ${dot.r} 0 1 1 ${cx - dot.r} ${cy} A ${dot.r} ${dot.r} 0 1 1 ${cx + dot.r} ${cy}`}
+                    />
+                </motion.circle>
+            ))}
+        </svg>
+    );
+};
+
 const SkillsetSection = () => {
     return (
-        <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden">
-            {/* 3D Abstract visual at top */}
+        <section className="pt-16 pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden">
+            {/* Realistic Spinning Wheel Animation */}
             <motion.div
-                className="flex justify-center mb-12"
-                initial={{ opacity: 0, scale: 0.8 }}
+                className="flex justify-center mb-8"
+                initial={{ opacity: 0, scale: 0.7 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1 }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
             >
-                <div className="w-40 h-40 md:w-56 md:h-56 relative">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/5 to-transparent animate-spin-slow" />
-                    <div className="absolute inset-4 rounded-full bg-gradient-to-tl from-white/5 to-transparent animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '20s' }} />
-                    <div className="absolute inset-8 rounded-full bg-gradient-to-r from-white/5 to-transparent animate-spin-slow" style={{ animationDuration: '15s' }} />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-5xl md:text-7xl opacity-20">✺</div>
-                    </div>
+                <div className="w-48 h-48 md:w-64 md:h-64 relative">
+                    <SpinningWheel />
                 </div>
             </motion.div>
 
