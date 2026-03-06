@@ -7,11 +7,11 @@ const Footer = () => {
             <div className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 py-12">
                     {/* Brand Column */}
-                    <div className="lg:col-span-4 space-y-6">
-                        <Link to="/" className="text-3xl md:text-4xl font-black text-white tracking-[-0.04em] uppercase font-heading">
+                    <div className="lg:col-span-4 space-y-8">
+                        <Link to="/" className="text-[40px] font-black text-white tracking-tight uppercase font-heading block leading-none">
                             AYUSH
                         </Link>
-                        <p className="text-secondary font-light leading-relaxed text-sm max-w-xs font-serif italic">
+                        <p className="text-[#9ca3af] text-[15px] leading-[1.8] max-w-sm font-serif italic">
                             Building digital experiences that matter, one line of code at a time.
                             Crafting interfaces that feel alive, solving problems that make a difference,
                             and turning ideas into reality. Every pixel has a purpose. Every interaction tells a story.
@@ -19,43 +19,61 @@ const Footer = () => {
                     </div>
 
                     {/* Navigation Columns */}
-                    <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
-                        <div className="space-y-4">
-                            <h4 className="text-sm font-serif italic text-white">General</h4>
-                            <ul className="space-y-3 text-secondary text-sm">
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">
+                    <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 md:gap-4 lg:ml-12 pt-2 lg:pt-0">
+                        <div className="space-y-6">
+                            <h4 className="text-[18px] md:text-[20px] font-serif italic text-white tracking-wide">General</h4>
+                            <ul className="space-y-4 text-[#9ca3af] text-[15px] font-sans">
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
                                     <Link to="/">Home</Link>
                                 </li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Blogs</li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Guestbook</li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Uses</li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/links">Blogs</Link>
+                                </li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/guestbook">Guestbook</Link>
+                                </li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/uses">Uses</Link>
+                                </li>
                             </ul>
                         </div>
-                        <div className="space-y-4">
-                            <h4 className="text-sm font-serif italic text-white">About</h4>
-                            <ul className="space-y-3 text-secondary text-sm">
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">
+                        <div className="space-y-6">
+                            <h4 className="text-[18px] md:text-[20px] font-serif italic text-white tracking-wide">About</h4>
+                            <ul className="space-y-4 text-[#9ca3af] text-[15px] font-sans">
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
                                     <Link to="/about">About Me</Link>
                                 </li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
                                     <Link to="/projects">Projects</Link>
                                 </li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Contact</li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/book">Contact</Link>
+                                </li>
                             </ul>
                         </div>
-                        <div className="space-y-4">
-                            <h4 className="text-sm font-serif italic text-white">Startup</h4>
-                            <ul className="space-y-3 text-secondary text-sm">
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">SkillTwin</li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">D-Liver</li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Agri-Novation</li>
+                        <div className="space-y-6">
+                            <h4 className="text-[18px] md:text-[20px] font-serif italic text-white tracking-wide">Startup</h4>
+                            <ul className="space-y-4 text-[#9ca3af] text-[15px] font-sans">
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/projects">SkillTwin</Link>
+                                </li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/projects">D-Liver</Link>
+                                </li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/projects">Agri-Novation</Link>
+                                </li>
                             </ul>
                         </div>
-                        <div className="space-y-4">
-                            <h4 className="text-sm font-serif italic text-white">Legal</h4>
-                            <ul className="space-y-3 text-secondary text-sm">
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Privacy Policy</li>
-                                <li className="hover:text-accent1 transition-colors cursor-pointer">Terms & Conditions</li>
+                        <div className="space-y-6">
+                            <h4 className="text-[18px] md:text-[20px] font-serif italic text-white tracking-wide">Legal</h4>
+                            <ul className="space-y-4 text-[#9ca3af] text-[15px] font-sans">
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/privacy-policy">Privacy Policy</Link>
+                                </li>
+                                <li className="hover:text-accent1 transition-colors cursor-pointer block">
+                                    <Link to="/terms-of-use">Terms & Conditions</Link>
+                                </li>
                             </ul>
                         </div>
                     </div>

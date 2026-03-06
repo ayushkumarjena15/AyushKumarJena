@@ -5,7 +5,14 @@ import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import ProjectsPage from './pages/ProjectsPage';
+import LinksPage from './pages/LinksPage';
+import UsesPage from './pages/UsesPage';
+import GuestbookPage from './pages/GuestbookPage';
+import BookCallPage from './pages/BookCallPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfUsePage from './pages/TermsOfUsePage';
 import Footer from './components/Footer';
+import CommandPalette from './components/CommandPalette';
 
 function ScrollHandler() {
   const { pathname } = useLocation();
@@ -22,11 +29,18 @@ function App() {
     <div className="bg-background min-h-screen text-gray-200 font-sans selection:bg-primary/30">
       <ScrollHandler />
       <Navbar />
+      <CommandPalette />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/links" element={<LinksPage />} />
+          <Route path="/uses" element={<UsesPage />} />
+          <Route path="/guestbook" element={<GuestbookPage />} />
+          <Route path="/book" element={<BookCallPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-use" element={<TermsOfUsePage />} />
         </Routes>
       </AnimatePresence>
       <Footer />

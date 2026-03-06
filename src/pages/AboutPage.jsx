@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, ExternalLink, Music, PenTool, Layout, Box, Star, Users, Briefcase, GitBranch, GitCommit } from 'lucide-react';
 import ScrollIndicator from '../components/ScrollIndicator';
+import GitHubActivity from '../components/GitHubActivity';
 
 const AboutPage = () => {
     const [githubUser, setGithubUser] = useState(null);
@@ -460,6 +461,8 @@ const AboutPage = () => {
                     </div>
                 </section>
 
+                <GitHubActivity />
+
                 {/* Bottom Call to Action */}
                 <section className="relative h-[60vh] flex flex-col items-center justify-center overflow-hidden rounded-[3rem] border border-white/5 bg-surface/5 group">
                     <div className="absolute inset-0 hero-glow opacity-30 group-hover:opacity-50 transition-opacity duration-1000" />
@@ -470,7 +473,7 @@ const AboutPage = () => {
                     >
                         <div className="flex items-center justify-center gap-6 mb-8">
                             <div className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-xl border border-white/10 flex items-center justify-center overflow-hidden">
-                                <img src="/profile.jpeg" className="w-full h-full object-cover filter grayscale" alt="Profile" />
+                                <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Profile" />
                             </div>
                             <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">
                                 Let's create <br /> something real.

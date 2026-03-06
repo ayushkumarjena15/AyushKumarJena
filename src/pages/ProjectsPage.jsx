@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
+import GitHubActivity from '../components/GitHubActivity';
 
 const projects = [
     {
@@ -215,6 +216,8 @@ const ProjectsPage = () => {
                     </button>
                 </div>
             </section>
+
+            <GitHubActivity />
         </motion.main>
     );
 };
