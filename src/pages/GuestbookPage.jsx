@@ -112,6 +112,7 @@ const GuestbookPage = () => {
     const [avatarPreview, setAvatarPreview] = useState(null);
     const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
     const [isDraggingAvatar, setIsDraggingAvatar] = useState(false);
+    const [pendingAvatarFile, setPendingAvatarFile] = useState(null);
     const avatarInputRef = useRef(null);
 
     // Admin features
@@ -224,7 +225,7 @@ const GuestbookPage = () => {
         }
     };
 
-    const handleAvatarFile = useCallback(async (file) => {
+    const handleAvatarFile = useCallback((file) => {
         if (!file || !user) return;
         if (!file.type.startsWith('image/')) {
             alert('Please upload an image file (JPG, PNG, GIF, etc.)');
@@ -235,46 +236,11 @@ const GuestbookPage = () => {
             return;
         }
 
-        // Show local preview immediately
+        // Show local preview only, save file for later upload
         const reader = new FileReader();
         reader.onload = (e) => setAvatarPreview(e.target.result);
         reader.readAsDataURL(file);
-
-        // Upload to Supabase Storage
-        setIsUploadingAvatar(true);
-        try {
-            const fileExt = file.name.split('.').pop();
-            const filePath = `${user.id}/avatar.${fileExt}`;
-
-            // Remove old avatar if exists
-            await supabase.storage.from('avatars').remove([filePath]);
-
-            const { error: uploadError } = await supabase.storage
-                .from('avatars')
-                .upload(filePath, file, { upsert: true });
-
-            if (uploadError) throw uploadError;
-
-            const { data: urlData } = supabase.storage
-                .from('avatars')
-                .getPublicUrl(filePath);
-
-            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
-
-            // Update user metadata with new avatar URL
-            const { data: userData, error: updateError } = await supabase.auth.updateUser({
-                data: { avatar_url: publicUrl }
-            });
-            if (updateError) throw updateError;
-            setUser(userData.user);
-            setAvatarPreview(null); // Clear preview, use real URL now
-        } catch (error) {
-            console.error('Error uploading avatar:', error.message);
-            alert('Failed to upload avatar. Make sure you have created an "avatars" bucket in Supabase Storage.');
-            setAvatarPreview(null);
-        } finally {
-            setIsUploadingAvatar(false);
-        }
+        setPendingAvatarFile(file);
     }, [user]);
 
     const handleAvatarDrop = useCallback((e) => {
@@ -304,11 +270,34 @@ const GuestbookPage = () => {
                 full_name: profileData.full_name,
                 user_name: profileData.user_name,
             };
+
+            // Upload avatar if a new file was selected
+            if (pendingAvatarFile) {
+                const fileExt = pendingAvatarFile.name.split('.').pop();
+                const filePath = `${user.id}/avatar.${fileExt}`;
+
+                await supabase.storage.from('avatars').remove([filePath]);
+
+                const { error: uploadError } = await supabase.storage
+                    .from('avatars')
+                    .upload(filePath, pendingAvatarFile, { upsert: true });
+
+                if (uploadError) throw uploadError;
+
+                const { data: urlData } = supabase.storage
+                    .from('avatars')
+                    .getPublicUrl(filePath);
+
+                updates.avatar_url = urlData.publicUrl + '?t=' + Date.now();
+            }
+
             const { data, error } = await supabase.auth.updateUser({
                 data: updates
             });
             if (error) throw error;
             setUser(data.user);
+            setAvatarPreview(null);
+            setPendingAvatarFile(null);
             setIsProfileModalOpen(false);
         } catch (error) {
             console.error('Error updating profile:', error.message);
