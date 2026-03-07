@@ -6,6 +6,8 @@ const links = [
     { id: '02', name: 'X', url: 'https://x.com/Aksj_15' },
     { id: '03', name: 'LINKEDIN', url: 'https://linkedin.com/in/ayush-kumar-jena' },
     { id: '04', name: 'EMAIL', url: 'mailto:ahalyajena28@gmail.com' },
+    { id: '05', name: 'INSTAGRAM', url: 'https://instagram.com/ayushkumarjena15' },
+    { id: '06', name: 'LEETCODE', url: 'https://leetcode.com/u/ayushkumarjena15' },
 ];
 
 const containerVariants = {

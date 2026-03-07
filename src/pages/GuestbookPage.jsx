@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
@@ -109,6 +109,10 @@ const GuestbookPage = () => {
     const [profileData, setProfileData] = useState({ full_name: '', user_name: '' });
     const [isSavingProfile, setIsSavingProfile] = useState(false);
     const [deleteConfirmationId, setDeleteConfirmationId] = useState(null);
+    const [avatarPreview, setAvatarPreview] = useState(null);
+    const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+    const [isDraggingAvatar, setIsDraggingAvatar] = useState(false);
+    const avatarInputRef = useRef(null);
 
     // Admin features
     const isAdmin = user &&
@@ -219,6 +223,79 @@ const GuestbookPage = () => {
             setIsSubmitting(false);
         }
     };
+
+    const handleAvatarFile = useCallback(async (file) => {
+        if (!file || !user) return;
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file (JPG, PNG, GIF, etc.)');
+            return;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image must be smaller than 5MB.');
+            return;
+        }
+
+        // Show local preview immediately
+        const reader = new FileReader();
+        reader.onload = (e) => setAvatarPreview(e.target.result);
+        reader.readAsDataURL(file);
+
+        // Upload to Supabase Storage
+        setIsUploadingAvatar(true);
+        try {
+            const fileExt = file.name.split('.').pop();
+            const filePath = `${user.id}/avatar.${fileExt}`;
+
+            // Remove old avatar if exists
+            await supabase.storage.from('avatars').remove([filePath]);
+
+            const { error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(filePath, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            const { data: urlData } = supabase.storage
+                .from('avatars')
+                .getPublicUrl(filePath);
+
+            const publicUrl = urlData.publicUrl + '?t=' + Date.now();
+
+            // Update user metadata with new avatar URL
+            const { data: userData, error: updateError } = await supabase.auth.updateUser({
+                data: { avatar_url: publicUrl }
+            });
+            if (updateError) throw updateError;
+            setUser(userData.user);
+            setAvatarPreview(null); // Clear preview, use real URL now
+        } catch (error) {
+            console.error('Error uploading avatar:', error.message);
+            alert('Failed to upload avatar. Make sure you have created an "avatars" bucket in Supabase Storage.');
+            setAvatarPreview(null);
+        } finally {
+            setIsUploadingAvatar(false);
+        }
+    }, [user]);
+
+    const handleAvatarDrop = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingAvatar(false);
+        const file = e.dataTransfer?.files?.[0];
+        if (file) handleAvatarFile(file);
+    }, [handleAvatarFile]);
+
+    const handleAvatarDragOver = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingAvatar(true);
+    }, []);
+
+    const handleAvatarDragLeave = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingAvatar(false);
+    }, []);
 
     const saveProfile = async () => {
         setIsSavingProfile(true);
@@ -486,18 +563,42 @@ const GuestbookPage = () => {
 
                             {/* Avatar Section */}
                             <div className="flex flex-col items-center mb-10 mt-2">
-                                <div className="relative group cursor-pointer w-[120px] h-[120px] rounded-full border border-dashed border-white/20 flex items-center justify-center overflow-hidden hover:border-white/40 transition-colors">
+                                <div
+                                    className={`relative group cursor-pointer w-[120px] h-[120px] rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden transition-all duration-300 ${isDraggingAvatar ? 'border-[#2563eb] bg-[#2563eb]/10 scale-110' : 'border-white/20 hover:border-white/40'}`}
+                                    onClick={() => avatarInputRef.current?.click()}
+                                    onDrop={handleAvatarDrop}
+                                    onDragOver={handleAvatarDragOver}
+                                    onDragLeave={handleAvatarDragLeave}
+                                >
+                                    <input
+                                        ref={avatarInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) => { if (e.target.files?.[0]) handleAvatarFile(e.target.files[0]); }}
+                                    />
                                     <div className="absolute inset-0 bg-[#1a1a1a]"></div>
                                     <img
-                                        src={user?.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.id}&backgroundColor=transparent`}
+                                        src={avatarPreview || user?.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.id}&backgroundColor=transparent`}
                                         alt="Profile"
-                                        className="absolute inset-0 w-full h-full object-cover rounded-full group-hover:opacity-30 transition-opacity"
+                                        className={`absolute inset-0 w-full h-full object-cover rounded-full transition-opacity ${isDraggingAvatar ? 'opacity-20' : 'group-hover:opacity-30'}`}
                                     />
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Upload size={20} className="text-white mb-2" />
+                                    <div className={`absolute inset-0 flex flex-col items-center justify-center transition-opacity ${isDraggingAvatar ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}>
+                                        {isUploadingAvatar ? (
+                                            <Loader2 size={24} className="text-white animate-spin" />
+                                        ) : isDraggingAvatar ? (
+                                            <>
+                                                <Upload size={24} className="text-[#2563eb] mb-1" />
+                                                <span className="text-[#2563eb] text-[10px] font-bold">Drop here</span>
+                                            </>
+                                        ) : (
+                                            <Upload size={20} className="text-white mb-2" />
+                                        )}
                                     </div>
                                 </div>
-                                <p className="text-white/40 text-[11px] mt-4 font-medium tracking-wide">Drag & drop or click to upload</p>
+                                <p className="text-white/40 text-[11px] mt-4 font-medium tracking-wide">
+                                    {isUploadingAvatar ? 'Uploading...' : 'Drag & drop or click to upload'}
+                                </p>
                             </div>
 
                             {/* Inputs */}
