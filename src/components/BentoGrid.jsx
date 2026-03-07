@@ -445,7 +445,7 @@ const BentoGrid = () => {
                     {/* Connect Button */}
                     <a
                         href="mailto:ahalyajena28@gmail.com"
-                        className="mt-6 w-full py-4 border border-white/20 rounded-xl text-center text-xs font-bold uppercase tracking-[0.2em] text-white hover:bg-white hover:text-background transition-all duration-500 flex items-center justify-center gap-2"
+                        className="mt-6 w-full py-4 bg-white border border-white rounded-xl text-center text-xs font-bold uppercase tracking-[0.2em] text-background hover:bg-transparent hover:text-white transition-all duration-500 flex items-center justify-center gap-2"
                     >
                         Connect Now
                         <ArrowUpRight size={14} />
