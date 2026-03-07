@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, ArrowRight, Music, GitCommit, ExternalLink } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 const BehindCurtains = () => {
+    const [guestbookAvatars, setGuestbookAvatars] = useState([]);
     const [githubUser, setGithubUser] = useState(null);
     const [latestEvent, setLatestEvent] = useState(null);
 
@@ -22,6 +25,12 @@ const BehindCurtains = () => {
                 }
             })
             .catch(e => console.error(e));
+
+        const fetchAvatars = async () => {
+            const { data } = await supabase.from('guestbook').select('avatar_url').limit(3).order('created_at', { ascending: false });
+            if (data) setGuestbookAvatars(data.map(d => d.avatar_url).filter(Boolean));
+        };
+        fetchAvatars();
     }, []);
 
     const getTimeAgo = (dateString) => {
@@ -156,19 +165,27 @@ const BehindCurtains = () => {
                     <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5">
                         <div className="flex items-center gap-2">
                             <div className="flex -space-x-2">
-                                {['🧑‍💻', '👩‍💻', '👨‍💻'].map((emoji, i) => (
-                                    <div key={i} className="w-8 h-8 rounded-full bg-white/10 border-2 border-background flex items-center justify-center text-sm">
-                                        {emoji}
-                                    </div>
-                                ))}
+                                {guestbookAvatars.length > 0 ? (
+                                    guestbookAvatars.map((url, i) => (
+                                        <div key={i} className="w-8 h-8 rounded-full border-2 border-background overflow-hidden bg-[#1a1a1a]">
+                                            <img src={url} alt="Guest" className="w-full h-full object-cover" />
+                                        </div>
+                                    ))
+                                ) : (
+                                    ['🧑‍💻', '👩‍💻', '👨‍💻'].map((emoji, i) => (
+                                        <div key={i} className="w-8 h-8 rounded-full bg-white/10 border-2 border-background flex items-center justify-center text-[10px]">
+                                            {emoji}
+                                        </div>
+                                    ))
+                                )}
                             </div>
-                            <span className="text-xs text-secondary ml-2">Join others</span>
+                            <span className="text-[10px] text-secondary ml-2 uppercase tracking-widest font-bold">Join others</span>
                         </div>
 
-                        <button className="px-4 py-2 border border-white/20 rounded-lg text-xs font-bold text-white hover:bg-white hover:text-background transition-all duration-300 flex items-center gap-2">
+                        <Link to="/guestbook" className="px-5 py-2.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-accent1 transition-all duration-300 flex items-center gap-2 shadow-lg shadow-white/5">
                             Sign Guestbook
                             <ArrowRight size={12} />
-                        </button>
+                        </Link>
                     </div>
                 </motion.div>
 

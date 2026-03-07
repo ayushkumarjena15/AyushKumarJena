@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { Menu, X, Command, Download, Link2, Monitor, Book, Sun, Moon } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -46,17 +46,46 @@ const Navbar = () => {
     };
 
     useMotionValueEvent(scrollY, "change", (latest) => {
-        setIsVisible(true);
-        setIsScrolled(latest > 20);
+        const previous = scrollY.getPrevious();
+
+        // Always show at the top
+        if (latest < 50) {
+            setIsVisible(true);
+            setIsScrolled(false);
+            return;
+        }
+
+        setIsScrolled(true);
+
+        // Smart Logic: Hide on scroll down, show on scroll up
+        if (latest > previous) {
+            // Only hide if we've scrolled a bit to avoid jitter
+            if (latest > 150) setIsVisible(false);
+        } else {
+            setIsVisible(true);
+        }
     });
+
+    // Detect when scrolling stops to show the nav (User interaction convenience)
+    useEffect(() => {
+        let timeout;
+        const handleScroll = () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setIsVisible(true);
+            }, 1000); // Re-show nav after 1 second of no scrolling
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const isActive = (path) => location.pathname === path;
 
     return (
         <motion.nav
             initial={{ y: 0 }}
-            animate={{ y: isVisible ? 0 : -100 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            animate={{ y: isVisible ? 0 : -120 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="fixed top-0 left-0 right-0 z-50 pt-6 pb-4 pointer-events-none"
         >
             <div className={`max-w-7xl mx-auto px-6 flex ${isScrolled ? 'justify-center' : 'justify-between'} items-center pointer-events-auto`}>

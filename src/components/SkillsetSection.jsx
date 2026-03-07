@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { useMemo } from 'react';
+import { motion, useMotionValue, useAnimationFrame, useTransform, useScroll } from 'framer-motion';
+import { useMemo, useState } from 'react';
 import {
     SiReact, SiNextdotjs, SiTypescript, SiTailwindcss,
     SiGreensock, SiFramer, SiSanity, SiContentful,
@@ -11,6 +11,7 @@ import {
 } from 'react-icons/si';
 import { FaAws } from 'react-icons/fa';
 import { TbPaw } from 'react-icons/tb';
+import propeller from '../assets/propeller.png';
 
 const skillRows = [
     ['ReactJS', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Motion', 'Sanity'],
@@ -48,229 +49,29 @@ const skillIcons = {
     'Linux': { icon: SiLinux, color: '#FCC624' },
 };
 
-/* ─── Realistic Wheel / Gear Animation ─── */
+/* ── Realistic 3D Propeller Animation ── */
 const SpinningWheel = () => {
-    const cx = 150, cy = 150;
-    const gold = '#c2a07a';
-    const goldLight = '#d4b896';
-    const goldDim = '#8a7560';
-
-    // Generate gear teeth path
-    const gearTeeth = useMemo(() => {
-        const teeth = 24;
-        const outerR = 120;
-        const innerR = 110;
-        const points = [];
-        for (let i = 0; i < teeth; i++) {
-            const a1 = (i / teeth) * Math.PI * 2;
-            const a2 = ((i + 0.3) / teeth) * Math.PI * 2;
-            const a3 = ((i + 0.5) / teeth) * Math.PI * 2;
-            const a4 = ((i + 0.7) / teeth) * Math.PI * 2;
-            points.push(`${cx + Math.cos(a1) * innerR},${cy + Math.sin(a1) * innerR}`);
-            points.push(`${cx + Math.cos(a2) * outerR},${cy + Math.sin(a2) * outerR}`);
-            points.push(`${cx + Math.cos(a3) * outerR},${cy + Math.sin(a3) * outerR}`);
-            points.push(`${cx + Math.cos(a4) * innerR},${cy + Math.sin(a4) * innerR}`);
-        }
-        return `M ${points.join(' L ')} Z`;
-    }, []);
-
-    // Spokes
-    const spokeCount = 12;
-    const spokes = useMemo(() => {
-        return Array.from({ length: spokeCount }, (_, i) => {
-            const angle = (i / spokeCount) * Math.PI * 2;
-            return {
-                x1: cx + Math.cos(angle) * 22,
-                y1: cy + Math.sin(angle) * 22,
-                x2: cx + Math.cos(angle) * 100,
-                y2: cy + Math.sin(angle) * 100,
-            };
-        });
-    }, []);
-
-    // Small orbiting dots
-    const orbitDots = [
-        { r: 135, dur: 10, size: 2.5, delay: 0 },
-        { r: 135, dur: 10, size: 2, delay: 5 },
-        { r: 140, dur: 14, size: 1.5, delay: 2 },
-        { r: 145, dur: 18, size: 1.2, delay: 7 },
-    ];
+    const { scrollYProgress } = useScroll();
+    const rotation = useTransform(scrollYProgress, [0, 1], [0, 720]);
 
     return (
-        <svg viewBox="0 0 300 300" className="w-full h-full" style={{ overflow: 'visible' }}>
-            <defs>
-                <radialGradient id="wheelGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor={gold} stopOpacity="0.12" />
-                    <stop offset="70%" stopColor={gold} stopOpacity="0.04" />
-                    <stop offset="100%" stopColor={gold} stopOpacity="0" />
-                </radialGradient>
-                <filter id="goldGlow">
-                    <feGaussianBlur stdDeviation="3" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-                <filter id="softGlow">
-                    <feGaussianBlur stdDeviation="2" result="blur" />
-                    <feMerge>
-                        <feMergeNode in="blur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
+        <div className="w-full h-full flex items-center justify-center pointer-events-none">
+            <div className="relative w-[300px] h-[300px] flex items-center justify-center">
+                <div className="absolute inset-[-40px] bg-blue-500/10 rounded-full blur-[100px]" />
 
-            {/* Background radial glow */}
-            <circle cx={cx} cy={cy} r="148" fill="url(#wheelGlow)" />
-
-            {/* ── Outer gear ring (clockwise) ── */}
-            <motion.g
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-            >
-                <path
-                    d={gearTeeth}
-                    fill="none"
-                    stroke={gold}
-                    strokeWidth="1.5"
-                    opacity={0.5}
-                    filter="url(#softGlow)"
-                />
-            </motion.g>
-
-            {/* ── Outer rim ring ── */}
-            <motion.circle
-                cx={cx} cy={cy} r="105"
-                fill="none"
-                stroke={gold}
-                strokeWidth="1.2"
-                opacity={0.35}
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: -360 }}
-                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-            />
-
-            {/* ── Decorative dashed ring ── */}
-            <motion.circle
-                cx={cx} cy={cy} r="95"
-                fill="none"
-                stroke={goldDim}
-                strokeWidth="0.8"
-                strokeDasharray="4 8"
-                opacity={0.3}
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
-            />
-
-            {/* ── Spokes (counter-clockwise) ── */}
-            <motion.g
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: -360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-            >
-                {spokes.map((s, i) => (
-                    <line
-                        key={i}
-                        x1={s.x1} y1={s.y1}
-                        x2={s.x2} y2={s.y2}
-                        stroke={gold}
-                        strokeWidth={i % 3 === 0 ? '1.2' : '0.6'}
-                        opacity={i % 3 === 0 ? 0.4 : 0.18}
-                    />
-                ))}
-            </motion.g>
-
-            {/* ── Inner ring (clockwise, faster) ── */}
-            <motion.circle
-                cx={cx} cy={cy} r="70"
-                fill="none"
-                stroke={goldLight}
-                strokeWidth="0.8"
-                opacity={0.25}
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
-            />
-
-            {/* ── Inner decorative ring with ticks ── */}
-            <motion.g
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: -360 }}
-                transition={{ duration: 18, repeat: Infinity, ease: 'linear' }}
-            >
-                <circle cx={cx} cy={cy} r="55" fill="none" stroke={goldDim} strokeWidth="0.6" opacity={0.2} />
-                {Array.from({ length: 36 }, (_, i) => {
-                    const angle = (i / 36) * Math.PI * 2;
-                    const r1 = 52;
-                    const r2 = i % 3 === 0 ? 47 : 50;
-                    return (
-                        <line
-                            key={i}
-                            x1={cx + Math.cos(angle) * r1}
-                            y1={cy + Math.sin(angle) * r1}
-                            x2={cx + Math.cos(angle) * r2}
-                            y2={cy + Math.sin(angle) * r2}
-                            stroke={goldDim}
-                            strokeWidth={i % 3 === 0 ? '1' : '0.5'}
-                            opacity={i % 3 === 0 ? 0.35 : 0.15}
-                        />
-                    );
-                })}
-            </motion.g>
-
-            {/* ── Hub ring ── */}
-            <motion.circle
-                cx={cx} cy={cy} r="20"
-                fill="none"
-                stroke={gold}
-                strokeWidth="2"
-                opacity={0.5}
-                filter="url(#goldGlow)"
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
-            />
-
-            {/* ── Center hub dot (pulsing) ── */}
-            <motion.circle
-                cx={cx} cy={cy} r="5"
-                fill={gold}
-                filter="url(#goldGlow)"
-                style={{ transformOrigin: `${cx}px ${cy}px` }}
-                animate={{
-                    scale: [1, 1.5, 1],
-                    opacity: [0.4, 0.8, 0.4],
-                }}
-                transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            />
-
-            {/* ── Orbiting particles ── */}
-            {orbitDots.map((dot, i) => (
-                <motion.circle
-                    key={i}
-                    r={dot.size}
-                    fill={i % 2 === 0 ? gold : goldLight}
-                    filter="url(#softGlow)"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: [0, 0.8, 0] }}
-                    transition={{
-                        duration: dot.dur * 0.4,
-                        repeat: Infinity,
-                        delay: dot.delay,
-                        ease: 'easeInOut',
+                <motion.img
+                    src={propeller}
+                    alt="Propeller"
+                    className="w-full h-full object-contain relative z-10"
+                    style={{
+                        rotate: rotation,
+                        mixBlendMode: 'screen', // This is key to removing the black square background
+                        filter: 'brightness(1.1) contrast(1.1)'
                     }}
-                >
-                    <animateMotion
-                        dur={`${dot.dur}s`}
-                        repeatCount="indefinite"
-                        begin={`${dot.delay}s`}
-                        path={`M ${cx + dot.r} ${cy} A ${dot.r} ${dot.r} 0 1 1 ${cx - dot.r} ${cy} A ${dot.r} ${dot.r} 0 1 1 ${cx + dot.r} ${cy}`}
-                    />
-                </motion.circle>
-            ))}
-        </svg>
+                />
+
+            </div>
+        </div>
     );
 };
 
@@ -301,7 +102,7 @@ const SkillsetSection = () => {
                 <p className="text-[11px] uppercase tracking-[0.4em] text-accent1 font-bold mb-4">My Skillset</p>
                 <h2 className="text-5xl md:text-7xl font-heading font-black text-white">
                     The Magic{' '}
-                    <span className="bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent font-serif italic">
+                    <span className="bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 bg-clip-text text-transparent italic">
                         Behind
                     </span>
                 </h2>

@@ -1,6 +1,44 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, useMotionValue, useAnimationFrame, useTransform, useSpring, useVelocity } from 'framer-motion';
-import { MapPin, Github, Linkedin, Twitter, Copy, ArrowUpRight, Sparkles } from 'lucide-react';
+import { MapPin, Github, Linkedin, Twitter, Copy, ArrowUpRight, Sparkles, Navigation } from 'lucide-react';
+
+const MiniGear = ({ rotation }) => {
+    const gearPath = useMemo(() => {
+        const teeth = 16;
+        const outerR = 45;
+        const innerR = 35;
+        const cx = 50, cy = 50;
+        let points = [];
+        for (let i = 0; i < teeth; i++) {
+            const a1 = (i / teeth) * Math.PI * 2;
+            const a2 = ((i + 0.3) / teeth) * Math.PI * 2;
+            const a3 = ((i + 0.5) / teeth) * Math.PI * 2;
+            const a4 = ((i + 0.7) / teeth) * Math.PI * 2;
+            points.push(`${cx + Math.cos(a1) * innerR},${cy + Math.sin(a1) * innerR}`);
+            points.push(`${cx + Math.cos(a2) * outerR},${cy + Math.sin(a2) * outerR}`);
+            points.push(`${cx + Math.cos(a3) * outerR},${cy + Math.sin(a3) * outerR}`);
+            points.push(`${cx + Math.cos(a4) * innerR},${cy + Math.sin(a4) * innerR}`);
+        }
+        return `M ${points.join(' L ')} Z`;
+    }, []);
+
+    return (
+        <motion.svg viewBox="0 0 100 100" className="w-full h-full text-accent1" style={{ rotate: rotation }}>
+            <path d={gearPath} fill="none" stroke="currentColor" strokeWidth="2.5" opacity="0.8" />
+            <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+            <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.9" />
+            {[0, 45, 90, 135, 180, 225, 270, 315].map(angle => (
+                <line
+                    key={angle}
+                    x1="50" y1="50"
+                    x2={50 + Math.cos(angle * Math.PI / 180) * 35}
+                    y2={50 + Math.sin(angle * Math.PI / 180) * 35}
+                    stroke="currentColor" strokeWidth="1" opacity="0.4"
+                />
+            ))}
+        </motion.svg>
+    );
+};
 
 const BentoGrid = () => {
     const [currentTime, setCurrentTime] = useState('');
@@ -35,7 +73,6 @@ const BentoGrid = () => {
         })
     };
 
-    const philosophyTags = ['Motion', 'Type', 'Feedback', 'Craft'];
     const [activeTag, setActiveTag] = useState(0);
 
     const galleryItems = [
@@ -63,6 +100,9 @@ const BentoGrid = () => {
     // 6 items * (140px + 12px gap) = 912px
     const setWidth = 912;
 
+    const gearRotation = useMotionValue(0);
+    const [hoverDir, setHoverDir] = useState(0);
+
     useAnimationFrame((t, delta) => {
         // Persistent auto-scroll
         const currentX = x.get();
@@ -73,6 +113,13 @@ const BentoGrid = () => {
         } else if (currentX < -setWidth) {
             x.set(currentX + setWidth);
         }
+
+        // Gear rotation logic
+        if (hoverDir !== 0) {
+            gearRotation.set(gearRotation.get() + (hoverDir * 2));
+        } else {
+            gearRotation.set(gearRotation.get() + 0.4); // Slow idle rotation
+        }
     });
 
     useEffect(() => {
@@ -80,12 +127,39 @@ const BentoGrid = () => {
         x.set(0);
     }, []);
 
+    const philosophyItems = [
+        {
+            tag: 'Motion',
+            title: 'Micro-interactions',
+            description: 'Subtle movement that confirms intent — never distracting.',
+            activeStyle: 'bg-violet-600/90 border-violet-500 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]'
+        },
+        {
+            tag: 'Type',
+            title: 'Typography',
+            description: 'Clean hierarchy and rhythm for effortless scanning.',
+            activeStyle: 'bg-blue-600/90 border-blue-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)]'
+        },
+        {
+            tag: 'Feedback',
+            title: 'Responsiveness',
+            description: 'Every hover, click, and focus gets a crisp response.',
+            activeStyle: 'bg-emerald-600/90 border-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)]'
+        },
+        {
+            tag: 'Craft',
+            title: 'Attention to detail',
+            description: 'Polish lives in the edges: spacing, timing, and states.',
+            activeStyle: 'bg-orange-500/90 border-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.4)]'
+        }
+    ];
+
     useEffect(() => {
         const interval = setInterval(() => {
-            setActiveTag(prev => (prev + 1) % philosophyTags.length);
-        }, 2000);
+            setActiveTag(prev => (prev + 1) % philosophyItems.length);
+        }, 3000); // 3 seconds feels more premium
         return () => clearInterval(interval);
-    }, []);
+    }, [philosophyItems.length]);
 
     return (
         <section className="relative py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -165,13 +239,15 @@ const BentoGrid = () => {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                 >
-                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 group-hover/card:opacity-30 transition-opacity duration-700">
-                        <img src="/gallery/ai_face.jpg" className="w-full h-full object-cover grayscale brightness-125" alt="" />
-                    </div>
+
                     <div className="relative z-10">
-                        <div className="flex items-center gap-2 text-secondary text-[10px] uppercase tracking-[0.3em] font-bold mb-3">
-                            <Sparkles size={12} className="text-accent1" />
-                            <span>Detail-Driven UI</span>
+                        <div className="flex items-center gap-3 mb-4 group/label">
+                            <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center p-1.5 bg-white/5 transition-all duration-500 group-hover/label:border-white/30 group-hover/label:bg-white/10">
+                                <Navigation size={14} className="text-white/80 rotate-[315deg] group-hover/label:text-white transition-colors" />
+                            </div>
+                            <span className="text-[10px] uppercase tracking-[0.4em] font-black text-white/90 drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">
+                                Detail-Driven UI
+                            </span>
                         </div>
                         <h3 className="text-2xl md:text-3xl font-heading font-bold text-white leading-tight">
                             Interfaces
@@ -182,44 +258,73 @@ const BentoGrid = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mt-4 relative z-10">
-                        {philosophyTags.map((tag, i) => (
-                            <span
-                                key={tag}
-                                className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-full border transition-all duration-500 ${activeTag === i
-                                    ? 'bg-accent1 border-accent1 text-background'
-                                    : 'border-white/10 text-secondary'
+                        {philosophyItems.map((item, i) => (
+                            <button
+                                key={item.tag}
+                                onClick={() => setActiveTag(i)}
+                                className={`px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded-full border transition-all duration-500 hover:scale-105 active:scale-95 ${activeTag === i
+                                    ? item.activeStyle
+                                    : 'border-white/10 text-secondary hover:border-white/30'
                                     }`}
                             >
-                                {tag}
-                            </span>
+                                {item.tag}
+                            </button>
                         ))}
                     </div>
 
                     <div className="mt-4 relative z-10">
                         <p className="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Philosophy ✦</p>
-                        <p className="text-sm font-bold text-white mt-1">Micro-interactions</p>
-                        <p className="text-xs text-secondary mt-1 leading-relaxed">
-                            Subtle movement that confirms intent — never distracting.
-                        </p>
+                        <motion.div
+                            key={activeTag}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            <p className="text-sm font-bold text-white mt-1">{philosophyItems[activeTag].title}</p>
+                            <p className="text-xs text-secondary mt-1 leading-relaxed">
+                                {philosophyItems[activeTag].description}
+                            </p>
+                        </motion.div>
                     </div>
                 </motion.div>
 
                 {/* Card 3: Connect / Available for Work */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 flex flex-col justify-between row-span-2 min-h-[380px]"
+                    className="bento-card p-6 md:p-8 flex flex-col justify-between row-span-2 min-h-[380px] group/available"
                     custom={2}
                     variants={cardVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
+                    onMouseMove={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const y = e.clientY - rect.top;
+                        setHoverDir(y < rect.height / 2 ? 1 : -1);
+                    }}
+                    onMouseLeave={() => setHoverDir(0)}
                 >
                     {/* Available badge */}
                     <div className="flex items-center justify-between">
-                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                            <div className="w-2 h-2 rounded-full bg-white" />
+                        <div className="relative w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover/available:border-accent1/30 transition-all duration-700">
+                            <div className="absolute inset-0 bg-accent1/5 rounded-full blur-md opacity-0 group-hover/available:opacity-100 transition-opacity" />
+                            <div className="w-7 h-7 relative z-10">
+                                <MiniGear rotation={gearRotation} />
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20">
-                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/20 group-hover/available:bg-green-500/20 transition-all duration-300">
+                            <div className="relative flex items-center justify-center">
+                                <div className="w-2 h-2 rounded-full bg-green-500" />
+                                <motion.div
+                                    className="absolute w-2 h-2 rounded-full bg-green-500"
+                                    animate={{ scale: [1, 2.5], opacity: [0.5, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeOut" }}
+                                />
+                                <motion.div
+                                    className="absolute w-2 h-2 rounded-full bg-green-500/50"
+                                    animate={{ scale: [1, 3.5], opacity: [0.3, 0] }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: 0.5 }}
+                                />
+                            </div>
                             <span className="text-[10px] font-bold text-green-400 uppercase tracking-wider">Available for work</span>
                         </div>
                     </div>
@@ -242,11 +347,18 @@ const BentoGrid = () => {
                             <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-accent1/30 transition-colors">
                                 <Copy size={12} className="text-secondary group-hover:text-accent1 transition-colors" />
                             </div>
-                            <div>
-                                <p className="text-sm font-bold text-white font-serif italic">ahalyajena28@gmail.com</p>
-                                <p className="text-[10px] text-secondary uppercase tracking-widest mt-0.5">
+                            <div className="flex flex-col group/email">
+                                <motion.p
+                                    className="text-sm font-bold text-white font-serif italic transition-all duration-300 group-hover:text-accent1 group-hover:drop-shadow-[0_0_10px_rgba(194,160,122,0.5)]"
+                                    whileHover={{ x: 5 }}
+                                >
+                                    ahalyajena28@gmail.com
+                                </motion.p>
+                                <motion.p
+                                    className="text-[10px] text-secondary uppercase tracking-widest mt-0.5 transition-all duration-300 group-hover:text-white/60 group-hover:translate-x-1"
+                                >
                                     {copied ? '✓ COPIED!' : 'TAP TO COPY EMAIL'}
-                                </p>
+                                </motion.p>
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,57 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
+
+const ProjectImageCarousel = ({ images, name, emoji }) => {
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        if (!images || images.length <= 1) return;
+        const interval = setInterval(() => {
+            setIndex((prev) => (prev + 1) % images.length);
+        }, 3000); // Change image every 3 seconds
+        return () => clearInterval(interval);
+    }, [images]);
+
+    return (
+        <div className="relative w-full h-full">
+            <AnimatePresence mode="wait">
+                <motion.img
+                    key={images[index]}
+                    src={images[index]}
+                    alt={`${name} screenshot ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                    onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling.style.display = 'flex';
+                    }}
+                />
+                <div className="hidden w-full h-full bg-black/40 backdrop-blur-sm items-center justify-center text-8xl">
+                    {emoji}
+                </div>
+            </AnimatePresence>
+
+            {/* Pagination Dots */}
+            {images.length > 1 && (
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+                    {images.map((_, i) => (
+                        <div
+                            key={i}
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-500 ${index === i ? 'bg-white w-4' : 'bg-white/30'}`}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const projects = [
     {
@@ -16,8 +64,14 @@ const projects = [
             'Personalized learning roadmap generation with LLM orchestration',
         ],
         techStack: ['React', 'Next.js', 'TypeScript', 'Groq API', 'Supabase', 'Tailwind CSS', 'GSAP', 'Vercel'],
-        image: '/skilltwin/hero.png',
-        color: 'from-red-600 to-red-800',
+        images: [
+            '/skilltwin/hero.png',
+            '/skilltwin/features.png',
+            '/skilltwin/roadmap.png',
+            '/skilltwin/problem.png',
+            '/skilltwin/sdg.png'
+        ],
+        color: 'from-orange-600 to-red-800',
     },
     {
         name: 'D-Liver',
@@ -29,7 +83,13 @@ const projects = [
             'Dual interface: patient-friendly & clinical views',
         ],
         techStack: ['React', 'Ollama', 'Supabase', 'PubMed API', 'Tailwind CSS', 'Node.js', 'Express', 'Vercel'],
-        image: '/d-liver/hero.png',
+        images: [
+            '/d-liver/hero.png',
+            '/d-liver/dashboard.png',
+            '/d-liver/features.png',
+            '/d-liver/howitworks.png',
+            '/d-liver/login.png'
+        ],
         color: 'from-blue-600 to-indigo-800',
     },
     {
@@ -42,12 +102,51 @@ const projects = [
             'Multilingual LLM-powered agronomic advisory system',
         ],
         techStack: ['FastAPI', 'Scikit-Learn', 'Firebase', 'Groq API', 'React', 'Python', 'TensorFlow', 'Vercel'],
-        image: '/agri-sahayak/hero.png',
+        images: [
+            '/agri-sahayak/hero.png',
+            '/agri-sahayak/dashboard.png',
+            '/agri-sahayak/features.png',
+            '/agri-sahayak/technology.png'
+        ],
         color: 'from-green-600 to-emerald-800',
     },
 ];
 
 const ProjectsPage = () => {
+    const listRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: listRef,
+        offset: ["start center", "end center"]
+    });
+
+    const scaleY = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    const avatarOpacity = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+
+    // Dynamic color mapping based on scroll progress
+    const lineColor = useTransform(
+        scrollYProgress,
+        [0.1, 0.45, 0.8],
+        ["#f97316", "#8b5cf6", "#10b981"] // SkillTwin (Orange) -> D-Liver (Violet) -> Agri-Novation (Green)
+    );
+
+    const avatarBorderColor = useTransform(
+        scrollYProgress,
+        [0.1, 0.45, 0.8],
+        ["#f97316", "#8b5cf6", "#10b981"]
+    );
+
+    const avatarGlow = useTransform(
+        scrollYProgress,
+        [0.1, 0.45, 0.8],
+        ["rgba(249, 115, 22, 0.4)", "rgba(139, 92, 246, 0.4)", "rgba(16, 185, 129, 0.4)"]
+    );
+
+    const title = "MY WORKS";
     const letterVariants = {
         hidden: { y: 100, opacity: 0, rotateX: -90 },
         visible: (i) => ({
@@ -62,25 +161,20 @@ const ProjectsPage = () => {
         }),
     };
 
-    const title = "MY WORKS";
-
     return (
         <motion.main
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="min-h-screen bg-background text-white selection:bg-accent1/30 bg-grain pb-32"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="min-h-screen bg-background text-white bg-grain pb-40"
         >
             {/* Hero Section */}
-            <section className="relative h-[80vh] flex flex-col items-center justify-center overflow-hidden">
-                {/* Glow effect matching the image */}
+            <section className="relative h-[85vh] flex flex-col items-center justify-center overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] bg-white/5 rounded-full blur-[120px] pointer-events-none" />
 
                 <div className="text-center z-10 w-full px-4">
                     <motion.h1
-                        className="text-[18vw] md:text-[16vw] font-black leading-none tracking-[-0.02em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
-                        style={{ perspective: '600px' }}
+                        className="text-[18vw] md:text-[16vw] font-black leading-none tracking-[-0.04em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
+                        style={{ perspective: '1000px' }}
                     >
                         {title.split('').map((letter, i) => (
                             <motion.span
@@ -99,7 +193,7 @@ const ProjectsPage = () => {
 
                     <div className="flex flex-col items-center gap-3 md:gap-4 mt-2">
                         <motion.p
-                            className="text-secondary text-[11px] md:text-sm font-bold uppercase tracking-[0.5em] opacity-90"
+                            className="text-white/30 text-[10px] md:text-xs font-black uppercase tracking-[0.8em] pl-4"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1.2, duration: 0.8 }}
@@ -107,7 +201,7 @@ const ProjectsPage = () => {
                             CRAFTING DIGITAL EXPERIENCES
                         </motion.p>
                         <motion.h2
-                            className="text-4xl md:text-6xl lg:text-7xl font-serif italic text-white font-light normal-case tracking-tight drop-shadow-md"
+                            className="text-4xl md:text-7xl lg:text-8xl font-serif italic text-white font-light normal-case tracking-tighter"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1.4, duration: 0.8 }}
@@ -117,107 +211,129 @@ const ProjectsPage = () => {
                     </div>
                 </div>
 
-                <ScrollIndicator text="Scroll down to see more" />
+                <ScrollIndicator text="Explore the works" />
             </section>
 
-            {/* List Section */}
-            <section className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative pt-10">
-                <div className="space-y-40">
+            {/* List Section with Integrated Scroll Indicator */}
+            <section className="px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto relative mt-20" ref={listRef}>
+
+                {/* Scroll Indicator System (Desktop Only) */}
+                <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/[0.05] z-0">
+                    <motion.div
+                        className="absolute top-0 left-0 w-full origin-top rounded-full"
+                        style={{
+                            height: '100%',
+                            scaleY,
+                            backgroundColor: lineColor
+                        }}
+                    />
+
+                    <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center">
+                        <motion.div
+                            className="w-14 h-14 rounded-full border-[3px] bg-[#1a1a1a] shadow-2xl overflow-hidden flex items-center justify-center -translate-y-1"
+                            style={{
+                                opacity: avatarOpacity,
+                                borderColor: avatarBorderColor,
+                                boxShadow: useTransform(avatarGlow, (glow) => `0 0 30px ${glow}`)
+                            }}
+                        >
+                            <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
+                        </motion.div>
+                    </div>
+                </div>
+
+                <div className="space-y-80 relative z-10">
                     {projects.map((project, idx) => (
                         <motion.div
                             key={project.name}
-                            className="relative grid grid-cols-1 lg:grid-cols-[1fr_40px_1fr] gap-8 lg:gap-12 items-center"
-                            initial={{ opacity: 0, y: 60 }}
-                            whileInView={{ opacity: 1, y: 0 }}
+                            className="relative grid grid-cols-1 lg:grid-cols-[1fr_100px_1fr] gap-12 lg:gap-0 items-center"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
                             viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.8 }}
                         >
-                            {/* Left - Info */}
-                            <div className="space-y-8 order-2 lg:order-1">
-                                {/* Title with red line */}
-                                <div className="flex items-center gap-4">
-                                    <div className="w-8 h-1 bg-red-600" />
-                                    <h3 className="text-3xl md:text-5xl font-heading font-black text-white">
+                            {/* Left Content (or Right on alternate) */}
+                            <div className={`space-y-10 ${idx % 2 === 0 ? 'lg:pr-20' : 'lg:pl-20 order-2 lg:order-3'}`}>
+                                <motion.div
+                                    className="flex items-center gap-6"
+                                    initial={{ x: idx % 2 === 0 ? -40 : 40, opacity: 0 }}
+                                    whileInView={{ x: 0, opacity: 1 }}
+                                    transition={{ duration: 1, ease: "easeOut" }}
+                                >
+                                    <h3 className="text-4xl md:text-7xl font-heading font-black text-white tracking-tighter italic uppercase">
                                         {project.name}
                                     </h3>
-                                </div>
+                                    <div className="h-[2px] flex-1 bg-gradient-to-r from-white/20 to-transparent" />
+                                </motion.div>
 
-                                <p className="text-primary text-base md:text-lg leading-relaxed font-light">
+                                <p className="text-white/60 text-lg md:text-xl leading-relaxed font-medium">
                                     {project.emoji} {project.description}
                                 </p>
 
-                                {/* Features List */}
-                                <ul className="space-y-4">
+                                <ul className="space-y-5">
                                     {project.features.map((feature, i) => (
-                                        <li key={i} className="flex items-start gap-4">
-                                            {/* Red Four-Pointed Star Bullet */}
-                                            <span className="text-[#ff4f4f] mt-1 shrink-0 text-sm">✦</span>
-                                            <span className="text-white text-[15px] leading-relaxed font-medium">{feature}</span>
-                                        </li>
+                                        <motion.li
+                                            key={i}
+                                            className="flex items-start gap-4 group"
+                                            initial={{ opacity: 0, y: 10 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: 0.1 * i }}
+                                        >
+                                            <span className="text-[#ffcc33] mt-1 shrink-0 text-lg group-hover:scale-125 transition-transform duration-500">✦</span>
+                                            <span className="text-white/80 text-[17px] leading-relaxed font-bold tracking-tight">{feature}</span>
+                                        </motion.li>
                                     ))}
                                 </ul>
 
-                                {/* Tech Stack Badges */}
-                                <div className="flex flex-wrap gap-3 pt-4 border-t border-white/5">
+                                <div className="flex flex-wrap gap-3 pt-8 border-t border-white/[0.03]">
                                     {project.techStack.map((tech) => (
                                         <span
                                             key={tech}
-                                            className="px-4 py-2 bg-surface/80 border border-white/10 rounded-full text-xs font-bold text-gray-300 flex items-center gap-2"
+                                            className="px-5 py-2.5 bg-white/[0.03] border border-white/5 rounded-2xl text-[10px] font-black text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-default"
                                         >
-                                            <div className="w-1.5 h-1.5 rounded-full bg-[#ffb703]" />
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
                             </div>
 
-                            {/* Middle - Vertical Scroll Tracker Line (Hidden on small screens) */}
-                            <div className="hidden lg:flex flex-col items-center justify-center relative h-full order-2">
-                                <div className="w-[1px] h-full bg-white/10 absolute top-0 bottom-0" />
-                                <div className="w-8 h-8 rounded-full bg-[#1c1917] border-[3px] border-[#c2a07a] z-10 flex items-center justify-center overflow-hidden">
-                                    <div className="w-full h-full bg-[url('/profile.jpeg')] bg-cover bg-center opacity-80" />
-                                </div>
-                                {/* Highlight connecting line fragment - visually indicates progress */}
-                                <div className="w-[3px] rounded-full h-32 bg-gradient-to-b from-[#c2a07a] to-transparent absolute top-1/2 -translate-y-1/2" />
-                            </div>
+                            {/* Middle Placeholder */}
+                            <div className="hidden lg:block order-2" />
 
-                            {/* Right - Mockups Block */}
-                            <div className={`order-1 lg:order-3 rounded-3xl bg-gradient-to-br ${project.color} p-4 md:p-8 h-full flex flex-col justify-center relative group`}>
-                                <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:scale-[1.02] transition-transform duration-700 w-full aspect-[4/3]">
-                                    <img
-                                        src={project.image}
-                                        alt={project.name}
-                                        className="w-full h-full object-cover object-left-top"
-                                        onError={(e) => {
-                                            e.target.style.display = 'none';
-                                            e.target.nextElementSibling.style.display = 'flex';
-                                        }}
-                                    />
-                                    <div className="hidden w-full h-full bg-black/40 backdrop-blur-sm items-center justify-center text-6xl">
-                                        {project.emoji}
-                                    </div>
+                            {/* Image Component - Now with Carousel */}
+                            <motion.div
+                                className={`rounded-[3rem] bg-gradient-to-br ${project.color} p-5 md:p-12 aspect-video flex flex-col justify-center relative group overflow-hidden shadow-2xl ${idx % 2 === 0 ? 'order-2 lg:order-3' : 'order-2 lg:order-1'}`}
+                                initial={{ scale: 0.9, opacity: 0, x: idx % 2 === 0 ? 50 : -50 }}
+                                whileInView={{ scale: 1, opacity: 1, x: 0 }}
+                                transition={{ duration: 1.2, ease: "easeOut" }}
+                            >
+                                <div className="relative z-10 rounded-[2rem] overflow-hidden shadow-[0_48px_80px_-16px_rgba(0,0,0,0.8)] border border-white/10 group-hover:scale-[1.02] transition-transform duration-1000 w-full h-full">
+                                    <ProjectImageCarousel images={project.images} name={project.name} emoji={project.emoji} />
                                 </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none rounded-3xl" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                                {/* Hover "See live" floating button effect */}
-                                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-sm bg-black/40 rounded-3xl">
-                                    <a href="#" className="px-6 py-3 bg-white text-black font-bold uppercase tracking-wider text-xs rounded-full flex items-center gap-2 hover:scale-105 transition-transform shadow-xl">
-                                        View Project <ArrowUpRight size={16} />
+                                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 backdrop-blur-[4px] bg-black/40">
+                                    <a href="#" className="px-10 py-5 bg-white text-black font-black uppercase tracking-widest text-xs rounded-[1.5rem] flex items-center gap-3 hover:bg-gray-100 transition-all shadow-2xl active:scale-95 translate-y-4 group-hover:translate-y-0 duration-700">
+                                        Launch Project <ArrowUpRight size={20} />
                                     </a>
                                 </div>
-                            </div>
+                            </motion.div>
                         </motion.div>
                     ))}
                 </div>
 
-                <div className="mt-32 text-center flex justify-center pb-20">
-                    <button className="text-sm font-bold text-white flex items-center gap-2 hover:opacity-70 transition-opacity">
-                        See more projects <ArrowUpRight size={16} />
-                    </button>
+                <div className="mt-60 text-center flex justify-center pb-20 relative z-20">
+                    <Link
+                        to="/contact"
+                        className="px-12 py-6 border border-white/10 rounded-full text-xs font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all duration-700 hover:scale-110 active:scale-95 flex items-center gap-4"
+                    >
+                        View older archives <ArrowUpRight size={18} />
+                    </Link>
                 </div>
             </section>
 
-            <GitHubActivity />
+            <div className="pt-20">
+                <GitHubActivity />
+            </div>
         </motion.main>
     );
 };
