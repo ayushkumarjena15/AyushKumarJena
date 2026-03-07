@@ -90,22 +90,20 @@ const FounderCard = ({ cardVariants }) => {
                 <div className="flex justify-end mb-4">
                     <div className="w-16 h-1 bg-accent1 rounded-full opacity-50" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-heading font-black text-white">
+                <h3 className="text-2xl md:text-3xl font-heading font-black text-white whitespace-nowrap">
                     Creator of{' '}
-                    <span className="relative inline-block overflow-hidden align-bottom" style={{ height: '1.2em', minWidth: '180px' }}>
-                        <AnimatePresence mode="wait">
-                            <motion.span
-                                key={activeProject}
-                                className="text-accent1 font-serif italic text-glow absolute right-0"
-                                initial={{ y: '100%', opacity: 0 }}
-                                animate={{ y: '0%', opacity: 1 }}
-                                exit={{ y: '-100%', opacity: 0 }}
-                                transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                            >
-                                {projectNames[activeProject]}
-                            </motion.span>
-                        </AnimatePresence>
-                    </span>
+                    <AnimatePresence mode="wait">
+                        <motion.span
+                            key={activeProject}
+                            className="text-accent1 font-serif italic text-glow inline-block"
+                            initial={{ y: 10, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            exit={{ y: -10, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        >
+                            {projectNames[activeProject]}
+                        </motion.span>
+                    </AnimatePresence>
                 </h3>
                 <p className="text-secondary text-sm italic flex items-center justify-end gap-2">
                     &lt; Crafting Digital Experiences /&gt;
