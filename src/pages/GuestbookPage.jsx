@@ -64,7 +64,7 @@ const SignatureCard = ({ id, name, created_at, message, is_pinned, liked_by, is_
                             <span className="text-xs font-bold whitespace-nowrap">Pinned</span>
                         </div>
                     )}
-                    {liked_by && !is_pinned && (
+                    {liked_by && (
                         <div className="flex items-center gap-2">
                             <Heart size={14} className="text-[#ec4899] fill-[#ec4899]" />
                             <span className="text-[#ec4899] text-[11px] italic font-medium whitespace-nowrap">Liked by {liked_by}</span>
