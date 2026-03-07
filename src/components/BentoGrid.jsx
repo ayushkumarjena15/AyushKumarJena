@@ -67,9 +67,6 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
         >
-            <div className="absolute inset-0 opacity-5 group-hover/card:opacity-10 transition-opacity duration-1000">
-                <img src="/gallery/abstract_gold.jpg" className="w-full h-full object-cover" alt="" />
-            </div>
             {/* Globe Section */}
             <div className="flex-1 space-y-4 relative z-10">
                 <p className="text-[10px] text-green-400 uppercase tracking-[0.3em] font-bold">Available Globally</p>
