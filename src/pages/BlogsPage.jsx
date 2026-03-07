@@ -8,14 +8,16 @@ const blogs = [
         date: "March 2026",
         readTime: "5 min read",
         excerpt: "Exploring the shift towards AI-integrated web architecture and what it means for the next generation of developers.",
-        category: "Engineering"
+        category: "Engineering",
+        imageUrl: "/gallery/sphere.jpg"
     },
     {
         title: "Building Scalable Systems",
         date: "February 2026",
         readTime: "8 min read",
         excerpt: "Lessons learned from scaling SkillTwin to handle thousands of concurrent users in a fast-paced environment.",
-        category: "System Design"
+        category: "System Design",
+        imageUrl: "/gallery/torus.jpg"
     }
 ];
 
@@ -49,7 +51,12 @@ const BlogsPage = () => {
                         className="group cursor-pointer"
                     >
                         <div className="relative aspect-[16/9] rounded-3xl overflow-hidden mb-6 bg-white/5 border border-white/5 group-hover:border-white/20 transition-all duration-500">
-                            <div className="absolute inset-0 bg-gradient-to-br from-accent1/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <img
+                                src={blog.imageUrl}
+                                alt={blog.title}
+                                className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500" />
                             <div className="absolute top-6 left-6 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10">
                                 <span className="text-[10px] font-black uppercase text-accent1 tracking-wider">{blog.category}</span>
                             </div>

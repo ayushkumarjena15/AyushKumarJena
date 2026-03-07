@@ -1,9 +1,35 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
+import {
+    SiNextdotjs, SiTypescript, SiSupabase, SiFramer, SiRadixui,
+    SiTailwindcss, SiOpenai, SiPython, SiFastapi, SiFirebase,
+    SiScikitlearn, SiTwilio, SiVercel
+} from 'react-icons/si';
+
+const getTechIcon = (tech) => {
+    const t = tech.toLowerCase();
+    if (t.includes('next.js')) return <SiNextdotjs className="w-3 h-3 text-[#000000] dark:text-white" />;
+    if (t.includes('typescript')) return <SiTypescript className="w-3 h-3 text-[#3178C6]" />;
+    if (t.includes('supabase')) return <SiSupabase className="w-3 h-3 text-[#3ECF8E]" />;
+    if (t.includes('framer')) return <SiFramer className="w-3 h-3 text-[#0055FF]" />;
+    if (t.includes('radix')) return <SiRadixui className="w-3 h-3 text-white" />;
+    if (t.includes('tailwind')) return <SiTailwindcss className="w-3 h-3 text-[#06B6D4]" />;
+    if (t.includes('groq')) return <Sparkles size={12} className="text-orange-400" />;
+    if (t.includes('python')) return <SiPython className="w-3 h-3 text-[#3776AB]" />;
+    if (t.includes('fastapi')) return <SiFastapi className="w-3 h-3 text-[#05998B]" />;
+    if (t.includes('firebase')) return <SiFirebase className="w-3 h-3 text-[#FFCA28]" />;
+    if (t.includes('scikit')) return <SiScikitlearn className="w-3 h-3 text-[#F7931E]" />;
+    if (t.includes('twilio')) return <SiTwilio className="w-3 h-3 text-[#F22F46]" />;
+    if (t.includes('ollama')) return <Sparkles size={12} className="text-purple-400" />;
+    if (t.includes('three.js')) return <span className="text-[9px] font-bold">3D</span>;
+    if (t.includes('tesseract')) return <span className="text-[9px] font-bold">OCR</span>;
+    if (t.includes('pubmed')) return <span className="text-[9px] font-bold">MED</span>;
+    return <span className="w-1.5 h-1.5 rounded-full bg-current" />;
+};
 
 const ProjectImageCarousel = ({ images, name, emoji }) => {
     const [index, setIndex] = useState(0);
@@ -18,16 +44,16 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
 
     return (
         <div className="relative w-full h-full">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
                 <motion.img
                     key={images[index]}
                     src={images[index]}
                     alt={`${name} screenshot ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: -20, filter: "blur(10px)" }}
-                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    initial={{ opacity: 0, x: 20, scale: 1.05, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, x: -20, scale: 0.95, filter: "blur(10px)" }}
+                    transition={{ duration: 0.9, ease: [0.33, 1, 0.68, 1] }}
                     onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextElementSibling.style.display = 'flex';
@@ -57,13 +83,9 @@ const projects = [
     {
         name: 'SkillTwin',
         emoji: '🚀',
-        description: 'An AI-first career intelligence platform that creates a "Digital Skill Twin" by analyzing resumes and GitHub profiles, detecting skill gaps, and generating personalized learning roadmaps using state-of-the-art LLMs.',
-        features: [
-            'AI-powered resume analysis with intelligent skill extraction',
-            'GitHub profile deep scanning for real competency mapping',
-            'Personalized learning roadmap generation with LLM orchestration',
-        ],
-        techStack: ['React', 'Next.js', 'TypeScript', 'Groq API', 'Supabase', 'Tailwind CSS', 'GSAP', 'Vercel'],
+        type: 'AI Career Intelligence',
+        description: 'A high-performance, AI-driven career intelligence platform designed to bridge the gap between academic education and industry requirements. It creates a "Digital Skill Twin" of the user to identify weaknesses and provide a hyper-personalized path to employability.',
+        color: 'from-orange-600 to-red-800',
         images: [
             '/skilltwin/hero.png',
             '/skilltwin/features.png',
@@ -71,18 +93,30 @@ const projects = [
             '/skilltwin/problem.png',
             '/skilltwin/sdg.png'
         ],
-        color: 'from-orange-600 to-red-800',
+        overview: {
+            problem: 'The "Employability Gap" caused by stagnant curriculums lagging 2-5 years behind industry trends and skill fragmentation where students lack structured paths.',
+            techSpec: [
+                { category: 'Frontend', tech: 'Next.js 16 (App Router)', purpose: 'SEO and performance' },
+                { category: 'AI (LLMs)', tech: 'Groq (Llama-3 70B)', purpose: 'Fast roadmap generation' },
+                { category: 'AI (Vision)', tech: 'Google Gemini', purpose: 'Resume deep analysis' },
+                { category: 'Realtime', tech: 'Supabase Realtime', purpose: 'Live social proof' }
+            ],
+            keyFeatures: [
+                { title: 'AI Skill Gap Analysis', desc: 'Uses Gemini to normalize resume skills and match against target JDs.' },
+                { title: '🐙 GitHub Intelligence', desc: 'Validates skills by analyzing actual code evidence from user profiles.' },
+                { title: 'Personalized Roadmaps', desc: 'Groq-powered week-by-week learning plans tailored to levels.' }
+            ],
+            workflow: 'Auth → Profiling (Skill Twin) → Targeting → Gap Detection → AI Roadmapping → Job Matching.',
+            future: 'Automated Mock Interviews (AI Voice) & Skill Certification (Blockchain).'
+        },
+        techStack: ['Next.js 15', 'TypeScript', 'Groq API', 'Supabase', 'Framer Motion', 'Radix UI']
     },
     {
         name: 'D-Liver',
-        emoji: '🏥',
-        description: 'An intelligent healthcare platform that democratizes medical report comprehension. Patients upload documents and receive simplified AI explanations, while doctors get clinical views with confidence scoring and RAG-backed citations.',
-        features: [
-            'Medical report AI analysis with confidence scoring',
-            'RAG pipeline for citation-backed explanations',
-            'Dual interface: patient-friendly & clinical views',
-        ],
-        techStack: ['React', 'Ollama', 'Supabase', 'PubMed API', 'Tailwind CSS', 'Node.js', 'Express', 'Vercel'],
+        emoji: '🩺',
+        type: 'Medical Report Intelligence',
+        description: 'An AI-Powered Medical Report Intelligence System designed to bridge the gap between complex clinical data and patient understanding. It transforms raw medical documents into structured, actionable health insights.',
+        color: 'from-blue-600 to-indigo-800',
         images: [
             '/d-liver/hero.png',
             '/d-liver/dashboard.png',
@@ -90,26 +124,54 @@ const projects = [
             '/d-liver/howitworks.png',
             '/d-liver/login.png'
         ],
-        color: 'from-blue-600 to-indigo-800',
+        overview: {
+            problem: 'The Medical Literacy Gap and anxiety caused by patients Googling complex lab terms they don\'t understand.',
+            techSpec: [
+                { category: 'AI Engine', tech: 'Gemini + Ollama', purpose: 'Dual-path AI processing' },
+                { category: 'OCR', tech: 'Tesseract.js', purpose: 'Extracting medical image text' },
+                { category: '3D Graphics', tech: 'Three.js / R3F', purpose: 'Interactive health visuals' },
+                { category: 'RAG', tech: 'PubMed API', purpose: 'Fetching clinical citations' }
+            ],
+            keyFeatures: [
+                { title: 'Multi-Lens Explanations', desc: '4 levels of detail: Patient, Balanced, Advanced, and Doctor.' },
+                { title: 'Medical Validation Firewall', desc: 'Layer that rejects non-medical files and cross-references data.' },
+                { title: 'Retrieval-Augmented Gen', desc: 'Automatically fetches live citations from trusted databases.' }
+            ],
+            workflow: 'Ingestion → Analysis Gateway → Entity Extraction → RAG Enrichment → 3D Presentation.',
+            future: 'Doctor Verification Portal & Local AI Privacy (Ollama integration).'
+        },
+        techStack: ['Next.js 15', 'Ollama', 'Supabase', 'Three.js', 'Tesseract.js', 'PubMed API']
     },
     {
         name: 'Agri-Novation',
-        emoji: '🌾',
-        description: 'A full-stack agricultural intelligence dashboard integrating real-time IoT sensor data, 6 concurrent ML models, and LLMs to provide proactive alerts, crop predictions, and actionable agronomic advice.',
-        features: [
-            'Real-time IoT sensor data integration & monitoring',
-            '6 concurrent ML models for crop prediction',
-            'Multilingual LLM-powered agronomic advisory system',
-        ],
-        techStack: ['FastAPI', 'Scikit-Learn', 'Firebase', 'Groq API', 'React', 'Python', 'TensorFlow', 'Vercel'],
+        emoji: '🌿',
+        type: 'Industrial Agri-Tech',
+        description: 'A comprehensive agricultural technology platform bridging the gap between traditional farming and modern data science. It leverages IoT, machine learning, and generative AI to provide farmers with actionable insights.',
+        color: 'from-green-600 to-emerald-800',
         images: [
             '/agri-sahayak/hero.png',
             '/agri-sahayak/dashboard.png',
             '/agri-sahayak/features.png',
             '/agri-sahayak/technology.png'
         ],
-        color: 'from-green-600 to-emerald-800',
-    },
+        overview: {
+            problem: 'Eliminating guesswork in irrigation/fertilization and predicting pest/disease outbreaks before they happen.',
+            techSpec: [
+                { category: 'Backend', tech: 'FastAPI (Python)', purpose: 'Asynchronous model inference' },
+                { category: 'Database', tech: 'Firebase Realtime', purpose: 'Live IoT sensor sync' },
+                { category: 'Predictive ML', tech: 'Scikit-learn', purpose: 'Disease & Pest forecasting' },
+                { category: 'Alerts', tech: 'Twilio API', purpose: 'Smart SMS notifications' }
+            ],
+            keyFeatures: [
+                { title: 'AI Prediction Suite', desc: 'Irrigation, Disease, and Pest forecasting based on IoT data.' },
+                { title: 'Smart Fertilizer Rec', desc: 'pH-based conditional logic for specific crop matching.' },
+                { title: 'Agri-Assistant', desc: 'Groq-powered chatbot for specialized farming knowledge.' }
+            ],
+            workflow: 'IoT Ingestion → Firebase Sync → FastAPI Processing → Actionable Recommendation → SMS Alerts.',
+            future: 'Direct multilingual translation for regional support and Glassmorphism dashboard optimization.'
+        },
+        techStack: ['Python', 'FastAPI', 'Firebase', 'Groq API', 'Scikit-learn', 'Twilio API']
+    }
 ];
 
 const ProjectsPage = () => {
@@ -259,37 +321,81 @@ const ProjectsPage = () => {
                                     whileInView={{ x: 0, opacity: 1 }}
                                     transition={{ duration: 1, ease: "easeOut" }}
                                 >
-                                    <h3 className="text-4xl md:text-7xl font-heading font-black text-white tracking-tighter italic uppercase">
-                                        {project.name}
-                                    </h3>
+                                    <div className="space-y-1">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent1">{project.type}</p>
+                                        <h3 className="text-4xl md:text-7xl font-heading font-black text-white tracking-tighter italic uppercase">
+                                            {project.name}
+                                        </h3>
+                                    </div>
                                     <div className="h-[2px] flex-1 bg-gradient-to-r from-white/20 to-transparent" />
                                 </motion.div>
 
                                 <p className="text-white/60 text-lg md:text-xl leading-relaxed font-medium">
-                                    {project.emoji} {project.description}
+                                    {project.description}
                                 </p>
 
-                                <ul className="space-y-5">
-                                    {project.features.map((feature, i) => (
-                                        <motion.li
-                                            key={i}
-                                            className="flex items-start gap-4 group"
-                                            initial={{ opacity: 0, y: 10 }}
-                                            whileInView={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: 0.1 * i }}
-                                        >
-                                            <span className="text-[#ffcc33] mt-1 shrink-0 text-lg group-hover:scale-125 transition-transform duration-500">✦</span>
-                                            <span className="text-white/80 text-[17px] leading-relaxed font-bold tracking-tight">{feature}</span>
-                                        </motion.li>
-                                    ))}
-                                </ul>
+                                {/* Detailed Sections */}
+                                <div className="space-y-8 py-8 border-y border-white/[0.03]">
+                                    <div>
+                                        <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                                            The Core Problem
+                                        </h4>
+                                        <p className="text-white/80 font-bold leading-relaxed">{project.overview.problem}</p>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                                                Key Features
+                                            </h4>
+                                            <ul className="space-y-3">
+                                                {project.overview.keyFeatures.map((feature, i) => (
+                                                    <li key={i} className="text-sm">
+                                                        <span className="text-white font-bold">{feature.title}: </span>
+                                                        <span className="text-white/60">{feature.desc}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-3 flex items-center gap-2">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                                Strategic Workflow
+                                            </h4>
+                                            <p className="text-sm text-white/60 leading-relaxed italic">{project.overview.workflow}</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Tech Specs Panel */}
+                                    <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-6">
+                                        <h4 className="text-[10px] font-black text-white/40 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-accent1" />
+                                            Technical DNA
+                                        </h4>
+                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                            {project.overview.techSpec.map((spec, i) => (
+                                                <div key={i} className="space-y-1">
+                                                    <p className="text-[9px] text-accent1/60 font-black uppercase tracking-tighter flex items-center gap-1.5">
+                                                        {getTechIcon(spec.tech)}
+                                                        {spec.category}
+                                                    </p>
+                                                    <p className="text-xs text-white font-bold">{spec.tech}</p>
+                                                    <p className="text-[10px] text-white/30 italic">{spec.purpose}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div className="flex flex-wrap gap-3 pt-8 border-t border-white/[0.03]">
                                     {project.techStack.map((tech) => (
                                         <span
                                             key={tech}
-                                            className="px-5 py-2.5 bg-white/[0.03] border border-white/5 rounded-2xl text-[10px] font-black text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-default"
+                                            className="px-5 py-2.5 bg-white/[0.03] border border-white/5 rounded-2xl text-[10px] font-black text-white/40 uppercase tracking-widest hover:bg-white/5 hover:text-white transition-all cursor-default flex items-center gap-2"
                                         >
+                                            {getTechIcon(tech)}
                                             {tech}
                                         </span>
                                     ))}

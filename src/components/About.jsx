@@ -1,6 +1,24 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import {
+    SiReact, SiTailwindcss, SiTypescript, SiNodedotjs,
+    SiExpress, SiMongodb, SiGit, SiDocker, SiFigma
+} from 'react-icons/si';
+
+const getSkillIcon = (name) => {
+    const n = name.toLowerCase();
+    if (n.includes('react')) return <SiReact className="text-[#61DAFB]" />;
+    if (n.includes('tailwind')) return <SiTailwindcss className="text-[#06B6D4]" />;
+    if (n.includes('javascript') || n.includes('ts')) return <SiTypescript className="text-[#3178C6]" />;
+    if (n.includes('node')) return <SiNodedotjs className="text-[#339933]" />;
+    if (n.includes('express')) return <SiExpress className="text-white" />;
+    if (n.includes('mongodb')) return <SiMongodb className="text-[#47A248]" />;
+    if (n.includes('git')) return <SiGit className="text-[#F05032]" />;
+    if (n.includes('docker')) return <SiDocker className="text-[#2496ED]" />;
+    if (n.includes('figma')) return <SiFigma className="text-[#F24E1E]" />;
+    return null;
+};
 
 const skills = [
     { category: 'Frontend', items: [{ name: 'React', level: 90 }, { name: 'Tailwind CSS', level: 85 }, { name: 'JavaScript / TS', level: 80 }] },
@@ -56,7 +74,10 @@ const About = () => {
                                         {skillGroup.items.map((skill, i) => (
                                             <div key={i} className="group">
                                                 <div className="flex justify-between text-sm mb-3">
-                                                    <span className="text-primary font-bold group-hover:text-accent1 transition-colors uppercase tracking-widest text-[11px]">{skill.name}</span>
+                                                    <span className="text-primary font-bold group-hover:text-accent1 transition-colors uppercase tracking-widest text-[11px] flex items-center gap-2">
+                                                        {getSkillIcon(skill.name)}
+                                                        {skill.name}
+                                                    </span>
                                                     <span className="text-secondary font-mono text-xs">{skill.level}%</span>
                                                 </div>
                                                 <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">

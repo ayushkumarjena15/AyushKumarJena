@@ -2,6 +2,29 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, ArrowRight, ExternalLink, Github } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import {
+    SiNextdotjs, SiTypescript, SiSupabase, SiFramer, SiRadixui,
+    SiTailwindcss, SiOpenai, SiPython, SiFastapi, SiFirebase,
+    SiScikitlearn, SiTwilio, SiVercel, SiReact
+} from 'react-icons/si';
+
+const getTechIcon = (tech) => {
+    const t = tech.toLowerCase();
+    if (t.includes('next.js')) return <SiNextdotjs className="w-3 h-3 text-[#000000] dark:text-white" />;
+    if (t.includes('react')) return <SiReact className="w-3 h-3 text-[#61DAFB]" />;
+    if (t.includes('typescript')) return <SiTypescript className="w-3 h-3 text-[#3178C6]" />;
+    if (t.includes('supabase')) return <SiSupabase className="w-3 h-3 text-[#3ECF8E]" />;
+    if (t.includes('framer')) return <SiFramer className="w-3 h-3 text-[#0055FF]" />;
+    if (t.includes('tailwind')) return <SiTailwindcss className="w-3 h-3 text-[#06B6D4]" />;
+    if (t.includes('groq')) return <Sparkles size={10} className="text-orange-400" />;
+    if (t.includes('python')) return <SiPython className="w-3 h-3 text-[#3776AB]" />;
+    if (t.includes('fastapi')) return <SiFastapi className="w-3 h-3 text-[#05998B]" />;
+    if (t.includes('firebase')) return <SiFirebase className="w-3 h-3 text-[#FFCA28]" />;
+    if (t.includes('scikit')) return <SiScikitlearn className="w-3 h-3 text-[#F7931E]" />;
+    if (t.includes('twilio')) return <SiTwilio className="w-3 h-3 text-[#F22F46]" />;
+    if (t.includes('ollama')) return <Sparkles size={10} className="text-purple-400" />;
+    return <span className="w-1 h-1 rounded-full bg-current" />;
+};
 
 const featuredProjects = [
     {
@@ -107,7 +130,8 @@ const Projects = () => {
                             {/* Tech Stack Chips */}
                             <div className="flex flex-wrap gap-2 py-4">
                                 {project.techHighlights.map(tech => (
-                                    <span key={tech} className="px-3 py-1 bg-white/5 border border-white/5 text-[9px] font-black text-secondary rounded-lg group-hover:text-accent1 group-hover:border-accent1/20 transition-all uppercase tracking-widest">
+                                    <span key={tech} className="px-3 py-1.5 bg-white/5 border border-white/5 text-[9px] font-black text-secondary rounded-lg group-hover:text-accent1 group-hover:border-accent1/20 transition-all uppercase tracking-widest flex items-center gap-1.5">
+                                        {getTechIcon(tech)}
                                         {tech}
                                     </span>
                                 ))}

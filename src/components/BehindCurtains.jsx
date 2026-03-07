@@ -4,10 +4,15 @@ import { Github, ArrowRight, Music, GitCommit, ExternalLink } from 'lucide-react
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
+const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
+const LASTFM_USERNAME = import.meta.env.VITE_LASTFM_USERNAME;
+
 const BehindCurtains = () => {
     const [guestbookAvatars, setGuestbookAvatars] = useState([]);
     const [githubUser, setGithubUser] = useState(null);
     const [latestEvent, setLatestEvent] = useState(null);
+    const [lastfmTrack, setLastfmTrack] = useState(null);
+    const [lastfmLoaded, setLastfmLoaded] = useState(false);
 
     useEffect(() => {
         // Fetch User Profile
@@ -31,6 +36,32 @@ const BehindCurtains = () => {
             if (data) setGuestbookAvatars(data.map(d => d.avatar_url).filter(Boolean));
         };
         fetchAvatars();
+
+        // Fetch Last.fm recent track
+        const fetchLastfm = async () => {
+            try {
+                const res = await fetch(
+                    `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USERNAME}&api_key=${LASTFM_API_KEY}&format=json&limit=1`
+                );
+                const json = await res.json();
+                const track = json?.recenttracks?.track?.[0];
+                if (track) {
+                    setLastfmTrack({
+                        name: track.name,
+                        artist: track.artist?.['#text'],
+                        album: track.album?.['#text'],
+                        image: track.image?.find(img => img.size === 'large')?.['#text'] || '',
+                        nowPlaying: !!track['@attr']?.nowplaying,
+                        date: track.date?.['#text'] || null,
+                    });
+                }
+                setLastfmLoaded(true);
+            } catch (e) {
+                console.error(e);
+                setLastfmLoaded(true);
+            }
+        };
+        fetchLastfm();
     }, []);
 
     const getTimeAgo = (dateString) => {
@@ -191,47 +222,135 @@ const BehindCurtains = () => {
 
                 {/* Spotify / Last Played Card */}
                 <motion.div
-                    className="bento-card p-8 flex flex-col justify-between min-h-[280px]"
+                    className="bento-card p-6 flex flex-col justify-between min-h-[280px] relative overflow-hidden"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: 0.2 }}
                 >
-                    <div className="flex items-center gap-2 mb-4">
-                        <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                            <Music size={12} className="text-white" />
+                    {/* Ambient glow */}
+                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+
+                    {/* Header */}
+                    <div className="flex items-center justify-between mb-5 relative">
+                        <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 rounded-full bg-[#d51007] flex items-center justify-center shadow-md shadow-red-500/40">
+                                <Music size={13} className="text-white" />
+                            </div>
+                            <h3 className="text-sm font-heading font-bold text-white tracking-wide">
+                                {lastfmTrack?.nowPlaying ? 'Now Playing' : 'Last Played'}
+                            </h3>
                         </div>
-                        <h3 className="text-lg font-heading font-bold text-white">Last Played</h3>
+                        {/* Animated equalizer — pulses when now playing, static when not */}
+                        <div className="flex items-end gap-[3px] h-5">
+                            {[6, 12, 8, 14, 7, 10, 5].map((h, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="w-[3px] bg-[#d51007] rounded-full"
+                                    animate={lastfmTrack?.nowPlaying ? { scaleY: [1, 2.2, 0.7, 1.8, 1] } : { scaleY: 1 }}
+                                    transition={{
+                                        duration: 1.1 + i * 0.13,
+                                        repeat: lastfmTrack?.nowPlaying ? Infinity : 0,
+                                        ease: 'easeInOut',
+                                        delay: i * 0.07,
+                                    }}
+                                    style={{ height: `${h}px`, transformOrigin: 'bottom' }}
+                                />
+                            ))}
+                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <p className="text-primary text-sm">
-                            I recently listened to{' '}
-                            <span className="text-white font-bold">Attention</span>{' '}
-                            by <span className="text-white font-bold">Charlie Puth</span>
-                        </p>
-                        <p className="text-secondary text-xs">
-                            from the album <span className="text-primary">Voicenotes</span>
-                        </p>
-                    </div>
+                    {/* Album art + song info */}
+                    {lastfmTrack ? (
+                        <div className="flex gap-4 items-center relative">
+                            {/* Album art */}
+                            <div className="relative flex-shrink-0">
+                                <motion.div
+                                    className="w-[76px] h-[76px] rounded-2xl overflow-hidden relative shadow-xl border border-white/[0.07]"
+                                    whileHover={{ scale: 1.04 }}
+                                >
+                                    {lastfmTrack.image ? (
+                                        <img src={lastfmTrack.image} alt={lastfmTrack.album} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <>
+                                            <div className="w-full h-full bg-gradient-to-br from-[#2a1a5e] via-[#1a1040] to-[#0d0825]" />
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <span className="text-2xl">🎵</span>
+                                            </div>
+                                        </>
+                                    )}
+                                    {/* Spinning overlay when now playing */}
+                                    {lastfmTrack.nowPlaying && (
+                                        <motion.div
+                                            className="absolute inset-0 rounded-2xl border-2 border-[#d51007]/40"
+                                            animate={{ opacity: [0.4, 1, 0.4] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                        />
+                                    )}
+                                </motion.div>
+                                {/* Status dot */}
+                                <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-[#111] flex items-center justify-center ${lastfmTrack.nowPlaying ? 'bg-[#d51007]' : 'bg-white/20'}`}>
+                                    <motion.div
+                                        className="w-1.5 h-1.5 bg-white rounded-full"
+                                        animate={lastfmTrack.nowPlaying ? { scale: [1, 1.4, 1] } : {}}
+                                        transition={{ duration: 1.5, repeat: Infinity }}
+                                    />
+                                </div>
+                            </div>
 
-                    {/* Mini Album Art */}
-                    <div className="mt-6 flex items-center gap-4">
-                        <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-purple-900 to-indigo-900 overflow-hidden flex items-center justify-center relative group">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                            <span className="text-3xl relative z-10">🎵</span>
-                            {/* Spinning vinyl effect */}
-                            <div className="absolute inset-2 rounded-full border border-white/10 animate-spin-slow" />
-                        </div>
-                        <div className="flex-1">
-                            <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div className="h-full w-2/3 bg-green-500/60 rounded-full" />
-                            </div>
-                            <div className="flex justify-between mt-1 text-[10px] text-secondary">
-                                <span>2:14</span>
-                                <span>3:31</span>
+                            {/* Song info */}
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[9px] text-[#d51007] uppercase tracking-[0.3em] font-bold mb-1">
+                                    {lastfmTrack.nowPlaying ? '● Now Playing' : lastfmTrack.date || 'Recently Played'}
+                                </p>
+                                <h4 className="text-white font-bold text-base leading-tight truncate">{lastfmTrack.name}</h4>
+                                <p className="text-secondary text-xs mt-0.5 truncate">{lastfmTrack.artist}</p>
+                                <p className="text-white/30 text-[10px] mt-0.5 truncate font-light">{lastfmTrack.album}</p>
                             </div>
                         </div>
+                    ) : lastfmLoaded ? (
+                        /* No scrobbles yet */
+                        <div className="flex gap-4 items-center">
+                            <div className="w-[76px] h-[76px] rounded-2xl bg-white/[0.04] border border-white/[0.06] flex-shrink-0 flex items-center justify-center">
+                                <Music size={24} className="text-white/20" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold mb-1">Not scrobbling yet</p>
+                                <p className="text-white/50 text-sm leading-snug">Connect a music app to Last.fm to see plays here.</p>
+                            </div>
+                        </div>
+                    ) : (
+                        /* Skeleton loader */
+                        <div className="flex gap-4 items-center">
+                            <div className="w-[76px] h-[76px] rounded-2xl bg-white/5 animate-pulse flex-shrink-0" />
+                            <div className="flex-1 space-y-2">
+                                <div className="h-2 bg-white/5 rounded animate-pulse w-1/3" />
+                                <div className="h-4 bg-white/5 rounded animate-pulse w-3/4" />
+                                <div className="h-3 bg-white/5 rounded animate-pulse w-1/2" />
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Last.fm attribution */}
+                    <div className="mt-5 flex items-center justify-between">
+                        <div className="w-full h-[3px] bg-white/[0.06] rounded-full overflow-hidden">
+                            <motion.div
+                                className="h-full rounded-full bg-[#d51007]"
+                                initial={{ width: '0%' }}
+                                whileInView={{ width: lastfmTrack?.nowPlaying ? '45%' : '70%' }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1.5, ease: 'easeOut', delay: 0.5 }}
+                            />
+                        </div>
+                        <a
+                            href={`https://www.last.fm/user/${LASTFM_USERNAME}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="ml-3 text-[9px] text-white/25 hover:text-white/60 transition-colors whitespace-nowrap font-mono tracking-wider"
+                        >
+                            last.fm
+                        </a>
                     </div>
                 </motion.div>
             </div>

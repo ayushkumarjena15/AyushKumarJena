@@ -60,15 +60,14 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
 
     return (
         <motion.div
-            className="bento-card md:col-span-2 p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start min-h-[180px] relative overflow-hidden group/card"
+            className="bento-card md:col-span-2 p-6 md:p-8 md:pt-24 flex flex-col md:flex-row gap-8 items-start min-h-[180px] relative overflow-hidden group/card"
             custom={4}
             variants={cardVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
         >
-            {/* Globe Section */}
-            <div className="flex-1 space-y-4 relative z-10">
+            <div className="relative z-50 flex-1 space-y-4">
                 <p className="text-[10px] text-green-400 uppercase tracking-[0.3em] font-bold">Available Globally</p>
                 <h3 className="text-xl font-heading font-bold text-white">
                     Adaptable across<br />time zones
@@ -78,19 +77,20 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
                         <button
                             key={zone.label}
                             onClick={() => onTimezoneChange(i)}
-                            className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-500 cursor-pointer hover:scale-105 active:scale-95 ${selectedTimezone === i
-                                ? 'bg-accent1/20 border-accent1/40 text-accent1 shadow-[0_0_15px_rgba(194,160,122,0.2)]'
+                            className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-500 cursor-pointer hover:scale-105 active:scale-95 flex items-center gap-2 ${selectedTimezone === i
+                                ? 'bg-white border-white text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]'
                                 : 'border-white/10 text-secondary hover:border-white/30'
                                 }`}
                         >
-                            <img src={`https://flagcdn.com/20x15/${zone.flag}.png`} alt={zone.label} className="w-5 h-3.5 rounded-[2px] object-cover" /> {zone.label}
+                            <img src={`https://flagcdn.com/20x15/${zone.flag}.png`} alt={zone.label} className="w-4 h-3 rounded-[1px] object-cover" />
+                            <span>{zone.label}</span>
                         </button>
                     ))}
                 </div>
             </div>
 
             {/* Founder Info */}
-            <div className="flex-1 text-right space-y-3 relative z-10">
+            <div className="relative z-50 flex-1 text-right space-y-3">
                 <div className="flex justify-end mb-4">
                     <div className="w-16 h-1 bg-accent1 rounded-full opacity-50" />
                 </div>
@@ -99,7 +99,7 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
                     <AnimatePresence mode="wait">
                         <motion.span
                             key={activeProject}
-                            className="text-accent1 font-serif italic text-glow inline-block"
+                            className="bg-gradient-to-r from-[#f92f60] via-[#d02492] to-[#8c44dc] bg-clip-text text-transparent font-serif italic inline-block"
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -10, opacity: 0 }}
@@ -137,6 +137,21 @@ const BentoGrid = () => {
         const interval = setInterval(updateTime, 1000);
         return () => clearInterval(interval);
     }, []);
+
+    const quotes = useMemo(() => [
+        { text: "Design is not just what it looks like and feels like. Design is how it works.", author: "Steve Jobs" },
+        { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+        { text: "Good design is obvious. Great design is transparent.", author: "Joe Sparano" },
+        { text: "Digital design is like painting, except the paint never dries.", author: "Neville Brody" },
+        { text: "The details are not the details. They make the design.", author: "Charles Eames" },
+        { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+        { text: "Everything is designed. Few things are designed well.", author: "Brian Reed" }
+    ], []);
+
+    const dailyQuote = useMemo(() => {
+        const day = new Date().getDate();
+        return quotes[day % quotes.length];
+    }, [quotes]);
 
     const handleCopyEmail = () => {
         navigator.clipboard.writeText('ahalyajena28@gmail.com');
@@ -242,11 +257,17 @@ const BentoGrid = () => {
 
     return (
         <section className="relative py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto">
+            {/* Crosshair Lines (Global) */}
+            <div className="absolute inset-0 pointer-events-none z-0">
+                <div className="absolute top-[38%] left-0 w-full h-[1px] bg-white/10" />
+                <div className="absolute left-[50%] top-0 w-[1px] h-full bg-white/10 -translate-x-1/2" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto relative z-10">
 
                 {/* Card 1: Profile Card */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 flex flex-col justify-between row-span-2 min-h-[380px]"
+                    className="bento-card p-6 md:p-8 md:pr-14 flex flex-col justify-between row-span-2 min-h-[380px]"
                     custom={0}
                     variants={cardVariants}
                     initial="hidden"
@@ -265,7 +286,6 @@ const BentoGrid = () => {
                         </div>
                     </div>
 
-                    {/* Draggable Photo Gallery - Circular Loop with 3D Animation */}
                     <div className="mt-8 relative" style={{ perspective: '1200px' }}>
                         <div className="overflow-hidden" ref={containerRef}>
                             <motion.div
@@ -280,18 +300,19 @@ const BentoGrid = () => {
                                 ))}
                             </motion.div>
                         </div>
-                        {/* Drag indicator */}
-                        <div className="flex justify-center gap-1 mt-6">
-                            <div className="w-12 h-1 rounded-full bg-white/5 overflow-hidden">
-                                <motion.div
-                                    className="h-full bg-accent1/50"
-                                    animate={{
-                                        x: [-20, 20],
-                                        opacity: [0.3, 1, 0.3]
-                                    }}
-                                    transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', ease: "easeInOut" }}
-                                />
-                            </div>
+                    </div>
+
+                    {/* Drag indicator */}
+                    <div className="flex justify-center gap-1 mt-6">
+                        <div className="w-12 h-1 rounded-full bg-white/5 overflow-hidden">
+                            <motion.div
+                                className="h-full bg-accent1/50"
+                                animate={{
+                                    x: [-20, 20],
+                                    opacity: [0.3, 1, 0.3]
+                                }}
+                                transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse', ease: "easeInOut" }}
+                            />
                         </div>
                     </div>
 
@@ -311,7 +332,7 @@ const BentoGrid = () => {
 
                 {/* Card 2: Philosophy/Interfaces */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 flex flex-col justify-between min-h-[180px] relative overflow-hidden group/card"
+                    className="bento-card p-6 md:p-8 md:pb-24 flex flex-col justify-between min-h-[180px] relative overflow-hidden group/card"
                     custom={1}
                     variants={cardVariants}
                     initial="hidden"
@@ -351,25 +372,27 @@ const BentoGrid = () => {
                         ))}
                     </div>
 
-                    <div className="mt-4 relative z-10">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Philosophy ✦</p>
-                        <motion.div
-                            key={activeTag}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            <p className="text-sm font-bold text-white mt-1">{philosophyItems[activeTag].title}</p>
-                            <p className="text-xs text-secondary mt-1 leading-relaxed">
-                                {philosophyItems[activeTag].description}
-                            </p>
-                        </motion.div>
+                    <div className="relative z-50 h-full flex flex-col justify-between">
+                        <div className="mt-4">
+                            <p className="text-[10px] uppercase tracking-[0.2em] text-secondary font-bold">Philosophy ✦</p>
+                            <motion.div
+                                key={activeTag}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <p className="text-sm font-bold text-white mt-1">{philosophyItems[activeTag].title}</p>
+                                <p className="text-xs text-secondary mt-1 leading-relaxed">
+                                    {philosophyItems[activeTag].description}
+                                </p>
+                            </motion.div>
+                        </div>
                     </div>
                 </motion.div>
 
                 {/* Card 3: Connect / Available for Work */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 flex flex-col justify-between row-span-2 min-h-[380px] group/available"
+                    className="bento-card p-6 md:p-8 md:pl-14 flex flex-col justify-between row-span-2 min-h-[380px] group/available"
                     custom={2}
                     variants={cardVariants}
                     initial="hidden"
@@ -452,71 +475,44 @@ const BentoGrid = () => {
                     </a>
                 </motion.div>
 
-                {/* Card 4: Clock Widget with Crosshair Layout */}
-                <motion.div
-                    className="bento-card p-0 overflow-hidden flex flex-col items-center justify-center min-h-[400px] relative bg-black group"
-                    custom={3}
-                    variants={cardVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-50px" }}
-                >
-                    {/* Crosshair Lines */}
-                    <div className="absolute inset-0 pointer-events-none">
-                        {/* Horizontal Line */}
-                        <div className="absolute top-[40%] left-0 w-full h-[1px] bg-white/5 -translate-y-1/2" />
-                        {/* Vertical Line */}
-                        <div className="absolute left-1/2 top-0 w-[1px] h-full bg-white/5 -translate-x-1/2" />
-                    </div>
+                {/* Card 4: Junction Point (Floating Clock Bridge) */}
+                <div className="relative min-h-[340px] md:min-h-0 md:h-full flex items-center justify-center z-30 pointer-events-none md:-mx-12 md:-my-7">
+                    <div className="pointer-events-auto scale-90 md:scale-110 relative">
+                        {/* THE CUTOUT EFFECT: Clean technical border instead of blur shadow */}
+                        <div className="absolute inset-1/2 -translate-x-1/2 -translate-y-1/2 w-[112%] h-[112%] rounded-full bg-[#030303] border border-white/10 z-0 shadow-[0_0_15px_rgba(0,0,0,1)]" />
 
-                    <div className="relative z-10 flex flex-col items-center gap-10">
-                        <AnalogClock timezone={timezones[selectedTimezone]} />
-
-                        {/* Timezone Selector integrated into the vertical line alignment */}
-                        <div className="flex flex-col gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/5 backdrop-blur-sm">
-                            {timezones.map((tz, idx) => (
-                                <button
-                                    key={tz.label}
-                                    onClick={() => setSelectedTimezone(idx)}
-                                    className={`flex items-center gap-3 px-5 py-2 rounded-xl transition-all duration-500 text-[10px] font-bold uppercase tracking-[0.2em] ${selectedTimezone === idx
-                                            ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.2)]'
-                                            : 'text-white/30 hover:text-white hover:bg-white/5'
-                                        }`}
-                                >
-                                    <div className="w-5 h-3 rounded-[2px] overflow-hidden border border-white/10 shadow-sm">
-                                        <img
-                                            src={`https://flagcdn.com/w40/${tz.flag}.png`}
-                                            alt={tz.label}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </div>
-                                    <span className="opacity-80">{tz.label}</span>
-                                </button>
-                            ))}
+                        <div className="relative z-10">
+                            <AnalogClock timezone={timezones[selectedTimezone]} />
                         </div>
                     </div>
-                </motion.div>
+                </div>
 
                 {/* Card 5: Founder Card */}
-                <FounderCard cardVariants={cardVariants} />
+                <FounderCard cardVariants={cardVariants} selectedTimezone={selectedTimezone} onTimezoneChange={setSelectedTimezone} />
 
-                {/* Card 6: Detail Card with I sweat spacing */}
+                {/* Card 6: Quote of the Day */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 min-h-[120px] flex flex-col justify-center"
+                    className="bento-card p-6 md:p-8 min-h-[140px] flex flex-col justify-center relative overflow-hidden group/quote"
                     custom={5}
                     variants={cardVariants}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                 >
-                    <p className="text-sm text-secondary leading-relaxed">
-                        I sweat spacing, timing, and feedback —<br />
-                        <span className="text-primary font-medium">the tiny stuff.</span>
-                    </p>
+
+                    <div className="relative z-10">
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-accent1 font-bold mb-3">Quote of the day</p>
+                        <p className="text-sm md:text-base text-white font-serif italic leading-relaxed">
+                            "{dailyQuote.text}"
+                        </p>
+                        <p className="text-[10px] text-secondary uppercase tracking-widest mt-3 font-bold">
+                            — {dailyQuote.author}
+                        </p>
+                    </div>
                 </motion.div>
 
-            </div>
-        </section>
+            </div >
+        </section >
     );
 };
 
@@ -563,55 +559,58 @@ const AnalogClock = ({ timezone }) => {
                     {/* Watch Face Interior */}
                     <div className="relative w-full h-full rounded-full bg-[#050505] overflow-hidden">
 
-                        {/* 24-Hour Ring numbering */}
-                        {[...Array(12)].map((_, i) => (
-                            <div key={i} className="absolute w-full h-full" style={{ transform: `rotate(${i * 30}deg)` }}>
-                                <span className="absolute top-2.5 left-1/2 -translate-x-1/2 text-[7px] font-bold text-white/30 tracking-tighter">
-                                    {(i * 2 === 0 ? 24 : i * 2).toString().padStart(2, '0')}
-                                </span>
-                            </div>
-                        ))}
 
                         {/* GMT Markers (Luminous style) */}
                         {[...Array(60)].map((_, i) => (
                             <div key={i} className="absolute w-full h-full" style={{ transform: `rotate(${i * 6}deg)` }}>
                                 {i % 5 === 0 ? (
-                                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[3px] h-3.5 bg-neutral-200 rounded-sm shadow-[0_0_5px_rgba(255,255,255,0.2)]" />
+                                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[3.5px] h-4 bg-white/90 rounded-sm shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
                                 ) : (
-                                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[1px] h-1.5 bg-white/20" />
+                                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[1.5px] h-2.5 bg-white/60" />
                                 )}
                             </div>
                         ))}
+
+                        {/* Date Window Complication */}
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10">
+                            <div className="w-8 h-6 bg-[#111] border border-white/20 rounded-[2px] flex items-center justify-center shadow-inner">
+                                <span className="text-[10px] font-mono font-bold text-white tracking-tighter">
+                                    {tzTime.getDate().toString().padStart(2, '0')}
+                                </span>
+                            </div>
+                        </div>
 
                         {/* Hands Component */}
                         <div className="absolute inset-0 z-20">
                             {/* Hour Hand */}
                             <motion.div
-                                className="absolute bottom-1/2 left-1/2 w-[6px] h-[26%] bg-white origin-bottom"
+                                className="absolute bottom-1/2 left-1/2 w-[7px] h-[26%] bg-white origin-bottom"
                                 animate={{ rotate: hourDeg }}
                                 style={{
                                     x: "-50%",
                                     clipPath: 'polygon(50% 0%, 100% 15%, 100% 100%, 0% 100%, 0% 15%)',
-                                    filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.5))'
+                                    filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.2)) drop-shadow(0 2px 5px rgba(0,0,0,0.5))'
                                 }}
                             />
+
                             {/* Minute Hand */}
                             <motion.div
-                                className="absolute bottom-1/2 left-1/2 w-[4px] h-[36%] bg-white origin-bottom"
+                                className="absolute bottom-1/2 left-1/2 w-[6px] h-[38%] bg-white origin-bottom"
                                 animate={{ rotate: minuteDeg }}
                                 style={{
                                     x: "-50%",
                                     clipPath: 'polygon(50% 0%, 100% 10%, 100% 100%, 0% 100%, 0% 10%)',
-                                    filter: 'drop-shadow(0 2px 5px rgba(0,0,0,0.5))'
+                                    filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.2)) drop-shadow(0 2px 5px rgba(0,0,0,0.5))'
                                 }}
                             />
+
                             {/* Second Hand */}
                             <motion.div
-                                className="absolute bottom-1/2 left-1/2 w-[1.5px] h-[44%] bg-accent1 origin-bottom"
+                                className="absolute bottom-1/2 left-1/2 w-[1.5px] h-[45%] bg-accent1 origin-bottom"
                                 style={{
                                     x: "-50%",
                                     rotate: secondDeg,
-                                    filter: 'drop-shadow(0 0 2px rgba(194,160,122,0.5))'
+                                    filter: 'drop-shadow(0 0 3px rgba(194,160,122,0.6))'
                                 }}
                             />
                         </div>
@@ -630,48 +629,40 @@ const AnalogClock = ({ timezone }) => {
     );
 };
 
-// Gallery Item with 3D effects
+// Gallery Item - Clean Modern Cards
 const GalleryItem = ({ item, containerX, index }) => {
     const itemWidth = 140;
     const gap = 12;
     const offset = index * (itemWidth + gap);
 
-    // Calculate relative position to container center (approx 450/2 = 225)
+    // Calculate relative position to container center for basic effects
     const relativeX = useTransform(containerX, (val) => val + offset + itemWidth / 2);
 
-    // 3D rotation based on position
-    const rotateY = useTransform(relativeX, [0, 450], [15, -15]);
-    const z = useTransform(relativeX, [0, 225, 450], [-100, 0, -100]);
-    const scale = useTransform(relativeX, [0, 225, 450], [0.85, 1.05, 0.85]);
-    const opacity = useTransform(relativeX, [-100, 50, 400, 550], [0.1, 1, 1, 0.1]);
+    // Expanded visibility ranges for the scrolling gallery
+    const scale = useTransform(relativeX, [-200, 150, 450], [0.95, 1, 0.95]);
+    const opacity = useTransform(relativeX, [-300, 0, 500, 800], [0, 1, 1, 0]);
 
     return (
         <motion.div
             style={{
-                rotateY,
-                z,
                 scale,
                 opacity,
-                background: `linear-gradient(to bottom right, rgba(255,255,255,0.05), rgba(255,255,255,0.01))`
+                background: `rgba(255,255,255,0.03)`
             }}
-            className="flex-shrink-0 w-[140px] aspect-[3/4] rounded-2xl border border-white/5 flex items-center justify-center overflow-hidden hover:border-white/20 transition-all group relative preserve-3d"
+            className="flex-shrink-0 w-[140px] aspect-[3/4] rounded-2xl border border-white/5 flex items-center justify-center overflow-hidden transition-all group relative"
         >
-            <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-20 group-hover:opacity-60 transition-opacity duration-500`} />
+            <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
 
             {item.type === 'image' ? (
-                <motion.img
+                <img
                     src={item.content}
                     alt="Gallery item"
-                    className="w-full h-full object-cover z-10 transition-all duration-700 scale-110 group-hover:scale-100"
-                    style={{ rotateY: useTransform(rotateY, (r) => -r * 0.5) }} // Subtle parallax
+                    className="w-full h-full object-cover z-10 transition-all duration-700 group-hover:scale-105"
                 />
             ) : (
-                <motion.span
-                    className="text-4xl z-10 transition-all transform group-hover:scale-125 duration-700"
-                    style={{ rotateY: useTransform(rotateY, (r) => -r) }} // Counter-rotate text for readability
-                >
+                <span className="text-4xl z-10 transition-all transform group-hover:scale-110 duration-700">
                     {item.content}
-                </motion.span>
+                </span>
             )}
 
             {/* Glossy shine effect */}

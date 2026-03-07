@@ -1,47 +1,132 @@
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import {
+    SiNextdotjs, SiTypescript, SiSupabase, SiFramer, SiRadixui,
+    SiTailwindcss, SiOpenai, SiPython, SiFastapi, SiFirebase,
+    SiScikitlearn, SiTwilio, SiVercel
+} from 'react-icons/si';
+
+const getTechIcon = (tech) => {
+    const t = tech.toLowerCase();
+    if (t.includes('next.js')) return <SiNextdotjs className="text-[#000000] dark:text-white" />;
+    if (t.includes('typescript')) return <SiTypescript className="text-[#3178C6]" />;
+    if (t.includes('supabase')) return <SiSupabase className="text-[#3ECF8E]" />;
+    if (t.includes('framer')) return <SiFramer className="text-[#0055FF]" />;
+    if (t.includes('radix')) return <SiRadixui className="text-white" />;
+    if (t.includes('tailwind')) return <SiTailwindcss className="text-[#06B6D4]" />;
+    if (t.includes('groq')) return <Sparkles size={10} className="text-orange-400" />;
+    if (t.includes('python')) return <SiPython className="text-[#3776AB]" />;
+    if (t.includes('fastapi')) return <SiFastapi className="text-[#05998B]" />;
+    if (t.includes('firebase')) return <SiFirebase className="text-[#FFCA28]" />;
+    if (t.includes('scikit')) return <SiScikitlearn className="text-[#F7931E]" />;
+    if (t.includes('twilio')) return <SiTwilio className="text-[#F22F46]" />;
+    if (t.includes('ollama')) return <Sparkles size={10} className="text-purple-400" />;
+    if (t.includes('three.js')) return <span className="text-[8px] font-bold">3D</span>;
+    if (t.includes('tesseract')) return <span className="text-[8px] font-bold">OCR</span>;
+    if (t.includes('pubmed')) return <span className="text-[8px] font-bold">MED</span>;
+    return <span className="w-1 h-1 rounded-full bg-current" />;
+};
 
 const ventures = [
     {
         name: 'SkillTwin',
         emoji: '🚀',
         description: 'An AI-first career intelligence platform that creates a "Digital Skill Twin" by analyzing resumes and GitHub profiles, detecting skill gaps, and generating personalized learning roadmaps using state-of-the-art LLMs.',
-        features: [
-            'AI-powered resume analysis with intelligent skill extraction',
-            'GitHub profile deep scanning for real competency mapping',
-            'Personalized learning roadmap generation with LLM orchestration',
+        techStack: ['Next.js 15', 'TypeScript', 'Groq (Llama-3)', 'Supabase', 'Framer Motion', 'Radix UI'],
+        images: [
+            '/skilltwin/hero.png',
+            '/skilltwin/features.png',
+            '/skilltwin/roadmap.png',
+            '/skilltwin/problem.png',
+            '/skilltwin/sdg.png'
         ],
-        techStack: ['React', 'Next.js', 'TypeScript', 'Groq API', 'Supabase', 'Tailwind CSS', 'GSAP', 'Vercel'],
-        image: '/skilltwin/hero.png',
         color: 'from-red-600 to-red-800',
     },
     {
         name: 'D-Liver',
-        emoji: '🏥',
-        description: 'An intelligent healthcare platform that democratizes medical report comprehension. Patients upload documents and receive simplified AI explanations, while doctors get clinical views with confidence scoring and RAG-backed citations.',
-        features: [
-            'Medical report AI analysis with confidence scoring',
-            'RAG pipeline for citation-backed explanations',
-            'Dual interface: patient-friendly & clinical views',
+        emoji: '🩺',
+        description: 'An AI-Powered Medical Report Intelligence System designed to bridge the gap between complex clinical data and patient understanding. It transforms raw medical documents into structured, actionable health insights.',
+        techStack: ['Next.js 15', 'Ollama', 'Supabase', 'Three.js', 'Tesseract.js', 'PubMed API'],
+        images: [
+            '/d-liver/hero.png',
+            '/d-liver/dashboard.png',
+            '/d-liver/features.png',
+            '/d-liver/howitworks.png',
+            '/d-liver/login.png'
         ],
-        techStack: ['React', 'Ollama', 'Supabase', 'PubMed API', 'Tailwind CSS', 'Node.js', 'Express', 'Vercel'],
-        image: '/d-liver/hero.png',
         color: 'from-blue-600 to-indigo-800',
     },
     {
         name: 'Agri-Novation',
-        emoji: '🌾',
-        description: 'A full-stack agricultural intelligence dashboard integrating real-time IoT sensor data, 6 concurrent ML models, and LLMs to provide proactive alerts, crop predictions, and actionable agronomic advice.',
-        features: [
-            'Real-time IoT sensor data integration & monitoring',
-            '6 concurrent ML models for crop prediction',
-            'Multilingual LLM-powered agronomic advisory system',
+        emoji: '🌿',
+        description: 'A comprehensive agricultural technology platform bridging the gap between traditional farming and modern data science. It leverages IoT, machine learning, and generative AI to provide farmers with actionable insights.',
+        techStack: ['Python', 'FastAPI', 'Firebase', 'Groq API', 'Scikit-learn', 'Twilio API'],
+        images: [
+            '/agri-sahayak/hero.png',
+            '/agri-sahayak/dashboard.png',
+            '/agri-sahayak/features.png',
+            '/agri-sahayak/technology.png'
         ],
-        techStack: ['FastAPI', 'Scikit-Learn', 'Firebase', 'Groq API', 'React', 'Python', 'TensorFlow', 'Vercel'],
-        image: '/agri-sahayak/hero.png',
         color: 'from-green-600 to-emerald-800',
-    },
+    }
 ];
+
+const ProjectImageCarousel = ({ images, name, emoji }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setCurrentIndex((prev) => (prev + 1) % images.length);
+        }, 3000); // Rotate every 3 seconds for a more dynamic feel
+        return () => clearInterval(timer);
+    }, [images.length]);
+
+    return (
+        <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black/20">
+            {/* Background Layer (Previous Image) to prevent flicker */}
+            <div
+                className="absolute inset-0 bg-cover bg-center opacity-40 transition-all duration-1000"
+                style={{ backgroundImage: `url(${images[(currentIndex - 1 + images.length) % images.length]})` }}
+            />
+
+            <AnimatePresence mode="popLayout">
+                <motion.img
+                    key={currentIndex}
+                    src={images[currentIndex]}
+                    alt={`${name} preview ${currentIndex + 1}`}
+                    className="absolute inset-0 w-full h-full object-cover z-10"
+                    initial={{ opacity: 0, filter: 'blur(10px)' }}
+                    animate={{ opacity: 1, filter: 'blur(0px)' }}
+                    exit={{ opacity: 0, filter: 'blur(10px)' }}
+                    transition={{ duration: 0.8, ease: 'easeInOut' }}
+                    onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallback = e.target.parentElement.querySelector('.fallback');
+                        if (fallback) fallback.style.display = 'flex';
+                    }}
+                />
+            </AnimatePresence>
+
+            {/* Fallback for missing images */}
+            <div className="fallback hidden absolute inset-0 w-full h-full bg-black/30 backdrop-blur-sm items-center justify-center">
+                <span className="text-6xl">{emoji}</span>
+            </div>
+
+            {/* Progress Indicators */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-30">
+                {images.map((_, idx) => (
+                    <div
+                        key={idx}
+                        className={`h-1.5 rounded-full transition-all duration-700 ${idx === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/20'
+                            }`}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
 
 const VentureShowcase = () => {
     return (
@@ -91,75 +176,42 @@ const VentureShowcase = () => {
                                     {venture.emoji} {venture.description}
                                 </p>
 
-                                <ul className="space-y-3">
-                                    {venture.features.map((feature, i) => (
-                                        <li key={i} className="flex items-start gap-3">
-                                            <span className="text-accent1 mt-1 text-sm">✦</span>
-                                            <span className="text-primary text-sm leading-relaxed">{feature}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                {/* Tech Stack */}
                                 <div className="flex flex-wrap gap-2 pt-4">
                                     {venture.techStack.map((tech) => (
                                         <span
                                             key={tech}
-                                            className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-secondary uppercase tracking-wider flex items-center gap-1.5 hover:border-accent1/30 hover:text-accent1 transition-all"
+                                            className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-bold text-secondary uppercase tracking-wider flex items-center gap-2 hover:border-accent1/30 hover:text-accent1 transition-all"
                                         >
-                                            <span className="w-1 h-1 rounded-full bg-current" />
+                                            {getTechIcon(tech)}
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
+
+                                {/* Know More Button */}
+                                <div className="pt-8">
+                                    <Link
+                                        to="/projects"
+                                        className="group/btn relative px-8 py-4 bg-white text-black font-black uppercase text-[10px] tracking-[0.3em] rounded-full overflow-hidden flex items-center gap-3 transition-all hover:scale-105 active:scale-95 inline-flex"
+                                    >
+                                        <span className="relative z-10 transition-colors group-hover/btn:text-white">Know More</span>
+                                        <ArrowUpRight size={14} className="relative z-10 group-hover/btn:rotate-45 group-hover/btn:text-white transition-all" />
+                                        <div className="absolute inset-0 bg-red-600 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500 ease-[0.22, 1, 0.36, 1]" />
+                                    </Link>
+                                </div>
                             </div>
 
-                            {/* Right - Mockup */}
+                            {/* Right - Mockup Carousel */}
                             <div className={`rounded-3xl bg-gradient-to-br ${venture.color} p-6 md:p-8 overflow-hidden relative group cursor-pointer`}>
                                 <div className="relative z-10">
-                                    <img
-                                        src={venture.image}
-                                        alt={venture.name}
-                                        className="w-full rounded-2xl shadow-2xl group-hover:scale-[1.03] transition-transform duration-700"
-                                        onError={(e) => {
-                                            e.target.style.display = 'none';
-                                            e.target.nextElementSibling.style.display = 'flex';
-                                        }}
+                                    <ProjectImageCarousel
+                                        images={venture.images}
+                                        name={venture.name}
+                                        emoji={venture.emoji}
                                     />
-                                    <div className="hidden w-full aspect-video rounded-2xl bg-black/30 backdrop-blur-sm items-center justify-center">
-                                        <span className="text-6xl">{venture.emoji}</span>
-                                    </div>
                                 </div>
                                 {/* Glow effect */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-
-                                {/* VISIT PROJECT circular hover button */}
-                                <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                    <div className="w-28 h-28 md:w-36 md:h-36 rounded-full bg-black/80 backdrop-blur-md flex items-center justify-center relative">
-                                        {/* Rotating text ring */}
-                                        <svg
-                                            className="absolute inset-0 w-full h-full animate-spin-slow"
-                                            viewBox="0 0 200 200"
-                                        >
-                                            <defs>
-                                                <path
-                                                    id={`circlePath-${idx}`}
-                                                    d="M100,100 m-70,0 a70,70 0 1,1 140,0 a70,70 0 1,1 -140,0"
-                                                />
-                                            </defs>
-                                            <text fill="white" fontSize="14" fontWeight="700" letterSpacing="6" style={{ textTransform: 'uppercase' }}>
-                                                <textPath href={`#circlePath-${idx}`}>
-                                                    • VISIT PROJECT • VISIT PROJECT
-                                                </textPath>
-                                            </text>
-                                        </svg>
-                                        {/* Eye icon center */}
-                                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="relative z-10">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                            <circle cx="12" cy="12" r="3" />
-                                        </svg>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </motion.div>

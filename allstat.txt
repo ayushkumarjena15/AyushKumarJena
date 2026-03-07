@@ -1,0 +1,18 @@
+﻿ package-lock.json                  |  39 +++
+ package.json                       |   1 +
+ src/App.jsx                        |   6 +
+ src/assets/propeller.png           | Bin 0 -> 370600 bytes
+ src/components/BehindCurtains.jsx  |  33 ++-
+ src/components/BentoGrid.jsx       | 178 +++++++++---
+ src/components/CTASection.jsx      | 170 +++++++-----
+ src/components/CommandPalette.jsx  |   2 +-
+ src/components/Footer.jsx          |   2 +-
+ src/components/MarqueeBanner.jsx   |   8 +-
+ src/components/Navbar.jsx          | 111 ++++++--
+ src/components/SkillsetSection.jsx | 243 ++---------------
+ src/pages/AboutPage.jsx            | 291 +++++++-------------
+ src/pages/BlogsPage.jsx            |  90 ++++++
+ src/pages/BookCallPage.jsx         | 542 +++++++++++++++++++++++++------------
+ src/pages/LabsPage.jsx             | 112 ++++++++
+ src/pages/ProjectsPage.jsx         | 278 +++++++++++++------
+ 17 files changed, 1298 insertions(+), 808 deletions(-)
