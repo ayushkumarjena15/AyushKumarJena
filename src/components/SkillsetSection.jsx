@@ -59,16 +59,23 @@ const SpinningWheel = () => {
             <div className="relative w-[300px] h-[300px] flex items-center justify-center">
                 <div className="absolute inset-[-40px] bg-blue-500/10 rounded-full blur-[100px]" />
 
-                <motion.img
-                    src={propeller}
-                    alt="Propeller"
-                    className="w-full h-full object-contain relative z-10"
+                <div
+                    className="w-full h-full relative z-10"
                     style={{
-                        rotate: rotation,
-                        mixBlendMode: 'screen', // This is key to removing the black square background
-                        filter: 'brightness(1.1) contrast(1.1)'
+                        WebkitMaskImage: 'radial-gradient(circle at center, white 35%, transparent 70%)',
+                        maskImage: 'radial-gradient(circle at center, white 35%, transparent 70%)',
                     }}
-                />
+                >
+                    <motion.img
+                        src={propeller}
+                        alt="Propeller"
+                        className="w-full h-full object-contain"
+                        style={{
+                            rotate: rotation,
+                            filter: 'brightness(1.3) contrast(1.2)'
+                        }}
+                    />
+                </div>
 
             </div>
         </div>
