@@ -42,7 +42,13 @@ const MiniGear = ({ rotation }) => {
 
 const projectNames = ['SkillTwin', 'D-Liver', 'Agri Sahayak'];
 
-const FounderCard = ({ cardVariants }) => {
+const timezones = [
+    { label: 'UK', flag: '🇬🇧', tz: 'Europe/London', offset: 0 },
+    { label: 'India', flag: '🇮🇳', tz: 'Asia/Kolkata', offset: 5.5 },
+    { label: 'USA', flag: '🇺🇸', tz: 'America/New_York', offset: -5 },
+];
+
+const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
     const [activeProject, setActiveProject] = useState(0);
 
     useEffect(() => {
@@ -71,16 +77,17 @@ const FounderCard = ({ cardVariants }) => {
                     Adaptable across<br />time zones
                 </h3>
                 <div className="mt-4 flex flex-wrap gap-2">
-                    {['🇬🇧 UK', '🇮🇳 India', '🇺🇸 USA'].map((zone, i) => (
-                        <span
-                            key={zone}
-                            className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-500 ${i === 1
-                                ? 'bg-accent1/20 border-accent1/40 text-accent1'
-                                : 'border-white/10 text-secondary'
+                    {timezones.map((zone, i) => (
+                        <button
+                            key={zone.label}
+                            onClick={() => onTimezoneChange(i)}
+                            className={`px-4 py-2 rounded-full text-xs font-bold border transition-all duration-500 cursor-pointer hover:scale-105 active:scale-95 ${selectedTimezone === i
+                                ? 'bg-accent1/20 border-accent1/40 text-accent1 shadow-[0_0_15px_rgba(194,160,122,0.2)]'
+                                : 'border-white/10 text-secondary hover:border-white/30'
                                 }`}
                         >
-                            {zone}
-                        </span>
+                            {zone.flag} {zone.label}
+                        </button>
                     ))}
                 </div>
             </div>
@@ -117,6 +124,7 @@ const FounderCard = ({ cardVariants }) => {
 const BentoGrid = () => {
     const [currentTime, setCurrentTime] = useState('');
     const [copied, setCopied] = useState(false);
+    const [selectedTimezone, setSelectedTimezone] = useState(1); // Default: India
 
     useEffect(() => {
         const updateTime = () => {
@@ -456,11 +464,11 @@ const BentoGrid = () => {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                 >
-                    <AnalogClock />
+                    <AnalogClock timezone={timezones[selectedTimezone]} />
                 </motion.div>
 
                 {/* Card 5: Founder Card */}
-                <FounderCard cardVariants={cardVariants} />
+                <FounderCard cardVariants={cardVariants} selectedTimezone={selectedTimezone} onTimezoneChange={setSelectedTimezone} />
 
                 {/* Card 6: Detail Card with I sweat spacing */}
                 <motion.div
@@ -483,7 +491,7 @@ const BentoGrid = () => {
 };
 
 // Analog Clock Component
-const AnalogClock = () => {
+const AnalogClock = ({ timezone }) => {
     const [time, setTime] = useState(new Date());
 
     useEffect(() => {
@@ -497,15 +505,15 @@ const AnalogClock = () => {
         return () => cancelAnimationFrame(frame);
     }, []);
 
-    // IST offset
+    // Dynamic timezone offset
     const utc = time.getTime() + (time.getTimezoneOffset() * 60000);
-    const ist = new Date(utc + (5.5 * 3600000));
+    const tzTime = new Date(utc + (timezone.offset * 3600000));
 
-    const seconds = ist.getSeconds();
-    const ms = ist.getMilliseconds();
-    const minutes = ist.getMinutes();
-    const hours = ist.getHours();
-    const date = ist.getDate();
+    const seconds = tzTime.getSeconds();
+    const ms = tzTime.getMilliseconds();
+    const minutes = tzTime.getMinutes();
+    const hours = tzTime.getHours();
+    const date = tzTime.getDate();
 
     const secondDeg = (seconds + ms / 1000) * 6;
     const minuteDeg = (minutes + seconds / 60) * 6;
