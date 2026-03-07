@@ -9,8 +9,8 @@ const words = [
 const MarqueeBanner = () => {
     return (
         <section className="py-6 overflow-hidden relative">
-            {/* Dark background bar */}
-            <div className="bg-surface/50 backdrop-blur-sm border-y border-white/5 py-5 relative overflow-hidden">
+            {/* Red background bar */}
+            <div className="bg-[#e11d48] py-5 relative overflow-hidden shadow-[0_0_30px_rgba(225,29,72,0.3)]">
                 <motion.div
                     className="flex gap-8 whitespace-nowrap"
                     animate={{ x: ['0%', '-50%'] }}
@@ -19,9 +19,9 @@ const MarqueeBanner = () => {
                     {[...words, ...words].map((word, i) => (
                         <span
                             key={i}
-                            className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-white/90 flex items-center gap-6"
+                            className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-white flex items-center gap-6"
                         >
-                            <span className="text-accent1/60">✦</span>
+                            <span className="text-white/40">✦</span>
                             {word}
                         </span>
                     ))}
