@@ -89,7 +89,7 @@ const SignatureCard = ({ id, name, created_at, message, is_pinned, liked_by, is_
                         <button onClick={() => onToggleHide(id, !is_hidden)} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#f59e0b]/20 hover:text-[#f59e0b] transition-colors" title={is_hidden ? "Unhide" : "Hide"}>
                             <EyeOff size={14} className={is_hidden ? "text-[#f59e0b]" : "text-white/50"} />
                         </button>
-                        <button onClick={() => { if (window.confirm('Are you sure you want to delete this message?')) onDelete(id); }} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition-colors" title="Delete">
+                        <button onClick={() => onDelete(id)} className="w-7 h-7 rounded-full bg-white/5 flex items-center justify-center hover:bg-red-500/20 hover:text-red-500 transition-colors" title="Delete">
                             <Trash2 size={14} className="text-white/50 hover:text-red-500" />
                         </button>
                     </div>
@@ -108,6 +108,7 @@ const GuestbookPage = () => {
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
     const [profileData, setProfileData] = useState({ full_name: '', user_name: '' });
     const [isSavingProfile, setIsSavingProfile] = useState(false);
+    const [deleteConfirmationId, setDeleteConfirmationId] = useState(null);
 
     // Admin features
     const isAdmin = user &&
@@ -277,6 +278,7 @@ const GuestbookPage = () => {
             const { error } = await supabase.from('guestbook').delete().eq('id', id);
             if (error) throw error;
             fetchSignatures();
+            setDeleteConfirmationId(null);
         } catch (e) {
             console.error('Error deleting signature:', e);
         }
@@ -410,11 +412,54 @@ const GuestbookPage = () => {
                             onTogglePin={togglePin}
                             onToggleLike={toggleLike}
                             onToggleHide={toggleHide}
-                            onDelete={deleteSignature}
+                            onDelete={(id) => setDeleteConfirmationId(id)}
                         />
                     ))}
                 </motion.div>
             )}
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {deleteConfirmationId && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                            className="bg-[#0a0a0a] border border-white/10 w-full max-w-[400px] rounded-[2rem] p-8 relative shadow-2xl flex flex-col items-center text-center"
+                        >
+                            <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
+                                <Trash2 size={24} className="text-red-500" />
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2 tracking-tight">Delete Message?</h3>
+                            <p className="text-white/60 text-sm mb-8 leading-relaxed">
+                                Are you absolutely sure you want to delete this signature? This action cannot be undone.
+                            </p>
+
+                            <div className="flex gap-4 w-full">
+                                <button
+                                    onClick={() => setDeleteConfirmationId(null)}
+                                    className="flex-1 py-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-white font-bold text-sm transition-colors"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => deleteSignature(deleteConfirmationId)}
+                                    className="flex-1 py-4 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-sm transition-colors shadow-[0_0_20px_rgba(239,68,68,0.3)]"
+                                >
+                                    Yes, delete it
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Edit Profile Modal */}
             <AnimatePresence>
