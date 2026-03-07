@@ -524,114 +524,99 @@ const AnalogClock = ({ timezone }) => {
                 {/* Watch Face */}
                 <div className="relative w-full h-full rounded-full bg-[#0c0c0c] overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,1)] border border-white/5">
 
-                    {/* Jacob & Co Celestial Background */}
-                    <div className="absolute inset-0 bg-[#050505]" />
+                    {/* Radial Texture / Sunburst effect */}
+                    <div className="absolute inset-0 opacity-40 bg-[radial-gradient(circle_at_center,_#1a1a1a_0%,_#050505_70%)]" />
+                    <div className="absolute inset-0 opacity-10 bg-[conic-gradient(from_0deg,_transparent_0deg,_white_20deg,_transparent_40deg,_white_60deg,_transparent_80deg,_white_100deg,_transparent_120deg,_white_140deg,_transparent_160deg,_white_180deg,_transparent_200deg,_white_220deg,_transparent_240deg,_white_260deg,_transparent_280deg,_white_300deg,_transparent_320deg,_white_340deg,_transparent_360deg)]" />
 
-                    {/* Rotating Skeletonized Gears (Functional Background) */}
-                    <motion.div
-                        className="absolute inset-0 opacity-20 border-[20px] border-double border-white/5 rounded-full"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                    >
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border border-white/10 border-dashed" />
-                    </motion.div>
-
-                    {/* Spinning Mechanical Gears */}
-                    <motion.div
-                        className="absolute top-[25%] left-[25%] w-12 h-12 bg-white/5 rounded-full border border-white/10 flex items-center justify-center"
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                    >
-                        <div className="w-10 h-[1px] bg-white/20 rotate-45" />
-                        <div className="w-10 h-[1px] bg-white/20 -rotate-45" />
-                    </motion.div>
-
-                    <motion.div
-                        className="absolute bottom-[20%] right-[30%] w-16 h-16 bg-white/5 rounded-full border border-white/10 flex items-center justify-center"
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                    >
-                        {[...Array(8)].map((_, i) => (
-                            <div key={i} className="absolute w-[2px] h-3 bg-white/20" style={{ transform: `rotate(${i * 45}deg) translateY(-28px)` }} />
-                        ))}
-                    </motion.div>
-
-                    {/* Minute Markers (Floating Style) */}
-                    {[...Array(12)].map((_, i) => (
+                    {/* Minute Markers */}
+                    {[...Array(60)].map((_, i) => (
                         <div
                             key={i}
                             className="absolute w-full h-full"
-                            style={{ transform: `rotate(${i * 30}deg)` }}
+                            style={{ transform: `rotate(${i * 6}deg)` }}
                         >
-                            <div className="absolute top-3 left-1/2 -translate-x-1/2 text-[8px] font-black text-white/40 font-heading">
-                                {i === 0 ? 12 : i}
-                            </div>
+                            {i % 5 === 0 ? (
+                                <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[3px] h-4 flex flex-col items-center">
+                                    <div className="w-full h-full bg-gradient-to-b from-white to-neutral-500 rounded-sm shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
+                                    <div className="absolute top-[2px] w-[1px] h-[10px] bg-cyan-400/60 blur-[1px]" /> {/* Lume effect */}
+                                </div>
+                            ) : (
+                                <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-[1px] h-1.5 bg-white/20" />
+                            )}
                         </div>
                     ))}
 
-                    {/* Date Window (Skeletonized) */}
-                    <div className="absolute right-[22%] top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-[#111] border border-accent1/30 flex items-center justify-center shadow-lg z-10">
-                        <span className="text-[10px] font-bold text-accent1">{date}</span>
+                    {/* Date Window */}
+                    <div className="absolute right-[20%] top-1/2 -translate-y-1/2 w-8 h-7 bg-[#050505] border border-white/10 rounded-sm flex items-center justify-center shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)] overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-white/5" />
+                        <span className="text-[11px] font-mono font-bold text-white tracking-tighter relative z-10">{date}</span>
                     </div>
 
-                    {/* Floating Branding Sub-dial */}
-                    <div className="absolute top-[28%] left-1/2 -translate-x-1/2 z-10">
-                        <div className="px-2 py-0.5 rounded-full bg-accent1/10 border border-accent1/20">
-                            <p className="text-[6px] font-black tracking-[0.2em] text-accent1 uppercase">ASTRONOMIA</p>
-                        </div>
+                    {/* Branding */}
+                    <div className="absolute top-[30%] left-1/2 -translate-x-1/2 text-center w-full">
+                        <p className="text-[8px] font-black tracking-[0.4em] text-white/70 uppercase mb-0.5">ROLEX-STYLE</p>
+                        <p className="text-[5px] font-bold tracking-[0.2em] text-accent1/50 uppercase">OFFICIAL CHRONOMETER</p>
+                    </div>
+                    <div className="absolute bottom-[30%] left-1/2 -translate-x-1/2 text-center w-full">
+                        <p className="text-[6px] font-bold tracking-[0.2em] text-white/30 uppercase">SWISS MADE</p>
                     </div>
 
-                    {/* Hour Hand (Skeleton Blue-Steel Style) */}
+                    {/* Hour Hand (Sword Style) */}
                     <motion.div
-                        className="absolute bottom-1/2 left-1/2 w-[5px] h-[24%] origin-bottom z-20"
+                        className="absolute bottom-1/2 left-1/2 w-[6px] h-[28%] bg-white rounded-sm origin-bottom z-20"
                         animate={{ rotate: hourDeg }}
                         transition={{ type: "spring", stiffness: 50, damping: 20 }}
-                        style={{ x: "-50%" }}
+                        style={{
+                            x: "-50%",
+                            clipPath: 'polygon(50% 0%, 100% 20%, 100% 100%, 0% 100%, 0% 20%)',
+                            boxShadow: '0 4px 10px rgba(0,0,0,0.8)'
+                        }}
                     >
-                        <div className="w-full h-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-sm shadow-xl relative">
-                            <div className="absolute inset-[1px] bg-[#0c0c0c] rounded-sm" />
-                        </div>
+                        {/* Lume strip */}
+                        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[2px] h-[60%] bg-cyan-400/40 blur-[0.5px]" />
+                        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[1px] h-[60%] bg-white shadow-[0_0_5px_rgba(34,211,238,0.8)]" />
                     </motion.div>
 
-                    {/* Minute Hand (Skeleton Blue-Steel Style) */}
+                    {/* Minute Hand (Sword Style) */}
                     <motion.div
-                        className="absolute bottom-1/2 left-1/2 w-[3px] h-[36%] origin-bottom z-30"
+                        className="absolute bottom-1/2 left-1/2 w-[4px] h-[38%] bg-white rounded-sm origin-bottom z-30"
                         animate={{ rotate: minuteDeg }}
                         transition={{ type: "spring", stiffness: 50, damping: 20 }}
-                        style={{ x: "-50%" }}
+                        style={{
+                            x: "-50%",
+                            clipPath: 'polygon(50% 0%, 100% 15%, 100% 100%, 0% 100%, 0% 15%)',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.8)'
+                        }}
                     >
-                        <div className="w-full h-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-full shadow-xl relative">
-                            <div className="absolute inset-[1px] bg-[#0c0c0c] rounded-full" />
-                        </div>
+                        {/* Lume strip */}
+                        <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[1.5px] h-[70%] bg-cyan-400/40 blur-[0.5px]" />
+                        <div className="absolute top-[15%] left-1/2 -translate-x-1/2 w-[1px] h-[70%] bg-white shadow-[0_0_5px_rgba(34,211,238,0.8)]" />
                     </motion.div>
 
-                    {/* Functional Central Tourbillon (Seconds) */}
+                    {/* Second Hand (Needle Style) */}
                     <div
-                        className="absolute bottom-1/2 left-1/2 w-[2px] h-[45%] origin-bottom z-40"
-                        style={{ transform: `translateX(-50%) rotate(${secondDeg}deg)` }}
+                        className="absolute bottom-1/2 left-1/2 w-[1px] h-[45%] bg-accent1 origin-bottom z-40"
+                        style={{
+                            transform: `translateX(-50%) rotate(${secondDeg}deg)`,
+                            boxShadow: '0 2px 10px rgba(0,0,0,0.5)'
+                        }}
                     >
-                        {/* Spinning Diamond/Planet element on the second hand */}
-                        <motion.div
-                            className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4"
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        >
-                            <div className="w-full h-full bg-accent1 rounded-sm rotate-45 shadow-[0_0_15px_rgba(194,160,122,0.8)] border border-white/20" />
-                        </motion.div>
-                        <div className="w-full h-full bg-accent1/80 rounded-full" />
+                        {/* Needle point point */}
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-accent1 shadow-glow" />
+                        {/* Counter-weight circle */}
+                        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full border border-accent1/50 bg-[#050505]" />
                     </div>
 
-                    {/* Center Core Cap (Diamond Style) */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 z-50">
-                        <div className="absolute inset-0 bg-accent1/20 rounded-full blur-md" />
-                        <div className="relative w-full h-full bg-gradient-to-br from-[#444] to-[#111] rounded-full border border-white/30 flex items-center justify-center shadow-2xl">
-                            <div className="w-2 h-2 bg-white rounded-full shadow-[0_0_10px_#fff]" />
-                        </div>
+                    {/* Center Pin / Cap */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-gradient-to-br from-[#333] to-[#111] rounded-full z-50 shadow-2xl border border-white/20 flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 bg-accent1/80 rounded-full border border-white/10" />
                     </div>
 
-                    {/* Domed Glass Effect Overlay */}
-                    <div className="absolute inset-0 pointer-events-none z-[60] bg-[radial-gradient(circle_at_30%_30%,_rgba(255,255,255,0.1)_0%,_transparent_60%)] opacity-50" />
-                    <div className="absolute inset-0 border-[15px] border-black/40 rounded-full pointer-events-none z-[60]" />
+                    {/* Glass Reflection Overlay */}
+                    <div className="absolute inset-0 pointer-events-none z-[60] rounded-full overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.03] to-white/[0.08]" />
+                        <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_30%,_rgba(255,255,255,0.05)_0%,_transparent_60%)]" />
+                    </div>
                 </div>
             </div>
         </div>
