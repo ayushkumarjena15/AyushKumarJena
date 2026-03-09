@@ -77,9 +77,7 @@ const SpinningWheel = () => {
 
     return (
         <div className="w-full h-full flex items-center justify-center pointer-events-none">
-            <div className="relative w-[300px] h-[300px] flex items-center justify-center">
-                <div className="absolute inset-[-40px] bg-blue-500/10 rounded-full blur-[100px]" />
-
+            <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center rounded-full overflow-hidden bg-black/50">
                 <motion.img
                     src={propeller}
                     alt="Propeller"
@@ -87,6 +85,7 @@ const SpinningWheel = () => {
                     style={{
                         rotate: rotation,
                         mixBlendMode: 'screen',
+                        filter: 'contrast(1.8) brightness(0.6) saturate(0)',
                     }}
                 />
             </div>

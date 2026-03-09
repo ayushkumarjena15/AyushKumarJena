@@ -92,10 +92,10 @@ const Hero = () => {
                 <div className="flex flex-col items-center gap-2">
                     <Layers size={18} className="text-blue-400" />
                     <p className="text-[10px] font-black tracking-[0.3em] uppercase text-accent2 text-center">
-                        Full Stack Dev,
+                        Full Stack Dev
                     </p>
                     <p className="text-[10px] tracking-[0.2em] uppercase text-secondary text-center">
-                        & AI Engineer
+                        & MLOps Engineer
                     </p>
                 </div>
             </motion.div>

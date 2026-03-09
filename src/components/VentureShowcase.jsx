@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Sparkles, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
@@ -42,7 +42,7 @@ const ventures = [
             '/skilltwin/problem.png',
             '/skilltwin/sdg.png'
         ],
-        color: 'from-red-600 to-red-800',
+        color: 'from-orange-600 to-red-800',
     },
     {
         name: 'D-Liver',
@@ -84,7 +84,7 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
     }, [images.length]);
 
     return (
-        <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black/20">
+        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/20">
             {/* Background Layer (Previous Image) to prevent flicker */}
             <div
                 className="absolute inset-0 bg-cover bg-center opacity-40 transition-all duration-1000"
@@ -129,8 +129,66 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
 };
 
 const VentureShowcase = () => {
+    const listRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: listRef,
+        offset: ["start center", "end center"]
+    });
+
+    const scaleY = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
+    const avatarOpacity = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+
+    // Same color mapping as Projects page
+    const lineColor = useTransform(
+        scrollYProgress,
+        [0.1, 0.45, 0.8],
+        ["#f97316", "#8b5cf6", "#10b981"] // SkillTwin (Orange) -> D-Liver (Violet) -> Agri-Novation (Green)
+    );
+
+    const avatarBorderColor = useTransform(
+        scrollYProgress,
+        [0.1, 0.45, 0.8],
+        ["#f97316", "#8b5cf6", "#10b981"]
+    );
+
+    const avatarGlow = useTransform(
+        scrollYProgress,
+        [0.1, 0.45, 0.8],
+        ["rgba(249, 115, 22, 0.4)", "rgba(139, 92, 246, 0.4)", "rgba(16, 185, 129, 0.4)"]
+    );
+
     return (
-        <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+        <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative" ref={listRef}>
+            {/* Scroll Indicator System (Desktop Only) */}
+            <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px] bg-white/[0.05] z-0">
+                <motion.div
+                    className="absolute top-0 left-0 w-full origin-top"
+                    style={{
+                        height: '100%',
+                        scaleY,
+                        backgroundColor: lineColor
+                    }}
+                />
+
+                <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center">
+                    <motion.div
+                        className="w-12 h-12 rounded-full border-2 bg-background shadow-2xl overflow-hidden flex items-center justify-center -translate-y-1"
+                        style={{
+                            opacity: avatarOpacity,
+                            borderColor: avatarBorderColor,
+                            boxShadow: useTransform(avatarGlow, (glow) => `0 0 20px ${glow}`)
+                        }}
+                    >
+                        <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
+                    </motion.div>
+                </div>
+            </div>
+
             {/* Section Header */}
             <motion.div
                 className="text-center mb-20"
@@ -169,7 +227,7 @@ const VentureShowcase = () => {
                             </h3>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
                             {/* Left - Info */}
                             <div className="space-y-6">
                                 <p className="text-primary text-base md:text-lg leading-relaxed font-light">
@@ -202,8 +260,8 @@ const VentureShowcase = () => {
                             </div>
 
                             {/* Right - Mockup Carousel */}
-                            <div className={`rounded-3xl bg-gradient-to-br ${venture.color} p-6 md:p-8 overflow-hidden relative group cursor-pointer`}>
-                                <div className="relative z-10">
+                            <div className={`rounded-3xl bg-gradient-to-br ${venture.color} p-1.5 overflow-hidden relative group cursor-pointer shadow-2xl border border-white/5 h-full`}>
+                                <div className="relative z-10 h-full rounded-2xl overflow-hidden">
                                     <ProjectImageCarousel
                                         images={venture.images}
                                         name={venture.name}

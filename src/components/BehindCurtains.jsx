@@ -338,22 +338,17 @@ const BehindCurtains = () => {
                             </div>
                         </a>
                     ) : spotifyLoaded ? (
-                        <div className="flex gap-4 items-center">
-                            <div className="w-[76px] h-[76px] rounded-2xl bg-white/[0.04] border border-white/[0.06] flex-shrink-0 flex items-center justify-center">
-                                <Music size={24} className="text-white/20" />
-                            </div>
+                        <div className="flex gap-4 items-center pl-1">
                             <div className="flex-1 min-w-0">
                                 <p className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold mb-1">Status</p>
-                                <p className="text-white/50 text-sm leading-snug">Fetching live music data...</p>
+                                <p className="text-white/50 text-sm leading-snug italic">Synced with Last.fm...</p>
                             </div>
                         </div>
                     ) : (
                         <div className="flex gap-4 items-center">
-                            <div className="w-[76px] h-[76px] rounded-2xl bg-white/5 animate-pulse flex-shrink-0" />
-                            <div className="flex-1 space-y-2">
-                                <div className="h-2 bg-white/5 rounded animate-pulse w-1/3" />
-                                <div className="h-4 bg-white/5 rounded animate-pulse w-3/4" />
-                                <div className="h-3 bg-white/5 rounded animate-pulse w-1/2" />
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[9px] text-white/30 uppercase tracking-[0.3em] font-bold mb-1">Status</p>
+                                <p className="text-white/50 text-sm leading-snug animate-pulse">Initializing music stream...</p>
                             </div>
                         </div>
                     )}
