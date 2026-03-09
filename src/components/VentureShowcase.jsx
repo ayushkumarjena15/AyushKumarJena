@@ -141,7 +141,7 @@ const VentureShowcase = () => {
         restDelta: 0.001
     });
 
-    const avatarOpacity = useTransform(scrollYProgress, [0, 0.05, 0.95, 1], [0, 1, 1, 0]);
+    const avatarOpacity = useTransform(scrollYProgress, [0, 0.05, 1], [0, 1, 1]);
 
     // Same color mapping as Projects page
     const lineColor = useTransform(
@@ -163,32 +163,7 @@ const VentureShowcase = () => {
     );
 
     return (
-        <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative" ref={listRef}>
-            {/* Scroll Indicator System (Desktop Only) */}
-            <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px] bg-white/[0.05] z-0">
-                <motion.div
-                    className="absolute top-0 left-0 w-full origin-top"
-                    style={{
-                        height: '100%',
-                        scaleY,
-                        backgroundColor: lineColor
-                    }}
-                />
-
-                <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center">
-                    <motion.div
-                        className="w-12 h-12 rounded-full border-2 bg-background shadow-2xl overflow-hidden flex items-center justify-center -translate-y-1"
-                        style={{
-                            opacity: avatarOpacity,
-                            borderColor: avatarBorderColor,
-                            boxShadow: useTransform(avatarGlow, (glow) => `0 0 20px ${glow}`)
-                        }}
-                    >
-                        <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
-                    </motion.div>
-                </div>
-            </div>
-
+        <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             {/* Section Header */}
             <motion.div
                 className="text-center mb-20"
@@ -209,6 +184,32 @@ const VentureShowcase = () => {
             </motion.div>
 
             {/* Venture Cards */}
+            <div className="relative pb-24" ref={listRef}>
+                {/* Scroll Indicator System (Desktop Only) */}
+                <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px] bg-white/[0.05] z-0">
+                    <motion.div
+                        className="absolute top-0 left-0 w-full origin-top"
+                        style={{
+                            height: '100%',
+                            scaleY,
+                            backgroundColor: lineColor
+                        }}
+                    />
+
+                    <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center">
+                        <motion.div
+                            className="w-8 h-8 rounded-full border-2 bg-background shadow-2xl overflow-hidden flex items-center justify-center -translate-y-1"
+                            style={{
+                                opacity: avatarOpacity,
+                                borderColor: avatarBorderColor,
+                                boxShadow: useTransform(avatarGlow, (glow) => `0 0 20px ${glow}`)
+                            }}
+                        >
+                            <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
+                        </motion.div>
+                    </div>
+                </div>
+
             <div className="space-y-32">
                 {ventures.map((venture, idx) => (
                     <motion.div
@@ -274,6 +275,7 @@ const VentureShowcase = () => {
                         </div>
                     </motion.div>
                 ))}
+            </div>
             </div>
         </section>
     );

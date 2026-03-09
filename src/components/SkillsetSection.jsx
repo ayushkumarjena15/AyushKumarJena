@@ -77,17 +77,25 @@ const SpinningWheel = () => {
 
     return (
         <div className="w-full h-full flex items-center justify-center pointer-events-none">
-            <div className="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center rounded-full overflow-hidden bg-black/50">
-                <motion.img
-                    src={propeller}
-                    alt="Propeller"
-                    className="w-full h-full object-contain relative z-10"
+            <div className="relative w-[300px] h-[300px] flex items-center justify-center">
+                <div className="absolute inset-[-40px] bg-blue-500/10 rounded-full blur-[100px]" />
+
+                {/* Mask on plain div (not the rotating one) so it actually works */}
+                <div
+                    className="w-full h-full"
                     style={{
-                        rotate: rotation,
-                        mixBlendMode: 'screen',
-                        filter: 'contrast(1.8) brightness(0.6) saturate(0)',
+                        maskImage: 'radial-gradient(circle, black 44%, transparent 66%)',
+                        WebkitMaskImage: 'radial-gradient(circle, black 44%, transparent 66%)',
                     }}
-                />
+                >
+                    <motion.div className="w-full h-full" style={{ rotate: rotation }}>
+                        <img
+                            src={propeller}
+                            alt="Propeller"
+                            className="w-full h-full object-contain"
+                        />
+                    </motion.div>
+                </div>
             </div>
         </div>
     );
@@ -96,35 +104,42 @@ const SpinningWheel = () => {
 const SkillsetSection = () => {
     return (
         <section className="pt-16 pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden">
-            {/* Realistic Spinning Wheel Animation */}
-            <motion.div
-                className="flex justify-center mb-8"
-                initial={{ opacity: 0, scale: 0.7 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: 'easeOut' }}
-            >
-                <div className="w-48 h-48 md:w-64 md:h-64 relative">
-                    <SpinningWheel />
-                </div>
-            </motion.div>
+            {/* Propeller + Header overlapping container */}
+            <div className="relative flex flex-col items-center mb-16">
+                {/* Propeller — bottom layer */}
+                <motion.div
+                    className="relative z-0"
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.2, ease: 'easeOut' }}
+                    style={{
+                        maskImage: 'linear-gradient(to bottom, black 30%, transparent 80%)',
+                        WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 80%)',
+                    }}
+                >
+                    <div className="w-64 h-64 md:w-80 md:h-80">
+                        <SpinningWheel />
+                    </div>
+                </motion.div>
 
-            {/* Header */}
-            <motion.div
-                className="text-center mb-16"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-            >
-                <p className="text-[11px] uppercase tracking-[0.4em] text-accent1 font-bold mb-4">My Skillset</p>
+                {/* Header — top layer, pulled up to overlap propeller */}
+                <motion.div
+                    className="text-center relative z-10 -mt-28"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                >
                 <h2 className="text-5xl md:text-7xl font-heading font-black text-white">
                     The Magic{' '}
                     <span className="bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 bg-clip-text text-transparent italic">
                         Behind
                     </span>
                 </h2>
-            </motion.div>
+                <p className="text-[11px] uppercase tracking-[0.4em] text-accent1 font-bold mt-4">My Skillset</p>
+                </motion.div>
+            </div>
 
             {/* Skill Rows */}
             <div className="space-y-4 flex flex-col items-center">

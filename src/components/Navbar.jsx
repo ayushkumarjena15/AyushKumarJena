@@ -100,9 +100,12 @@ const Navbar = () => {
                         >
                             <Link to="/" onClick={() => setIsMoreOpen(false)} className="z-10 flex items-center gap-3">
                                 <span className="text-xl font-black text-white tracking-widest uppercase font-ethnocentric">AJ</span>
-                                <div className="hidden sm:block border-l border-white/10 pl-3">
-                                    <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">Creative Engineer</p>
-                                    <p className="text-[9px] font-bold text-accent1 uppercase tracking-[0.2em]">Building the Future</p>
+                                <div className="hidden sm:flex items-center gap-2 border-l border-white/10 pl-3">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_4px_1px_rgba(74,222,128,0.6)] flex-shrink-0" />
+                                    <div>
+                                        <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">Creative Engineer</p>
+                                        <p className="text-[9px] font-bold text-accent1 uppercase tracking-[0.2em]">Building the Future</p>
+                                    </div>
                                 </div>
                             </Link>
                         </motion.div>

@@ -11,20 +11,6 @@ const BehindCurtains = () => {
     const [latestEvent, setLatestEvent] = useState(null);
     const [spotifyTrack, setSpotifyTrack] = useState(null);
     const [spotifyLoaded, setSpotifyLoaded] = useState(false);
-    const [currentTime, setCurrentTime] = useState(0);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentTime((prev) => (prev >= 1368 ? 0 : prev + 1));
-        }, 1000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const formatTime = (seconds) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    };
 
     useEffect(() => {
         // Fetch User Profile
@@ -57,19 +43,22 @@ const BehindCurtains = () => {
 
                 if (!API_KEY || !USERNAME) return;
 
-                const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=1`;
+                const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=2`;
                 const res = await fetch(url);
                 const data = await res.json();
 
-                if (data.recenttracks?.track?.[0]) {
-                    const track = data.recenttracks.track[0];
+                const tracks = data.recenttracks?.track;
+                if (tracks?.[0]) {
+                    const track = tracks[0];
+                    const nowPlaying = track['@attr']?.nowplaying === 'true';
                     setSpotifyTrack({
-                        isPlaying: track['@attr']?.nowplaying === 'true',
+                        isPlaying: nowPlaying,
                         title: track.name,
                         artist: track.artist['#text'],
                         album: track.album['#text'],
                         albumArt: track.image[track.image.length - 1]['#text'] || '',
-                        songUrl: track.url
+                        songUrl: track.url,
+                        playedAt: track.date?.uts ? parseInt(track.date.uts) * 1000 : null,
                     });
                 }
             } catch (e) {
@@ -252,18 +241,37 @@ const BehindCurtains = () => {
 
                 {/* Spotify / Last Played Card */}
                 <motion.div
-                    className="bento-card p-6 flex flex-col justify-between min-h-[280px] relative overflow-hidden"
+                    className="bento-card p-6 flex flex-col justify-between min-h-[280px] relative overflow-hidden !bg-transparent !backdrop-blur-none"
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.7, delay: 0.2 }}
                 >
+                    {/* Album art background */}
+                    <motion.div
+                        key={spotifyTrack?.albumArt || 'default'}
+                        className="absolute inset-0 z-0"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 1 }}
+                    >
+                        {spotifyTrack?.albumArt ? (
+                            <img
+                                src={spotifyTrack.albumArt}
+                                alt=""
+                                className="w-full h-full object-cover scale-110"
+                                style={{ filter: 'blur(6px) brightness(0.55) saturate(1.6)' }}
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-white/[0.03]" />
+                        )}
+                    </motion.div>
                     {/* Ambient glow */}
-                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-500/10 rounded-full blur-3xl pointer-events-none" />
-                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute -top-10 -right-10 w-40 h-40 bg-green-500/10 rounded-full blur-3xl pointer-events-none z-[1]" />
+                    <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-600/10 rounded-full blur-3xl pointer-events-none z-[1]" />
 
                     {/* Header */}
-                    <div className="flex items-center justify-between mb-5 relative">
+                    <div className="flex items-center justify-between mb-5 relative z-10">
                         <div className="flex items-center gap-2.5">
                             <div className="w-7 h-7 rounded-full bg-[#1DB954] flex items-center justify-center shadow-md shadow-green-500/40">
                                 <Music size={13} className="text-white" />
@@ -297,7 +305,7 @@ const BehindCurtains = () => {
                             href={spotifyTrack.songUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex gap-4 items-center relative group cursor-pointer"
+                            className="flex gap-4 items-center relative z-10 group cursor-pointer"
                         >
                             {/* Album art container */}
                             <div className="relative flex-shrink-0">
@@ -330,7 +338,11 @@ const BehindCurtains = () => {
                             {/* Song info */}
                             <div className="flex-1 min-w-0">
                                 <p className="text-[9px] text-[#1DB954] uppercase tracking-[0.3em] font-bold mb-1">
-                                    {spotifyTrack.isPlaying ? '● Now Playing' : 'Recently Played'}
+                                    {spotifyTrack.isPlaying
+                                        ? '● Now Playing'
+                                        : spotifyTrack.playedAt
+                                            ? `Last played · ${getTimeAgo(spotifyTrack.playedAt)}`
+                                            : 'Recently Played'}
                                 </p>
                                 <h4 className="text-white font-bold text-base leading-tight truncate group-hover:text-accent1 transition-colors">{spotifyTrack.title}</h4>
                                 <p className="text-secondary text-xs mt-0.5 truncate">{spotifyTrack.artist}</p>
@@ -353,30 +365,17 @@ const BehindCurtains = () => {
                         </div>
                     )}
 
-                    {/* Progress indicator */}
-                    <div className="mt-5 space-y-2">
-                        <div className="flex justify-between items-center text-[10px] font-mono text-white/40 px-1">
-                            <span>{spotifyTrack?.isPlaying ? 'LIVE' : 'REC'}</span>
-                            <span className="opacity-0">00:00</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <div className="w-full h-[3px] bg-white/[0.06] rounded-full overflow-hidden">
-                                <motion.div
-                                    className="h-full rounded-full bg-[#1DB954]"
-                                    initial={{ width: "0%" }}
-                                    animate={{ width: spotifyTrack?.isPlaying ? "100%" : "0%" }}
-                                    transition={{ duration: 2, repeat: spotifyTrack?.isPlaying ? Infinity : 0, repeatType: "reverse" }}
-                                />
-                            </div>
-                            <a
-                                href={spotifyTrack?.songUrl || "https://www.last.fm/user/ayush099"}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="ml-3 text-[9px] text-white/25 hover:text-[#1DB954] transition-colors whitespace-nowrap font-mono tracking-wider"
-                            >
-                                last.fm
-                            </a>
-                        </div>
+                    {/* Status label */}
+                    <div className="mt-5 relative z-10 flex justify-between items-center text-[10px] font-mono text-white/40 px-1">
+                        <span>{spotifyTrack?.isPlaying ? 'LIVE' : 'REC'}</span>
+                        <a
+                            href={spotifyTrack?.songUrl || "https://www.last.fm/user/ayush099"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[9px] text-white/25 hover:text-[#1DB954] transition-colors font-mono tracking-wider"
+                        >
+                            spotify
+                        </a>
                     </div>
                 </motion.div>
             </div>
