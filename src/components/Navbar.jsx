@@ -98,7 +98,7 @@ const Navbar = () => {
                             exit={{ opacity: 0, x: -20 }}
                             className="flex items-center gap-3"
                         >
-                            <Link to="/" className="z-10 flex items-center gap-3">
+                            <Link to="/" onClick={() => setIsMoreOpen(false)} className="z-10 flex items-center gap-3">
                                 <span className="text-xl font-black text-white tracking-widest uppercase font-ethnocentric">AJ</span>
                                 <div className="hidden sm:block border-l border-white/10 pl-3">
                                     <p className="text-[9px] font-bold text-secondary uppercase tracking-[0.2em]">Creative Engineer</p>
@@ -130,6 +130,7 @@ const Navbar = () => {
                             ) : (
                                 <Link
                                     to={link.href}
+                                    onClick={() => setIsMoreOpen(false)}
                                     className={`px-5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] rounded-full transition-all duration-500 flex items-center gap-1 ${isActive(link.href)
                                         ? 'bg-white text-black'
                                         : 'text-secondary hover:text-white hover:bg-white/5'
@@ -204,12 +205,13 @@ const Navbar = () => {
                     <a
                         href="/resume.pdf"
                         download
+                        onClick={() => setIsMoreOpen(false)}
                         className="flex items-center gap-2 px-4 py-2 hover:bg-accent1/10 rounded-full transition-all cursor-pointer group"
                     >
                         <Download size={12} className="text-accent1 group-hover:text-white transition-colors" />
                         <span className="text-[10px] font-black uppercase text-accent1 group-hover:text-white tracking-widest transition-colors">Resume</span>
                     </a>
-                    <Link to="/book" className="flex items-center gap-2 px-4 py-2 hover:bg-white/5 rounded-full transition-all cursor-pointer group">
+                    <Link to="/book" onClick={() => setIsMoreOpen(false)} className="flex items-center gap-2 px-4 py-2 hover:bg-white/5 rounded-full transition-all cursor-pointer group">
                         <div className="w-4 h-4 rounded-full border border-white/20 group-hover:border-white transition-colors flex items-center justify-center">
                             <div className="w-1 h-1 bg-white rounded-full" />
                         </div>

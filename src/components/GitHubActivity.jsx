@@ -127,7 +127,7 @@ const GitHubActivity = () => {
     };
 
     return (
-        <section className="w-full py-24 bg-background relative overflow-hidden flex flex-col items-center">
+        <section className="w-full py-16 bg-background relative overflow-hidden flex flex-col items-center">
             {/* Subtle green glow in the background */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#39d353]/[0.03] rounded-full blur-[120px] pointer-events-none" />
 

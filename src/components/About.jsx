@@ -28,7 +28,7 @@ const skills = [
 
 const About = () => {
     return (
-        <section id="about" className="py-32 border-t border-white/5 relative bg-grid">
+        <section id="about" className="py-16 border-t border-white/5 relative bg-grid">
             <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -55,6 +55,29 @@ const About = () => {
                             <p>
                                 With a strong foundation in <span className="text-accent1 font-bold italic">Full-Stack Development</span>, I bridge the gap between complex logic and intuitive user experiences.
                             </p>
+                        </div>
+
+                        {/* Journey Timeline */}
+                        <div className="space-y-3">
+                            <p className="text-[10px] uppercase tracking-[0.4em] text-secondary font-bold mb-5">EDUCATION</p>
+                            <div className="relative pl-5 space-y-0">
+                                {/* vertical line */}
+                                <div className="absolute left-[7px] top-2 bottom-2 w-[1px] bg-white/10" />
+
+                                {[
+                                    { label: 'B.Tech • Present', sub: 'CSE AI/ML | Gandhi Institute of Engineering and Technology University, Gunupur', done: false, active: true },
+                                    { label: 'Class 12th • 2024', sub: 'PCM | Seven Hills Residential School, Sambalpur (CBSE)', done: true },
+                                    { label: 'Class 10th • 2022', sub: 'Guru Nanak Public School, Sambalpur (CBSE)', done: true },
+                                ].map((item, i) => (
+                                    <div key={i} className="relative flex items-start gap-4 pb-6 last:pb-0">
+                                        <div className={`relative z-10 mt-1 w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 ${item.active ? 'border-accent1 bg-accent1 shadow-[0_0_8px_2px] shadow-accent1/40' : item.done ? 'border-white/40 bg-white/20' : 'border-white/10 bg-transparent'}`} />
+                                        <div>
+                                            <p className={`text-sm font-bold ${item.active ? 'text-accent1' : 'text-white/80'}`}>{item.label}</p>
+                                            <p className="text-[11px] text-secondary mt-0.5">{item.sub}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         <Link to="/about" className="inline-flex items-center gap-6 px-10 py-5 glass-card text-accent2 font-black rounded-[2rem] hover:bg-white/5 hover:-translate-y-1 transition-all duration-500 group uppercase tracking-widest text-xs border border-white/5">

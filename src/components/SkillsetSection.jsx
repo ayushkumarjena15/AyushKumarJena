@@ -87,10 +87,8 @@ const SpinningWheel = () => {
                     style={{
                         rotate: rotation,
                         mixBlendMode: 'screen',
-                        filter: 'brightness(1.1) contrast(1.1)'
                     }}
                 />
-
             </div>
         </div>
     );

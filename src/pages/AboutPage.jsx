@@ -160,7 +160,7 @@ const AboutPage = () => {
             </section>
 
             {/* Content Container */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-48 pb-32">
+            <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-24 pb-32">
 
                 {/* Nice to Meet You Section */}
                 <section className="grid lg:grid-cols-2 gap-24 items-center">
@@ -189,6 +189,27 @@ const AboutPage = () => {
                             <p>
                                 My philosophy is simple: build things that last. I help startups and businesses bridge the gap between concept and reality with code that performs.
                             </p>
+                        </div>
+
+                        {/* Journey Timeline */}
+                        <div className="space-y-3">
+                            <p className="text-[10px] uppercase tracking-[0.4em] text-accent1/60 font-bold mb-5">EDUCATION</p>
+                            <div className="relative pl-5 space-y-0">
+                                <div className="absolute left-[7px] top-2 bottom-2 w-[1px] bg-white/10" />
+                                {[
+                                    { label: 'B.Tech • Present', sub: 'CSE AI/ML | Gandhi Institute of Engineering and Technology University, Gunupur', active: true },
+                                    { label: 'Class 12th • 2024', sub: 'PCM | Seven Hills Residential School, Sambalpur (CBSE)', done: true },
+                                    { label: 'Class 10th • 2022', sub: 'Guru Nanak Public School, Sambalpur (CBSE)', done: true },
+                                ].map((item, i) => (
+                                    <div key={i} className="relative flex items-start gap-4 pb-6 last:pb-0">
+                                        <div className={`relative z-10 mt-1 w-3.5 h-3.5 rounded-full border-2 flex-shrink-0 ${item.active ? 'border-accent1 bg-accent1 shadow-[0_0_8px_2px] shadow-accent1/40' : 'border-white/40 bg-white/20'}`} />
+                                        <div>
+                                            <p className={`text-sm font-bold ${item.active ? 'text-accent1' : 'text-white/80'}`}>{item.label}</p>
+                                            <p className="text-[11px] text-secondary mt-0.5">{item.sub}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
 
                         <div className="flex gap-6 text-[18px] text-secondary">

@@ -171,11 +171,14 @@ const BentoGrid = () => {
 
     const galleryItems = [
         { id: 1, type: 'image', content: '/profile.jpeg', gradient: 'from-accent1/20 to-accent1/5' },
-        { id: 2, type: 'image', content: '/gallery/sphere.jpg', gradient: 'from-blue-600/20 to-indigo-600/10' },
-        { id: 3, type: 'image', content: '/gallery/torus.jpg', gradient: 'from-blue-700/20 to-indigo-800/10' },
-        { id: 4, type: 'image', content: '/gallery/geometric.jpg', gradient: 'from-stone-600/20 to-stone-900/10' },
-        { id: 5, type: 'image', content: '/gallery/ai_face.jpg', gradient: 'from-purple-600/20 to-fuchsia-600/20' },
-        { id: 6, type: 'image', content: '/gallery/abstract_gold.jpg', gradient: 'from-orange-600/20 to-amber-600/20' },
+        { id: 2, type: 'image', content: '/gallery/photo3.jpeg', gradient: 'from-red-700/20 to-red-800/10' },
+        { id: 3, type: 'image', content: '/gallery/photo1.jpeg', gradient: 'from-blue-600/20 to-indigo-600/10' },
+        { id: 4, type: 'image', content: '/gallery/photo2.jpeg', gradient: 'from-purple-600/20 to-purple-800/10' },
+        { id: 5, type: 'image', content: '/gallery/sphere.jpg', gradient: 'from-blue-600/20 to-indigo-600/10' },
+        { id: 6, type: 'image', content: '/gallery/torus.jpg', gradient: 'from-blue-700/20 to-indigo-800/10' },
+        { id: 7, type: 'image', content: '/gallery/geometric.jpg', gradient: 'from-stone-600/20 to-stone-900/10' },
+        { id: 8, type: 'image', content: '/gallery/ai_face.jpg', gradient: 'from-purple-600/20 to-fuchsia-600/20' },
+        { id: 9, type: 'image', content: '/gallery/abstract_gold.jpg', gradient: 'from-orange-600/20 to-amber-600/20' },
     ];
 
     const dragRef = useRef(null);
@@ -191,8 +194,8 @@ const BentoGrid = () => {
     const containerRef = useRef(null);
 
     // Track the width of a single set of items to handle looping
-    // 6 items * (140px + 12px gap) = 912px
-    const setWidth = 912;
+    // 9 items * (140px + 12px gap) = 1368px
+    const setWidth = 1368;
 
     const gearRotation = useMotionValue(0);
     const [hoverDir, setHoverDir] = useState(0);
@@ -257,11 +260,7 @@ const BentoGrid = () => {
 
     return (
         <section className="relative py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-            {/* Crosshair Lines (Global) */}
-            <div className="absolute inset-0 pointer-events-none z-0">
-                <div className="absolute top-[38%] left-0 w-full h-[1px] bg-white/10" />
-                <div className="absolute left-[50%] top-0 w-[1px] h-full bg-white/10 -translate-x-1/2" />
-            </div>
+            {/* Crosshair Lines (Global) - Removed per user request */}
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-auto relative z-10">
 
@@ -468,7 +467,7 @@ const BentoGrid = () => {
                     {/* Connect Button */}
                     <a
                         href="mailto:ahalyajena28@gmail.com"
-                        className="mt-6 w-full py-4 bg-white border border-white rounded-xl text-center text-xs font-bold uppercase tracking-[0.2em] text-background hover:bg-gradient-to-r hover:from-pink-500 hover:via-red-500 hover:to-purple-500 hover:border-transparent hover:text-white active:scale-95 transition-all duration-500 flex items-center justify-center gap-2"
+                        className="mt-6 w-full py-4 bg-white border border-white rounded-xl text-center text-xs font-bold uppercase tracking-[0.2em] text-background hover:bg-gradient-to-r hover:from-[#ff4d4d] hover:via-[#f731db] hover:to-[#a855f7] hover:border-transparent hover:text-white active:scale-95 transition-all duration-500 flex items-center justify-center gap-2"
                     >
                         Connect Now
                         <ArrowUpRight size={14} />

@@ -15,7 +15,7 @@ const CTASection = () => {
     };
 
     return (
-        <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden" onMouseMove={handleMouseMove}>
+        <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden" onMouseMove={handleMouseMove}>
             <div className="flex flex-col lg:flex-row items-center justify-between gap-20">
 
                 {/* Left: Text Content - Perfectly Matching the Image */}
