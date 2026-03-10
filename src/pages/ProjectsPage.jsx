@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
 import {
@@ -50,10 +49,10 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
                     src={images[index]}
                     alt={`${name} screenshot ${index + 1}`}
                     className="absolute inset-0 w-full h-full object-cover"
-                    initial={{ opacity: 0, x: 20, scale: 1.05, filter: "blur(10px)" }}
-                    animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, x: -20, scale: 0.95, filter: "blur(10px)" }}
-                    transition={{ duration: 0.9, ease: [0.33, 1, 0.68, 1] }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeInOut' }}
                     onError={(e) => {
                         e.target.style.display = 'none';
                         e.target.nextElementSibling.style.display = 'flex';
@@ -207,17 +206,26 @@ const ProjectsPage = () => {
         [0.1, 0.45, 0.8],
         ["rgba(249, 115, 22, 0.4)", "rgba(139, 92, 246, 0.4)", "rgba(16, 185, 129, 0.4)"]
     );
+    const avatarBoxShadow = useTransform(avatarGlow, (glow) => `0 0 30px ${glow}`);
+    const [containerHeight, setContainerHeight] = useState(0);
+    useEffect(() => {
+        if (!listRef.current) return;
+        const ro = new ResizeObserver(e => setContainerHeight(e[0].contentRect.height));
+        ro.observe(listRef.current);
+        setContainerHeight(listRef.current.offsetHeight);
+        return () => ro.disconnect();
+    }, []);
+    const avatarY = useTransform(scaleY, [0, 1], [0, containerHeight - 56]);
 
     const title = "MY WORKS";
     const letterVariants = {
-        hidden: { y: 100, opacity: 0, rotateX: -90 },
+        hidden: { y: 60, opacity: 0 },
         visible: (i) => ({
             y: 0,
             opacity: 1,
-            rotateX: 0,
             transition: {
-                delay: 0.3 + i * 0.08,
-                duration: 0.8,
+                delay: 0.2 + i * 0.05,
+                duration: 0.6,
                 ease: [0.25, 0.46, 0.45, 0.94],
             },
         }),
@@ -236,7 +244,6 @@ const ProjectsPage = () => {
                 <div className="text-center z-10 w-full px-4">
                     <motion.h1
                         className="text-[13vw] sm:text-[15vw] md:text-[16vw] font-black leading-none tracking-[-0.04em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
-                        style={{ perspective: '1000px' }}
                     >
                         {title.split('').map((letter, i) => (
                             <motion.span
@@ -280,7 +287,7 @@ const ProjectsPage = () => {
             <section className="px-4 sm:px-6 lg:px-12 max-w-[1400px] mx-auto relative mt-20" ref={listRef}>
 
                 {/* Scroll Indicator System (Desktop Only) */}
-                <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/[0.05] z-0">
+                <div className="hidden lg:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-white/[0.05] z-0" style={{ willChange: 'transform' }}>
                     <motion.div
                         className="absolute top-0 left-0 w-full origin-top rounded-full"
                         style={{
@@ -290,18 +297,21 @@ const ProjectsPage = () => {
                         }}
                     />
 
-                    <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center">
+                    <motion.div
+                        className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center"
+                        style={{ y: avatarY }}
+                    >
                         <motion.div
-                            className="w-14 h-14 rounded-full border-[3px] bg-[#1a1a1a] shadow-2xl overflow-hidden flex items-center justify-center -translate-y-1"
+                            className="w-14 h-14 rounded-full border-[3px] bg-[#1a1a1a] shadow-2xl overflow-hidden flex items-center justify-center"
                             style={{
                                 opacity: avatarOpacity,
                                 borderColor: avatarBorderColor,
-                                boxShadow: useTransform(avatarGlow, (glow) => `0 0 30px ${glow}`)
+                                boxShadow: avatarBoxShadow
                             }}
                         >
                             <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
                         </motion.div>
-                    </div>
+                    </motion.div>
                 </div>
 
                 <div className="space-y-24 md:space-y-80 relative z-10">
@@ -428,12 +438,14 @@ const ProjectsPage = () => {
                 </div>
 
                 <div className="mt-20 md:mt-60 text-center flex justify-center pb-20 relative z-20">
-                    <Link
-                        to="/contact"
+                    <a
+                        href="https://github.com/ayushkumarjena15"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="px-12 py-6 border border-white/10 rounded-full text-xs font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all duration-700 hover:scale-110 active:scale-95 flex items-center gap-4"
                     >
-                        View older archives <ArrowUpRight size={18} />
-                    </Link>
+                        For more projects, visit GitHub <ArrowUpRight size={18} />
+                    </a>
                 </div>
             </section>
 

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { GitHubCalendar } from 'react-github-calendar';
+import { Tooltip } from 'react-tooltip';
 import { motion } from 'framer-motion';
 
 const GitHubActivity = () => {
-    // Exact GitHub contribution colors matching the provided screenshot
     const explicitTheme = {
         light: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
         dark: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
@@ -11,7 +11,6 @@ const GitHubActivity = () => {
 
     return (
         <section className="w-full py-16 bg-background relative overflow-hidden flex flex-col items-center">
-            {/* Subtle green glow in the background */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#39d353]/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 w-full relative z-10 flex flex-col items-center">
@@ -36,12 +35,11 @@ const GitHubActivity = () => {
                     </h2>
                 </motion.div>
 
-                {/* Custom Live GitHub Calendar Component */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                    initial={{ opacity: 0, y: 60, scale: 0.95 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                     className="w-full flex justify-center pb-6 overflow-x-auto"
                 >
                     <div className="min-w-max">
@@ -52,11 +50,29 @@ const GitHubActivity = () => {
                             blockSize={14}
                             blockMargin={5}
                             fontSize={12}
+                            renderBlock={(block, activity) =>
+                                React.cloneElement(block, {
+                                    'data-tooltip-id': 'gh-tooltip',
+                                    'data-tooltip-content': `${activity.count} contribution${activity.count !== 1 ? 's' : ''} on ${new Date(activity.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}.`,
+                                })
+                            }
+                        />
+                        <Tooltip
+                            id="gh-tooltip"
+                            style={{
+                                backgroundColor: '#1a1a1a',
+                                color: '#ffffff',
+                                fontSize: '12px',
+                                fontWeight: '600',
+                                borderRadius: '8px',
+                                padding: '6px 10px',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                                zIndex: 9999,
+                            }}
                         />
                     </div>
                 </motion.div>
-
-
             </div>
 
             <style dangerouslySetInnerHTML={{

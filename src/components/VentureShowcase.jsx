@@ -161,6 +161,16 @@ const VentureShowcase = () => {
         [0.1, 0.45, 0.8],
         ["rgba(249, 115, 22, 0.4)", "rgba(139, 92, 246, 0.4)", "rgba(16, 185, 129, 0.4)"]
     );
+    const avatarBoxShadow = useTransform(avatarGlow, (glow) => `0 0 20px ${glow}`);
+    const [containerHeight, setContainerHeight] = useState(0);
+    useEffect(() => {
+        if (!listRef.current) return;
+        const ro = new ResizeObserver(e => setContainerHeight(e[0].contentRect.height));
+        ro.observe(listRef.current);
+        setContainerHeight(listRef.current.offsetHeight);
+        return () => ro.disconnect();
+    }, []);
+    const avatarY = useTransform(scaleY, [0, 1], [0, containerHeight - 32]);
 
     return (
         <section className="py-16 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
@@ -196,18 +206,21 @@ const VentureShowcase = () => {
                         }}
                     />
 
-                    <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center">
+                    <motion.div
+                        className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center"
+                        style={{ y: avatarY }}
+                    >
                         <motion.div
-                            className="w-8 h-8 rounded-full border-2 bg-background shadow-2xl overflow-hidden flex items-center justify-center -translate-y-1"
+                            className="w-8 h-8 rounded-full border-2 bg-background shadow-2xl overflow-hidden flex items-center justify-center"
                             style={{
                                 opacity: avatarOpacity,
                                 borderColor: avatarBorderColor,
-                                boxShadow: useTransform(avatarGlow, (glow) => `0 0 20px ${glow}`)
+                                boxShadow: avatarBoxShadow
                             }}
                         >
                             <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
                         </motion.div>
-                    </div>
+                    </motion.div>
                 </div>
 
             <div className="space-y-16 md:space-y-32">
