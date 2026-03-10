@@ -1,4 +1,4 @@
-import { motion, useTransform, useScroll } from 'framer-motion';
+import { motion, useMotionValue, useAnimationFrame, useScroll, useVelocity, useSpring } from 'framer-motion';
 import * as SiIcons from 'react-icons/si';
 import { VscGraph } from 'react-icons/vsc';
 import { FaJava, FaXbox, FaTerminal } from 'react-icons/fa';
@@ -72,8 +72,18 @@ const skillIcons = {
 
 /* ── Realistic 3D Propeller Animation ── */
 const SpinningWheel = () => {
-    const { scrollYProgress } = useScroll();
-    const rotation = useTransform(scrollYProgress, [0, 1], [0, 720]);
+    const { scrollY } = useScroll();
+    const scrollVelocity = useVelocity(scrollY);
+    const smoothVelocity = useSpring(scrollVelocity, { damping: 50, stiffness: 400 });
+
+    const rotation = useMotionValue(0);
+
+    useAnimationFrame((_, delta) => {
+        const velocity = smoothVelocity.get();
+        const direction = velocity < 0 ? -1 : 1;
+        const scrollBoost = Math.abs(velocity) * 0.003;
+        rotation.set(rotation.get() + scrollBoost * direction * delta * 0.1);
+    });
 
     return (
         <div className="w-full h-full flex items-center justify-center pointer-events-none">

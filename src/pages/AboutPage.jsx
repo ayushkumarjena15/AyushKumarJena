@@ -363,8 +363,8 @@ const AboutPage = () => {
                                     <GitBranch size={24} className="text-accent1" />
                                     <h3 className="text-xl font-bold font-serif italic">Terminal Activity</h3>
                                 </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-accent1 animate-pulse flex items-center gap-2">
-                                    <div className="w-2 h-2 rounded-full bg-accent1"></div> Live
+                                <span className="text-[10px] font-black uppercase tracking-widest text-red-500 animate-pulse flex items-center gap-2">
+                                    <div className="w-2 h-2 rounded-full bg-red-500"></div> Live
                                 </span>
                             </div>
 

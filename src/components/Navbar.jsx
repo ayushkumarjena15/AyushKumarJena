@@ -104,7 +104,7 @@ const Navbar = () => {
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500 ${
                 isScrolled
-                    ? 'pt-3 pb-3 md:pt-6 md:pb-4 bg-background/90 backdrop-blur-xl border-b border-white/[0.05] md:bg-transparent md:backdrop-blur-none md:border-transparent'
+                    ? 'pt-3 pb-3 md:pt-6 md:pb-4 bg-background/90 backdrop-blur-xl md:bg-transparent md:backdrop-blur-none'
                     : 'pt-4 pb-3 md:pt-6 md:pb-4'
             }`}
         >
@@ -235,7 +235,6 @@ const Navbar = () => {
                             )}
                         </div>
                     ))}
-                    <div className="w-px h-4 bg-white/10 mx-1" />
                     <a
                         href="/resume.pdf"
                         download

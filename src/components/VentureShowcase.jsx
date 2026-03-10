@@ -207,8 +207,8 @@ const VentureShowcase = () => {
                     />
 
                     <motion.div
-                        className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center"
-                        style={{ y: avatarY }}
+                        className="absolute top-0 left-0 flex flex-col items-center"
+                        style={{ y: avatarY, x: '-50%' }}
                     >
                         <motion.div
                             className="w-8 h-8 rounded-full border-2 bg-background shadow-2xl overflow-hidden flex items-center justify-center"

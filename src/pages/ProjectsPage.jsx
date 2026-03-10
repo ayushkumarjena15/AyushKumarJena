@@ -298,8 +298,8 @@ const ProjectsPage = () => {
                     />
 
                     <motion.div
-                        className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center"
-                        style={{ y: avatarY }}
+                        className="absolute top-0 left-0 flex flex-col items-center"
+                        style={{ y: avatarY, x: '-50%' }}
                     >
                         <motion.div
                             className="w-14 h-14 rounded-full border-[3px] bg-[#1a1a1a] shadow-2xl overflow-hidden flex items-center justify-center"
@@ -314,7 +314,7 @@ const ProjectsPage = () => {
                     </motion.div>
                 </div>
 
-                <div className="space-y-24 md:space-y-80 relative z-10">
+                <div className="space-y-16 md:space-y-32 relative z-10">
                     {projects.map((project, idx) => (
                         <motion.div
                             key={project.name}
