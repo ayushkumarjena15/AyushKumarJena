@@ -95,7 +95,7 @@ const BehindCurtains = () => {
                     <span className="font-serif italic">Decoding logic</span>
                 </h2>
                 <h2 className="text-3xl md:text-4xl font-heading font-black mt-2">
-                    <span className="bg-gradient-to-r from-green-400 via-pink-500 to-purple-500 bg-clip-text text-transparent font-serif italic">
+                    <span className="bg-clip-text text-transparent font-serif italic animated-gradient-text">
                         && the lyrics
                     </span>
                 </h2>

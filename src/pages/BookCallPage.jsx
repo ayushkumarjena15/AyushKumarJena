@@ -350,7 +350,8 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                     {dates.map(date => {
                         const isSelected = selectedDate === date;
                         const isToday = date === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear();
-                        const isPast = new Date(year, month, date) < new Date().setHours(0, 0, 0, 0);
+                        const minDate = new Date(); minDate.setDate(minDate.getDate() + 2); minDate.setHours(0, 0, 0, 0);
+                        const isPast = new Date(year, month, date) < minDate;
                         const isWeekendDay = isWeekend(year, month, date);
                         const isDisabled = isPast || isWeekendDay;
                         return (
@@ -364,7 +365,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                                                 'text-white/60 hover:bg-white/5 bg-[#1a1a1a] border border-white/[0.02]'}`}
                                 >
                                     {date}
-                                    {isToday && !isSelected && <span className="absolute bottom-2 w-1 h-1 rounded-full bg-white/40"></span>}
+                                    {isToday && !isSelected && <span className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 text-[8px] font-bold text-white/30 uppercase tracking-wider">Today</span>}
                                     {isWeekendDay && !isPast && <span className="absolute top-1 right-1.5 w-1 h-1 rounded-full bg-red-500/40"></span>}
                                 </button>
                             </div>
@@ -1028,7 +1029,7 @@ const BookCallPage = () => {
     const initialTab = searchParams.get('tab') === 'message' ? 'message' : 'book';
     const [activeTab, setActiveTab] = useState(initialTab);
     const [bookingStep, setBookingStep] = useState(1);
-    const [selectedDate, setSelectedDate] = useState(new Date().getDate());
+    const [selectedDate, setSelectedDate] = useState(() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.getDate(); });
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedTimezone, setSelectedTimezone] = useState('Asia/Kolkata');
     const contentRef = useRef(null);

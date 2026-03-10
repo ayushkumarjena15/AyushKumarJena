@@ -172,7 +172,7 @@ const UsesPage = () => {
 
     return (
         <main className="bg-background">
-            <section className="min-h-screen pt-32 pb-20 px-6 max-w-5xl mx-auto relative overflow-hidden">
+            <section className="min-h-screen pt-32 pb-20 px-6 max-w-5xl mx-auto relative">
                 {/* Very faint background glow */}
                 <div className="fixed top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-white/[0.02] rounded-full blur-[120px] pointer-events-none" />
 
@@ -223,56 +223,59 @@ const UsesPage = () => {
                     />
                 </div>
 
-                <AnimatePresence>
-                    {activeGallery && (
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.8, filter: 'blur(5px)' }}
-                            animate={{
-                                opacity: 1,
-                                scale: 1,
-                                filter: 'blur(0px)',
-                                x: mousePos.x + 40,
-                                y: mousePos.y - 120
-                            }}
-                            exit={{ opacity: 0, scale: 0.8, filter: 'blur(5px)' }}
-                            transition={{
-                                duration: 0.2,
-                                ease: "easeOut",
-                                x: { type: "spring", stiffness: 300, damping: 30 },
-                                y: { type: "spring", stiffness: 300, damping: 30 }
-                            }}
-                            className="fixed top-0 left-0 pointer-events-none z-50 flex flex-col items-center justify-center w-[350px]"
-                        >
-                            <div className="relative w-full aspect-[16/10] overflow-hidden rounded-2xl drop-shadow-[0_0_30px_rgba(255,149,0,0.3)] flex items-center justify-center">
-                                <AnimatePresence mode="popLayout">
-                                    <motion.img
-                                        key={currentImageIndex}
-                                        src={activeGallery.images[currentImageIndex]}
-                                        initial={{ opacity: 0, scale: 1.05 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.5 }}
-                                        className="absolute inset-0 w-full h-full object-contain p-2"
-                                        alt={activeGallery.title}
-                                    />
-                                </AnimatePresence>
-                            </div>
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 0.3 }}
-                                className="mt-4 flex items-center gap-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
-                            >
-                                <div className="h-[1px] w-8 bg-white/20" />
-                                <p className="text-[#ff9500] font-mono text-xs tracking-[0.3em] uppercase font-bold text-center">
-                                    {activeGallery.title} <br className="hidden md:block" />({currentImageIndex + 1} / {activeGallery.images.length})
-                                </p>
-                                <div className="h-[1px] w-8 bg-white/20" />
-                            </motion.div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
             </section>
+
+            {/* Gallery tooltip rendered outside section to avoid overflow-hidden clipping fixed position */}
+            <AnimatePresence>
+                {activeGallery && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8, filter: 'blur(5px)' }}
+                        animate={{
+                            opacity: 1,
+                            scale: 1,
+                            filter: 'blur(0px)',
+                            x: mousePos.x + 40,
+                            y: mousePos.y - 120
+                        }}
+                        exit={{ opacity: 0, scale: 0.8, filter: 'blur(5px)' }}
+                        transition={{
+                            duration: 0.2,
+                            ease: "easeOut",
+                            x: { type: "spring", stiffness: 300, damping: 30 },
+                            y: { type: "spring", stiffness: 300, damping: 30 }
+                        }}
+                        className="fixed top-0 left-0 pointer-events-none z-50 flex flex-col items-center justify-center w-[350px]"
+                    >
+                        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-2xl drop-shadow-[0_0_30px_rgba(255,149,0,0.3)] flex items-center justify-center">
+                            <AnimatePresence mode="popLayout">
+                                <motion.img
+                                    key={currentImageIndex}
+                                    src={activeGallery.images[currentImageIndex]}
+                                    initial={{ opacity: 0, scale: 1.05 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="absolute inset-0 w-full h-full object-contain p-2"
+                                    alt={activeGallery.title}
+                                />
+                            </AnimatePresence>
+                        </div>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.3 }}
+                            className="mt-4 flex items-center gap-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                        >
+                            <div className="h-[1px] w-8 bg-white/20" />
+                            <p className="text-[#ff9500] font-mono text-xs tracking-[0.3em] uppercase font-bold text-center">
+                                {activeGallery.title} <br className="hidden md:block" />({currentImageIndex + 1} / {activeGallery.images.length})
+                            </p>
+                            <div className="h-[1px] w-8 bg-white/20" />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <CTASection />
         </main>
     );

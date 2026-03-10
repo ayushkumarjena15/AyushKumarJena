@@ -175,7 +175,7 @@ const AboutPage = () => {
                             <p className="text-[10px] font-black uppercase tracking-[0.6em] text-accent1">A little about me</p>
                             <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-tight">
                                 Nice to meet you. <br />
-                                I'm <span className="text-gradient italic font-serif">Ayush</span>
+                                I'm <span className="animated-gradient-text italic font-serif">Ayush</span>
                             </h2>
                         </div>
 
@@ -306,7 +306,7 @@ const AboutPage = () => {
                     <div className="text-center space-y-4">
                         <p className="text-[10px] font-black uppercase tracking-[0.6em] text-accent1/60">My code journey</p>
                         <h2 className="text-4xl md:text-7xl font-bold tracking-tighter">
-                            GitHub <span className="text-gradient italic font-serif">Live</span>
+                            GitHub <span className="animated-gradient-text italic font-serif">Live</span>
                         </h2>
                     </div>
 

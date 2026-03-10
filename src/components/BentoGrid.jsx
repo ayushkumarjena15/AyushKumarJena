@@ -99,7 +99,7 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
                     <AnimatePresence mode="wait">
                         <motion.span
                             key={activeProject}
-                            className="bg-gradient-to-r from-[#f92f60] via-[#d02492] to-[#8c44dc] bg-clip-text text-transparent font-serif italic inline-block"
+                            className="animated-gradient-text font-serif italic inline-block"
                             initial={{ y: 10, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -10, opacity: 0 }}
@@ -170,15 +170,14 @@ const BentoGrid = () => {
     const [activeTag, setActiveTag] = useState(0);
 
     const galleryItems = [
-        { id: 1, type: 'image', content: '/profile.jpeg', gradient: 'from-accent1/20 to-accent1/5' },
-        { id: 2, type: 'image', content: '/gallery/photo3.jpeg', gradient: 'from-red-700/20 to-red-800/10' },
-        { id: 3, type: 'image', content: '/gallery/photo1.jpeg', gradient: 'from-blue-600/20 to-indigo-600/10' },
-        { id: 4, type: 'image', content: '/gallery/photo2.jpeg', gradient: 'from-purple-600/20 to-purple-800/10' },
-        { id: 5, type: 'image', content: '/gallery/sphere.jpg', gradient: 'from-blue-600/20 to-indigo-600/10' },
-        { id: 6, type: 'image', content: '/gallery/torus.jpg', gradient: 'from-blue-700/20 to-indigo-800/10' },
-        { id: 7, type: 'image', content: '/gallery/geometric.jpg', gradient: 'from-stone-600/20 to-stone-900/10' },
-        { id: 8, type: 'image', content: '/gallery/ai_face.jpg', gradient: 'from-purple-600/20 to-fuchsia-600/20' },
-        { id: 9, type: 'image', content: '/gallery/abstract_gold.jpg', gradient: 'from-orange-600/20 to-amber-600/20' },
+        { id: 1, type: 'image', content: '/gallery/photo1.jpeg', gradient: 'from-blue-600/20 to-indigo-600/10' },
+        { id: 2, type: 'image', content: '/gallery/photo2.jpeg', gradient: 'from-purple-600/20 to-purple-800/10' },
+        { id: 3, type: 'image', content: '/gallery/photo3.jpg', gradient: 'from-red-700/20 to-red-800/10' },
+        { id: 4, type: 'image', content: '/gallery/photo4.jpeg', gradient: 'from-green-600/20 to-emerald-600/10' },
+        { id: 5, type: 'image', content: '/gallery/photo5.jpeg', gradient: 'from-yellow-600/20 to-amber-600/10' },
+        { id: 6, type: 'image', content: '/gallery/photo6.png', gradient: 'from-pink-600/20 to-rose-600/10' },
+        { id: 7, type: 'image', content: '/gallery/photo7.jpeg', gradient: 'from-cyan-600/20 to-sky-600/10' },
+        { id: 8, type: 'image', content: '/gallery/photo8.jpeg', gradient: 'from-orange-600/20 to-amber-600/20' },
     ];
 
     const dragRef = useRef(null);

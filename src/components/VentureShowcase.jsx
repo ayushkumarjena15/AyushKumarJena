@@ -177,7 +177,7 @@ const VentureShowcase = () => {
                 </p>
                 <h2 className="text-5xl md:text-7xl font-heading font-black text-white uppercase tracking-tight">
                     Venture{' '}
-                    <span className="bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 bg-clip-text text-transparent font-serif italic">
+                    <span className="bg-clip-text text-transparent font-serif italic animated-gradient-text">
                         Showcase
                     </span>
                 </h2>

@@ -19,7 +19,7 @@ const QuickGlance = () => {
                     </p>
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-black text-white leading-tight">
                         Building the bridge between ideas and{' '}
-                        <span className="font-serif italic bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                        <span className="animated-gradient-text font-serif italic">
                             experiences
                         </span>
                     </h2>

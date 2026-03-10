@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
@@ -44,13 +44,29 @@ const CTASection = () => {
                     </p>
 
                     <div className="pt-6 md:pt-12">
+                        <>
+                        <style>{`
+                            @keyframes gradientShift {
+                                0% { background-position: 0% 50%; }
+                                50% { background-position: 100% 50%; }
+                                100% { background-position: 0% 50%; }
+                            }
+                            .animated-gradient {
+                                background: linear-gradient(270deg, #ff4d4d, #f731db, #a855f7, #f731db, #ff4d4d);
+                                background-size: 300% 300%;
+                                animation: gradientShift 7s ease infinite;
+                            }
+                        `}</style>
                         <Link
                             to="/book"
-                            className="inline-flex items-center gap-4 text-white text-sm font-bold uppercase tracking-[0.3em] group"
+                            className="relative group inline-flex items-center gap-3 text-white text-sm font-black uppercase tracking-[0.2em] px-8 py-4 rounded-full overflow-hidden active:scale-95 transition-all duration-300 border border-white/10"
                         >
-                            <span className="w-12 h-[1px] bg-white/20 group-hover:w-16 transition-all duration-500" />
-                            Start a project
+                            <span className="absolute inset-0 bg-[#1a1a1a] group-hover:opacity-0 transition-opacity duration-500" />
+                            <span className="animated-gradient absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <span className="relative">Collaborate & Contribute</span>
+                            <span className="relative text-base">→</span>
                         </Link>
+                        </>
                     </div>
                 </motion.div>
 

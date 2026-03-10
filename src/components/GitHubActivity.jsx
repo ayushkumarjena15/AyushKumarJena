@@ -29,8 +29,8 @@ const GitHubActivity = () => {
                         GitHub Activity
                     </h2>
                     <h2 className="text-[clamp(3rem,6vw,5rem)] font-serif italic text-white/50 leading-[1] tracking-tight flex items-center justify-center gap-3">
-                        <span className="text-[#ec4899] font-sans font-black not-italic px-1 tracking-tighter">&amp;&amp;</span>
-                        <span className="text-transparent border-none bg-clip-text bg-gradient-to-r from-[#ec4899] to-[#ef4444] stroke-none">
+                        <span className="animated-gradient-text font-sans font-black not-italic px-1 tracking-tighter">&amp;&amp;</span>
+                        <span className="animated-gradient-text">
                             Open Source
                         </span>
                     </h2>

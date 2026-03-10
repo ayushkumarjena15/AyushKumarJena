@@ -1,5 +1,24 @@
 import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter, Instagram, Send } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+const LiveClock = () => {
+    const [time, setTime] = useState(new Date());
+    useEffect(() => {
+        const timer = setInterval(() => setTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+    const pad = n => String(n).padStart(2, '0');
+    return (
+        <span className="font-mono text-xs text-secondary tracking-widest">
+            {pad(time.getHours())}
+            <span className="opacity-50 animate-pulse">:</span>
+            {pad(time.getMinutes())}
+            <span className="opacity-50 animate-pulse">:</span>
+            {pad(time.getSeconds())}
+        </span>
+    );
+};
 
 const Footer = () => {
     return (
@@ -81,9 +100,13 @@ const Footer = () => {
 
                 {/* Bottom Bar */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-white/5">
-                    <p className="text-xs text-secondary">
-                        © {new Date().getFullYear()} Ayush Kumar Jena. All Rights Reserved.
-                    </p>
+                    <div className="flex items-center gap-4">
+                        <p className="text-xs text-secondary">
+                            © {new Date().getFullYear()} Ayush Kumar Jena. All Rights Reserved.
+                        </p>
+                        <span className="text-white/10">|</span>
+                        <LiveClock />
+                    </div>
 
                     <div className="flex items-center gap-5">
                         <a href="https://github.com/ayushkumarjena15" target="_blank" rel="noopener noreferrer">

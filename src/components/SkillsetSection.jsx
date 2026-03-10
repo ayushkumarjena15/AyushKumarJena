@@ -133,7 +133,7 @@ const SkillsetSection = () => {
                 >
                 <h2 className="text-5xl md:text-7xl font-heading font-black text-white">
                     The Magic{' '}
-                    <span className="bg-gradient-to-r from-blue-500 via-violet-500 to-pink-500 bg-clip-text text-transparent italic">
+                    <span className="bg-clip-text text-transparent italic animated-gradient-text">
                         Behind
                     </span>
                 </h2>

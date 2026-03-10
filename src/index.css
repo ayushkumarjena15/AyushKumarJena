@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animated-gradient-text {
+  background: linear-gradient(270deg, #ff4d4d, #f731db, #a855f7, #f731db, #ff4d4d);
+  background-size: 300% 300%;
+  animation: gradientShift 7s ease infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 @layer base {
   :root {
     --color-black: 0 0 0;
