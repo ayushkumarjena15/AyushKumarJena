@@ -38,28 +38,11 @@ const BehindCurtains = () => {
         // Fetch Last.fm now playing
         const fetchMusic = async () => {
             try {
-                const API_KEY = import.meta.env.VITE_LASTFM_API_KEY;
-                const USERNAME = import.meta.env.VITE_LASTFM_USERNAME;
-
-                if (!API_KEY || !USERNAME) return;
-
-                const url = `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${USERNAME}&api_key=${API_KEY}&format=json&limit=2`;
-                const res = await fetch(url);
+                const res = await fetch('/api/now-playing');
                 const data = await res.json();
 
-                const tracks = data.recenttracks?.track;
-                if (tracks?.[0]) {
-                    const track = tracks[0];
-                    const nowPlaying = track['@attr']?.nowplaying === 'true';
-                    setSpotifyTrack({
-                        isPlaying: nowPlaying,
-                        title: track.name,
-                        artist: track.artist['#text'],
-                        album: track.album['#text'],
-                        albumArt: track.image[track.image.length - 1]['#text'] || '',
-                        songUrl: track.url,
-                        playedAt: track.date?.uts ? parseInt(track.date.uts) * 1000 : null,
-                    });
+                if (data && !data.error) {
+                    setSpotifyTrack(data);
                 }
             } catch (e) {
                 console.error('Error fetching music:', e);

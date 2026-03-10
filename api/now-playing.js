@@ -29,6 +29,7 @@ export default async function handler(req, res) {
             album: track.album['#text'],
             albumArt: track.image[track.image.length - 1]['#text'] || '',
             songUrl: track.url,
+            playedAt: track.date?.uts ? parseInt(track.date.uts) * 1000 : null,
         });
     } catch (e) {
         return res.status(500).json({ error: e.message });
