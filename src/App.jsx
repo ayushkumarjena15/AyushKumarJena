@@ -29,7 +29,7 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="bg-background min-h-screen text-gray-200 font-sans selection:bg-primary/30">
+    <div className="bg-background min-h-screen text-gray-200 font-sans selection:bg-primary/30 overflow-x-hidden">
       <ScrollHandler />
       <Navbar />
       <CommandPalette />

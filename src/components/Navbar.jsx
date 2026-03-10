@@ -97,13 +97,18 @@ const Navbar = () => {
     const isActive = (path) => location.pathname === path;
 
     return (
+        <>
         <motion.nav
             initial={{ y: 0 }}
             animate={{ y: isVisible ? 0 : -120 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed top-0 left-0 right-0 z-50 pt-6 pb-4 pointer-events-none"
+            className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-500 ${
+                isScrolled
+                    ? 'pt-3 pb-3 md:pt-6 md:pb-4 bg-background/90 backdrop-blur-xl border-b border-white/[0.05] md:bg-transparent md:backdrop-blur-none md:border-transparent'
+                    : 'pt-4 pb-3 md:pt-6 md:pb-4'
+            }`}
         >
-            <div className={`max-w-7xl mx-auto px-6 flex ${isScrolled ? 'md:justify-center justify-between' : 'justify-between'} items-center pointer-events-auto`}>
+            <div className={`max-w-7xl mx-auto px-6 flex ${isScrolled ? 'md:justify-center justify-end' : 'justify-between'} items-center pointer-events-auto`}>
                 {/* Logo + Tagline */}
                 <AnimatePresence>
                     {!isScrolled && (
@@ -126,6 +131,17 @@ const Navbar = () => {
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* Mobile-only: persistent AJ logo when scrolled */}
+                {isScrolled && (
+                    <Link
+                        to="/"
+                        onClick={() => setIsMoreOpen(false)}
+                        className="md:hidden mr-auto text-xl font-black text-white tracking-widest uppercase font-ethnocentric"
+                    >
+                        AJ
+                    </Link>
+                )}
 
                 {/* Floating Central Pill */}
                 <div className={`hidden md:flex items-center gap-1 p-1.5 backdrop-blur-3xl border border-white/5 rounded-full shadow-2xl transition-all duration-500 ${isScrolled ? 'bg-background/80' : 'bg-background/40'}`}>
@@ -271,14 +287,17 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {/* Mobile Nav Overlay */}
+        </motion.nav>
+
+            {/* Mobile Nav Overlay — rendered OUTSIDE motion.nav to avoid CSS transform stacking context bug
+                (position:fixed inside a transformed parent positions relative to parent, not viewport) */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="fixed inset-0 bg-background z-40 flex flex-col items-center justify-center p-8 space-y-6 pointer-events-auto"
+                        className="fixed inset-0 bg-background z-[45] flex flex-col items-center justify-center p-8 space-y-6 pointer-events-auto"
                     >
                         <div className="flex flex-col items-center space-y-4">
                             {navLinks.map((link) => (
@@ -334,7 +353,7 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.nav>
+        </>
     );
 };
 

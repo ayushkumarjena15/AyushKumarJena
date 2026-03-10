@@ -16,7 +16,7 @@ const CTASection = () => {
 
     return (
         <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden" onMouseMove={handleMouseMove}>
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-20">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-20">
 
                 {/* Left: Text Content - Perfectly Matching the Image */}
                 <motion.div
@@ -35,15 +35,15 @@ const CTASection = () => {
                                 alt="Ayush"
                             />
                         </div>
-                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-black text-white tracking-tighter leading-none">
+                        <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-black text-white tracking-tighter leading-none">
                             Let's create
                         </h2>
                     </div>
-                    <p className="text-5xl md:text-7xl lg:text-8xl font-heading font-black text-[#555] tracking-tighter leading-none">
+                    <p className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-black text-[#555] tracking-tighter leading-none">
                         something real.
                     </p>
 
-                    <div className="pt-12">
+                    <div className="pt-6 md:pt-12">
                         <Link
                             to="/book"
                             className="inline-flex items-center gap-4 text-white text-sm font-bold uppercase tracking-[0.3em] group"

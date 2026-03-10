@@ -90,8 +90,8 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
             </div>
 
             {/* Founder Info */}
-            <div className="relative z-50 flex-1 text-right space-y-3">
-                <div className="flex justify-end mb-4">
+            <div className="relative z-50 flex-1 text-left md:text-right space-y-3">
+                <div className="flex justify-start md:justify-end mb-4">
                     <div className="w-16 h-1 bg-accent1 rounded-full opacity-50" />
                 </div>
                 <h3 className="text-2xl md:text-3xl font-heading font-black text-white md:whitespace-nowrap">
@@ -109,7 +109,7 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
                         </motion.span>
                     </AnimatePresence>
                 </h3>
-                <p className="text-secondary text-sm italic flex items-center justify-end gap-2">
+                <p className="text-secondary text-sm italic flex items-center justify-start md:justify-end gap-2">
                     &lt; Crafting Digital Experiences /&gt;
                     <ArrowUpRight size={14} className="text-accent1" />
                 </p>
@@ -266,7 +266,7 @@ const BentoGrid = () => {
 
                 {/* Card 1: Profile Card */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 md:pr-14 flex flex-col justify-between row-span-2 min-h-[380px]"
+                    className="bento-card p-6 md:p-8 md:pr-14 flex flex-col justify-between md:row-span-2 min-h-[380px] overflow-hidden"
                     custom={0}
                     variants={cardVariants}
                     initial="hidden"
@@ -290,7 +290,7 @@ const BentoGrid = () => {
                             <motion.div
                                 drag="x"
                                 style={{ x, skewX: skew }}
-                                dragConstraints={{ left: -setWidth * 2, right: setWidth }}
+                                dragConstraints={{ left: -setWidth * 2, right: 0 }}
                                 className="flex gap-3 cursor-grab active:cursor-grabbing"
                             >
                                 {/* Triplicate items for seamless looping */}
@@ -391,7 +391,7 @@ const BentoGrid = () => {
 
                 {/* Card 3: Connect / Available for Work */}
                 <motion.div
-                    className="bento-card p-6 md:p-8 md:pl-14 flex flex-col justify-between row-span-2 min-h-[380px] group/available"
+                    className="bento-card p-6 md:p-8 md:pl-14 flex flex-col justify-between md:row-span-2 min-h-[380px] group/available"
                     custom={2}
                     variants={cardVariants}
                     initial="hidden"

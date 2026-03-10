@@ -235,7 +235,7 @@ const ProjectsPage = () => {
 
                 <div className="text-center z-10 w-full px-4">
                     <motion.h1
-                        className="text-[20vw] md:text-[16vw] font-black leading-none tracking-[-0.04em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
+                        className="text-[13vw] sm:text-[15vw] md:text-[16vw] font-black leading-none tracking-[-0.04em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
                         style={{ perspective: '1000px' }}
                     >
                         {title.split('').map((letter, i) => (
@@ -304,7 +304,7 @@ const ProjectsPage = () => {
                     </div>
                 </div>
 
-                <div className="space-y-80 relative z-10">
+                <div className="space-y-24 md:space-y-80 relative z-10">
                     {projects.map((project, idx) => (
                         <motion.div
                             key={project.name}
@@ -427,7 +427,7 @@ const ProjectsPage = () => {
                     ))}
                 </div>
 
-                <div className="mt-60 text-center flex justify-center pb-20 relative z-20">
+                <div className="mt-20 md:mt-60 text-center flex justify-center pb-20 relative z-20">
                     <Link
                         to="/contact"
                         className="px-12 py-6 border border-white/10 rounded-full text-xs font-black uppercase tracking-[0.4em] hover:bg-white hover:text-black transition-all duration-700 hover:scale-110 active:scale-95 flex items-center gap-4"

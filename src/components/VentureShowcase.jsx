@@ -163,10 +163,10 @@ const VentureShowcase = () => {
     );
 
     return (
-        <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="py-16 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             {/* Section Header */}
             <motion.div
-                className="text-center mb-20"
+                className="text-center mb-10 md:mb-20"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -210,7 +210,7 @@ const VentureShowcase = () => {
                     </div>
                 </div>
 
-            <div className="space-y-32">
+            <div className="space-y-16 md:space-y-32">
                 {ventures.map((venture, idx) => (
                     <motion.div
                         key={venture.name}

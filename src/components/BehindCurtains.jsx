@@ -193,7 +193,7 @@ const BehindCurtains = () => {
                         Let me know you were here.
                     </p>
 
-                    <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/5">
+                    <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-4 border-t border-white/5">
                         <div className="flex items-center gap-2">
                             <div className="flex -space-x-2">
                                 {guestbookAvatars.length > 0 ? (
