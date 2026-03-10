@@ -1048,13 +1048,13 @@ const BookCallPage = () => {
                 className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-8 pb-20 px-6">
                 <div className="flex-1 mt-8">
                     <p className="text-white/20 text-[10px] font-black tracking-[0.6em] uppercase mb-10 pl-1">SCHEDULE / CONNECT / COLLABORATE</p>
-                    <h1 className="text-[clamp(3rem,10vw,10rem)] font-black leading-[0.9] md:leading-[0.8] tracking-tighter uppercase text-white font-heading select-none">
+                    <h1 className="text-[12vw] md:text-[clamp(3rem,10vw,10rem)] font-black leading-[0.85] md:leading-[0.8] tracking-tighter uppercase text-white font-heading select-none">
                         <span className="block">BOOK A</span>
                         <span className="block text-white/20">CALL</span>
-                        <span className="block italic font-serif text-white lowercase tracking-widest translate-y-4">with me.</span>
+                        <span className="block italic font-serif text-white lowercase tracking-widest md:translate-y-4">with me.</span>
                     </h1>
                 </div>
-                <motion.div className="mt-4 lg:mt-0 relative w-[280px] h-[280px] md:w-[380px] md:h-[380px] rounded-[3.5rem] overflow-hidden flex-shrink-0 group mx-auto lg:mx-0 shadow-2xl border border-white/5">
+                <motion.div className="mt-8 lg:mt-0 relative w-[240px] h-[240px] md:w-[380px] md:h-[380px] rounded-[3rem] md:rounded-[3.5rem] overflow-hidden flex-shrink-0 group mx-auto lg:mx-0 shadow-2xl border border-white/5 order-last lg:order-none">
                     <img src="/profile.jpeg" alt="Profile" className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 group-hover:rotate-2" />
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
                 </motion.div>

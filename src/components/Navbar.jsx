@@ -46,6 +46,8 @@ const Navbar = () => {
     };
 
     useMotionValueEvent(scrollY, "change", (latest) => {
+        if (isMobileMenuOpen) return; // Don't hide navbar if mobile menu is open
+
         const previous = scrollY.getPrevious();
 
         // Always show at the top
@@ -70,6 +72,7 @@ const Navbar = () => {
     useEffect(() => {
         let timeout;
         const handleScroll = () => {
+            if (isMobileMenuOpen) return;
             clearTimeout(timeout);
             timeout = setTimeout(() => {
                 setIsVisible(true);
@@ -77,7 +80,19 @@ const Navbar = () => {
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+    }, [isMobileMenuOpen]);
+
+    // Lock body scroll when mobile menu is open
+    useEffect(() => {
+        if (isMobileMenuOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isMobileMenuOpen]);
 
     const isActive = (path) => location.pathname === path;
 
@@ -263,7 +278,7 @@ const Navbar = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="fixed inset-0 bg-background/95 backdrop-blur-2xl z-40 flex flex-col items-center justify-center p-8 space-y-6 pointer-events-auto"
+                        className="fixed inset-0 bg-background z-40 flex flex-col items-center justify-center p-8 space-y-6 pointer-events-auto"
                     >
                         <div className="flex flex-col items-center space-y-4">
                             {navLinks.map((link) => (

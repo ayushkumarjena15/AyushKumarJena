@@ -362,8 +362,14 @@ const GuestbookPage = () => {
     }
 
     return (
-        <main className="bg-background">
-            <section className="min-h-screen pt-32 pb-20 px-6 max-w-7xl mx-auto relative overflow-hidden">
+        <motion.main
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-background bg-grain"
+        >
+            <section className="min-h-screen pt-24 pb-20 px-6 max-w-7xl mx-auto relative overflow-hidden">
                 {/* Header Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -374,10 +380,10 @@ const GuestbookPage = () => {
                     <div className={!user ? "flex-1 mt-8 lg:mt-16" : ""}>
                         <p className="text-white/40 text-[11px] font-mono tracking-[0.3em] uppercase mb-6 pl-1">LEAVE YOUR SIGNATURE</p>
                         <h1 className="flex flex-col">
-                            <span className="text-[clamp(3.5rem,8vw,8rem)] font-black leading-[0.85] tracking-tight uppercase text-white font-heading select-none">
+                            <span className="text-[14vw] md:text-[clamp(3.5rem,8vw,8rem)] font-black leading-[0.85] tracking-tight uppercase text-white font-heading select-none">
                                 GUEST
                             </span>
-                            <span className="text-[clamp(3.5rem,8vw,8rem)] font-serif italic text-white/[0.35] leading-[0.85] tracking-tight pl-2 md:pl-6 -mt-3 select-none">
+                            <span className="text-[14vw] md:text-[clamp(3.5rem,8vw,8rem)] font-serif italic text-white/[0.35] leading-[0.85] tracking-tight pl-2 md:pl-6 -mt-3 select-none">
                                 book
                             </span>
                         </h1>
@@ -653,7 +659,7 @@ const GuestbookPage = () => {
                 </AnimatePresence>
             </section>
             <CTASection />
-        </main>
+        </motion.main>
     );
 };
 
