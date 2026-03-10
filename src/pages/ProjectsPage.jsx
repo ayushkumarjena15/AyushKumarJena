@@ -235,7 +235,7 @@ const ProjectsPage = () => {
 
                 <div className="text-center z-10 w-full px-4">
                     <motion.h1
-                        className="text-[18vw] md:text-[16vw] font-black leading-none tracking-[-0.04em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
+                        className="text-[20vw] md:text-[16vw] font-black leading-none tracking-[-0.04em] uppercase mb-8 text-white w-full flex justify-center overflow-hidden items-end"
                         style={{ perspective: '1000px' }}
                     >
                         {title.split('').map((letter, i) => (
@@ -323,7 +323,7 @@ const ProjectsPage = () => {
                                 >
                                     <div className="space-y-1">
                                         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent1">{project.type}</p>
-                                        <h3 className="text-4xl md:text-7xl font-heading font-black text-white tracking-tighter italic uppercase">
+                                        <h3 className="text-3xl md:text-7xl font-heading font-black text-white tracking-tighter italic uppercase">
                                             {project.name}
                                         </h3>
                                     </div>
@@ -374,7 +374,7 @@ const ProjectsPage = () => {
                                             <span className="w-1.5 h-1.5 rounded-full bg-accent1" />
                                             Technical DNA
                                         </h4>
-                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-4">
                                             {project.overview.techSpec.map((spec, i) => (
                                                 <div key={i} className="space-y-1">
                                                     <p className="text-[9px] text-accent1/60 font-black uppercase tracking-tighter flex items-center gap-1.5">

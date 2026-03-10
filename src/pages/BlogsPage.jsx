@@ -32,10 +32,10 @@ const BlogsPage = () => {
             >
                 <p className="text-white/40 text-[11px] font-mono tracking-[0.3em] uppercase mb-8 pl-1">MY THOUGHTS && WRITINGS</p>
                 <h1 className="flex flex-col">
-                    <span className="text-[clamp(4.5rem,10vw,8.5rem)] font-black leading-[0.85] tracking-tight uppercase text-white font-heading select-none">
+                    <span className="text-[clamp(3.5rem,10vw,8.5rem)] font-black leading-[0.85] tracking-tight uppercase text-white font-heading select-none">
                         BLOG
                     </span>
-                    <span className="text-[clamp(4.5rem,10vw,8.5rem)] font-serif italic text-white/[0.35] leading-[0.85] tracking-tight pl-2 md:pl-6 -mt-3 select-none">
+                    <span className="text-[clamp(3.5rem,10vw,8.5rem)] font-serif italic text-white/[0.35] leading-[0.85] tracking-tight pl-2 md:pl-6 -mt-3 select-none">
                         posts
                     </span>
                 </h1>

@@ -92,7 +92,7 @@ const AboutPage = () => {
 
                 <div className="text-center z-10 w-full px-4 flex flex-col items-center">
                     <motion.h1
-                        className="text-[12vw] md:text-[10vw] font-black leading-[0.8] tracking-[-0.02em] uppercase mb-6 drop-shadow-2xl flex flex-col items-center overflow-hidden w-full"
+                        className="text-[14vw] md:text-[10vw] font-black leading-[0.8] tracking-[-0.02em] uppercase mb-6 drop-shadow-2xl flex flex-col items-center overflow-hidden w-full"
                         style={{ perspective: '600px' }}
                     >
                         <div className="flex justify-center w-full">
@@ -137,7 +137,7 @@ const AboutPage = () => {
                             Get to know more about
                         </motion.p>
                         <motion.h2
-                            className="text-4xl md:text-6xl font-serif italic text-accent1 font-light lower-case"
+                            className="text-3xl md:text-6xl font-serif italic text-accent1 font-light lower-case"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1.4, duration: 0.8 }}
@@ -160,10 +160,10 @@ const AboutPage = () => {
             </section>
 
             {/* Content Container */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-24 pb-32">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 space-y-16 md:space-y-24 pb-32">
 
                 {/* Nice to Meet You Section */}
-                <section className="grid lg:grid-cols-2 gap-24 items-center">
+                <section className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                     <motion.div
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -173,7 +173,7 @@ const AboutPage = () => {
                     >
                         <div className="space-y-4">
                             <p className="text-[10px] font-black uppercase tracking-[0.6em] text-accent1">A little about me</p>
-                            <h2 className="text-5xl md:text-7xl font-bold tracking-tighter leading-tight">
+                            <h2 className="text-4xl md:text-7xl font-bold tracking-tighter leading-tight">
                                 Nice to meet you. <br />
                                 I'm <span className="text-gradient italic font-serif">Ayush</span>
                             </h2>
@@ -232,13 +232,13 @@ const AboutPage = () => {
                     </motion.div>
 
                     {/* Automatically Rotating 3D Photo Carousel */}
-                    <div className="relative h-[600px] w-full flex items-center justify-center overflow-visible" style={{ perspective: 1500 }}>
+                    <div className="relative h-[450px] md:h-[600px] w-full flex items-center justify-center overflow-visible" style={{ perspective: 1500 }}>
                         {[
                             {
                                 src: "/profile.jpeg",
                                 alt: "Ayush Kumar Jena",
-                                size: "w-80 h-[480px]",
-                                rounded: "rounded-[2.5rem]"
+                                size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
+                                rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
                                 src: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
@@ -249,8 +249,8 @@ const AboutPage = () => {
                             {
                                 src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
                                 alt: "Coding Passion",
-                                size: "w-80 h-[480px]",
-                                rounded: "rounded-[2.5rem]"
+                                size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
+                                rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             }
                         ].map((photo, i) => {
                             const offset = (i - photoIndex + 3) % 3;
@@ -263,7 +263,7 @@ const AboutPage = () => {
                                     key={i}
                                     initial={false}
                                     animate={{
-                                        x: isActive ? 0 : isLeft ? -160 : 160,
+                                        x: isActive ? 0 : isLeft ? (window.innerWidth < 768 ? -80 : -160) : (window.innerWidth < 768 ? 80 : 160),
                                         z: isActive ? 200 : -100,
                                         rotateY: isActive ? 0 : isLeft ? 35 : -35,
                                         rotateX: isActive ? 0 : 5,

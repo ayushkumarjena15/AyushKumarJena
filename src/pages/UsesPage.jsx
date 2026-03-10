@@ -59,7 +59,7 @@ const InventoryTable = ({ title, status, items, accentColor, setHoveredItem }) =
         </div>
 
         {/* Table Headers */}
-        <div className="grid grid-cols-12 gap-4 pb-4 border-b border-white/10 text-white/40 text-xs font-mono uppercase tracking-widest pl-4">
+        <div className="hidden md:grid grid-cols-12 gap-4 pb-4 border-b border-white/10 text-white/40 text-xs font-mono uppercase tracking-widest pl-4">
             <div className="col-span-1">ID</div>
             <div className="col-span-5 md:col-span-4">NAME</div>
             <div className="col-span-3">TYPE</div>
@@ -79,23 +79,26 @@ const InventoryTable = ({ title, status, items, accentColor, setHoveredItem }) =
                     <motion.div
                         variants={itemVariants}
                         key={item.id}
-                        className="grid grid-cols-12 gap-4 py-5 border-b border-white/5 items-center hover:bg-white/5 transition-colors duration-300 px-4 rounded-lg -mx-4 group cursor-default"
+                        className="flex flex-col md:grid md:grid-cols-12 gap-4 py-6 md:py-5 border-b border-white/5 items-start md:items-center hover:bg-white/5 transition-colors duration-300 px-4 rounded-lg -mx-4 group cursor-default"
                         onMouseEnter={() => setHoveredItem && setHoveredItem(item)}
                         onMouseLeave={() => setHoveredItem && setHoveredItem(null)}
                     >
-                        <div className="col-span-1 text-white/40 text-xs font-mono group-hover:text-white/80 transition-colors">
+                        <div className="hidden md:block col-span-1 text-white/40 text-xs font-mono group-hover:text-white/80 transition-colors">
                             {item.id}
                         </div>
-                        <div className="col-span-5 md:col-span-4 flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-white/30 transition-all">
+                        <div className="col-span-12 md:col-span-4 flex items-center gap-4 w-full">
+                            <div className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center bg-white/5 group-hover:border-white/30 transition-all flex-shrink-0">
                                 <Icon size={18} className="text-white/60 group-hover:text-white transition-colors" />
                             </div>
-                            <span className="text-white font-bold text-lg md:text-xl group-hover:translate-x-1 transition-transform">{item.name}</span>
+                            <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-4 overflow-hidden">
+                                <span className="text-white font-bold text-lg md:text-xl group-hover:translate-x-1 transition-transform truncate">{item.name}</span>
+                                <span className="md:hidden text-white/40 text-[10px] tracking-widest uppercase font-mono">{item.type}</span>
+                            </div>
                         </div>
-                        <div className="col-span-3 text-white/40 text-xs tracking-widest uppercase font-mono group-hover:text-white/80 transition-colors">
+                        <div className="hidden md:block col-span-3 text-white/40 text-xs tracking-widest uppercase font-mono group-hover:text-white/80 transition-colors">
                             {item.type}
                         </div>
-                        <div className="col-span-3 md:col-span-4 text-right text-white/50 text-xs md:text-sm font-mono group-hover:text-white/90 transition-colors">
+                        <div className="col-span-12 md:col-span-4 md:text-right text-white/50 text-xs md:text-sm font-mono group-hover:text-white/90 transition-colors">
                             {item.description}
                         </div>
                     </motion.div>
@@ -192,7 +195,7 @@ const UsesPage = () => {
                             {/* Connecting horizontal line */}
                             <div className="absolute left-0 top-0 w-full h-[1px] bg-white/10" />
 
-                            <h1 className="text-[clamp(4rem,10vw,8rem)] font-black leading-[0.8] tracking-tight uppercase font-heading text-white mt-12 mb-6">
+                            <h1 className="text-[clamp(3.5rem,10vw,8rem)] font-black leading-[0.8] tracking-tight uppercase font-heading text-white mt-12 mb-6">
                                 USES
                             </h1>
                             <p className="text-white/60 text-xl md:text-3xl max-w-2xl leading-tight">

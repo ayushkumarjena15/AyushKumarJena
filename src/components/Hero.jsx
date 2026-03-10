@@ -29,7 +29,7 @@ const Hero = () => {
             <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full px-6 pt-32 pb-20">
                 {/* Giant Name */}
                 <motion.h1
-                    className="text-[clamp(4rem,18vw,14rem)] font-black text-white leading-[0.85] tracking-[-0.04em] uppercase font-heading select-none"
+                    className="text-[clamp(3.5rem,15vw,14rem)] font-black text-white leading-[0.85] tracking-[-0.04em] uppercase font-heading select-none"
                     style={{ perspective: '600px' }}
                 >
                     <span className="flex overflow-hidden">
@@ -72,7 +72,7 @@ const Hero = () => {
 
             {/* Bottom Info Badges */}
             <motion.div
-                className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-12 flex justify-between items-end"
+                className="relative z-10 w-full max-w-7xl mx-auto px-6 pb-12 flex flex-col md:flex-row justify-between items-center md:items-end gap-8 md:gap-0"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.8, duration: 1 }}

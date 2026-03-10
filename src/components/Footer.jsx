@@ -19,7 +19,7 @@ const Footer = () => {
                     </div>
 
                     {/* Navigation Columns */}
-                    <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 md:gap-4 lg:ml-12 pt-2 lg:pt-0">
+                    <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-4 lg:ml-12 pt-2 lg:pt-0">
                         <div className="space-y-6">
                             <h4 className="text-[18px] md:text-[20px] font-serif italic text-white tracking-wide">General</h4>
                             <ul className="space-y-4 text-[#9ca3af] text-[15px] font-sans">

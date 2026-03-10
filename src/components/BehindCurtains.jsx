@@ -39,13 +39,21 @@ const BehindCurtains = () => {
         const fetchMusic = async () => {
             try {
                 const res = await fetch('/api/now-playing');
+                if (!res.ok) throw new Error('Network response was not ok');
+                
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new TypeError("Oops, we haven't got JSON!");
+                }
+                
                 const data = await res.json();
-
                 if (data && !data.error) {
                     setSpotifyTrack(data);
                 }
             } catch (e) {
-                console.error('Error fetching music:', e);
+                // Silently fail in dev if /api/now-playing is not served as JSON
+                // This prevents "SyntaxError: Unexpected token" when Vite serves JS/HTML instead of JSON
+                console.log('Music status currently unavailable');
             } finally {
                 setSpotifyLoaded(true);
             }

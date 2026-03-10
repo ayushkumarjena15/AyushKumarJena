@@ -46,7 +46,7 @@ const LinksPage = () => {
                             <div className="h-[1px] w-8 bg-white/20" />
                         </div>
 
-                        <h1 className="text-[clamp(3.5rem,8vw,6rem)] font-black leading-[0.9] tracking-tight uppercase font-heading select-none">
+                        <h1 className="text-[clamp(2.5rem,8vw,6rem)] font-black leading-[0.9] tracking-tight uppercase font-heading select-none">
                             <span className="block text-white">MY</span>
                             <span className="block text-secondary">DIGITAL</span>
                             <span className="block text-white">PRESENCE</span>
@@ -87,7 +87,7 @@ const LinksPage = () => {
                                 <span className="text-secondary text-sm font-mono group-hover:text-black/50 transition-colors duration-500">
                                     {link.id}
                                 </span>
-                                <h2 className="text-[clamp(2.5rem,6vw,5.5rem)] font-black text-white uppercase group-hover:text-black transition-colors duration-500 font-heading leading-none tracking-tight">
+                                <h2 className="text-[clamp(2rem,6vw,5.5rem)] font-black text-white uppercase group-hover:text-black transition-colors duration-500 font-heading leading-none tracking-tight">
                                     {link.name}
                                 </h2>
                             </div>

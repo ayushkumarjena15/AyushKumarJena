@@ -232,10 +232,10 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="w-full max-w-5xl mx-auto bg-[#141414] rounded-[2.5rem] border border-white/5 overflow-hidden flex flex-col md:flex-row shadow-2xl mt-4"
+            className="w-full max-w-5xl mx-auto bg-[#141414] rounded-[2rem] md:rounded-[2.5rem] border border-white/5 overflow-hidden flex flex-col md:flex-row shadow-2xl mt-4"
         >
             {/* Details Panel */}
-            <div className="w-full md:w-[32%] p-10 border-r border-white/5 bg-[#181818]/50 flex flex-col gap-10">
+            <div className="w-full md:w-[32%] p-6 md:p-10 border-b md:border-b-0 md:border-r border-white/5 bg-[#181818]/50 flex flex-col gap-8 md:gap-10">
                 <div className="space-y-6">
                     <img src="/profile.jpeg" className="w-14 h-14 rounded-full border border-white/10 shadow-2xl" alt="Ayush" />
                     <div className="space-y-1">
@@ -322,7 +322,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                     </div>
 
                     {selectedTimezone !== 'Asia/Kolkata' && (
-                        <p className="text-[10px] text-white/20 font-medium leading-relaxed border-t border-white/5 pt-4">
+                        <p className="hidden md:block text-[10px] text-white/20 font-medium leading-relaxed border-t border-white/5 pt-4">
                             Slots shown in your timezone.<br />Meeting hosted in India (IST UTC+5:30).
                         </p>
                     )}
@@ -330,7 +330,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
             </div>
 
             {/* Calendar Panel */}
-            <div className="w-full md:w-[43%] p-10 border-r border-white/5">
+            <div className="w-full md:w-[43%] p-6 md:p-10 border-b md:border-b-0 md:border-r border-white/5">
                 <div className="flex items-center justify-between mb-10">
                     <h3 className="text-white font-black text-xl tracking-tight">{monthNames[month]} <span className="text-white/20 font-light">{year}</span></h3>
                     <div className="flex gap-2">
@@ -339,7 +339,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                     </div>
                 </div>
 
-                <div className="grid grid-cols-7 gap-y-6 gap-x-1 mb-4">
+                <div className="grid grid-cols-7 gap-y-4 md:gap-y-6 gap-x-1 mb-4">
                     {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(day => (
                         <div key={day} className="text-center text-white/30 text-[10px] font-black tracking-[0.2em]">{day}</div>
                     ))}
@@ -358,7 +358,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                                 <button
                                     onClick={() => !isDisabled && setSelectedDate(date)}
                                     title={isWeekendDay ? 'Weekends unavailable' : undefined}
-                                    className={`w-11 h-11 rounded-2xl flex items-center justify-center text-sm font-bold transition-all relative
+                                    className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center text-xs sm:text-sm font-bold transition-all relative
                                         ${isSelected ? 'bg-white text-black shadow-xl' :
                                             isDisabled ? 'text-white/10 cursor-not-allowed opacity-40' :
                                                 'text-white/60 hover:bg-white/5 bg-[#1a1a1a] border border-white/[0.02]'}`}
@@ -374,7 +374,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
             </div>
 
             {/* Slots Panel */}
-            <div className="w-full md:w-[25%] p-10 bg-[#121212] flex flex-col h-[580px]">
+            <div className="w-full md:w-[25%] p-6 md:p-10 bg-[#121212] flex flex-col min-h-[400px] md:h-[580px]">
                 <div className="flex items-center justify-between mb-6">
                     <h3 className="text-white font-bold tracking-tight">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][new Date(year, month, selectedDate).getDay()]}{' '}
@@ -1048,7 +1048,7 @@ const BookCallPage = () => {
                 className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-8 pb-20 px-6">
                 <div className="flex-1 mt-8">
                     <p className="text-white/20 text-[10px] font-black tracking-[0.6em] uppercase mb-10 pl-1">SCHEDULE / CONNECT / COLLABORATE</p>
-                    <h1 className="text-[clamp(4.5rem,10vw,10rem)] font-black leading-[0.8] tracking-tighter uppercase text-white font-heading select-none">
+                    <h1 className="text-[clamp(3rem,10vw,10rem)] font-black leading-[0.9] md:leading-[0.8] tracking-tighter uppercase text-white font-heading select-none">
                         <span className="block">BOOK A</span>
                         <span className="block text-white/20">CALL</span>
                         <span className="block italic font-serif text-white lowercase tracking-widest translate-y-4">with me.</span>
@@ -1061,13 +1061,13 @@ const BookCallPage = () => {
             </motion.div>
 
             <div className="w-full flex justify-center mb-16 relative z-20">
-                <div className="flex bg-[#111] p-1.5 rounded-[1.8rem] border border-white/5 shadow-2xl backdrop-blur-xl">
+                <div className="flex flex-col sm:flex-row bg-[#111] p-1.5 rounded-[1.8rem] border border-white/5 shadow-2xl backdrop-blur-xl">
                     <button onClick={() => switchTab('book')}
-                        className={`px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center gap-3 transition-all duration-700 ${activeTab === 'book' ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.15)]' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
+                        className={`px-6 md:px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-700 ${activeTab === 'book' ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.15)]' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
                         <PhoneCall size={16} /> Book a Call
                     </button>
                     <button onClick={() => switchTab('message')}
-                        className={`px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center gap-3 transition-all duration-700 ${activeTab === 'message' ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.15)]' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
+                        className={`px-6 md:px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-700 ${activeTab === 'message' ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.15)]' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
                         <MessageSquare size={16} /> Send a Message
                     </button>
                 </div>

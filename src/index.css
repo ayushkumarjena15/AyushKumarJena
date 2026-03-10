@@ -80,13 +80,17 @@
     padding: 0;
     overflow-x: hidden;
     scroll-behavior: smooth;
+    width: 100%;
+    position: relative;
   }
 
   body {
-    @apply bg-background text-primary antialiased font-sans overflow-x-hidden;
+    @apply bg-background text-primary antialiased font-sans;
     margin: 0;
     padding: 0;
     width: 100%;
+    overflow-x: hidden;
+    position: relative;
   }
 
   h1,

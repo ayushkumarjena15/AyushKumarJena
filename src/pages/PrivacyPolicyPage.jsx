@@ -270,7 +270,7 @@ const PrivacyPolicyPage = () => {
                         >
                             {/* Huge Background Number */}
                             <div className="absolute -top-[4rem] sm:-top-[8rem] md:-top-[12rem] -left-4 sm:-left-8 select-none pointer-events-none z-0">
-                                <span className="text-[10rem] sm:text-[16rem] md:text-[24rem] font-heading font-black text-[#111] leading-none tracking-tighter mix-blend-screen opacity-60">
+                                <span className="text-[7rem] sm:text-[16rem] md:text-[24rem] font-heading font-black text-[#111] leading-none tracking-tighter mix-blend-screen opacity-60">
                                     {section.number}
                                 </span>
                             </div>

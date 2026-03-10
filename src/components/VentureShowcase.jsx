@@ -261,7 +261,7 @@ const VentureShowcase = () => {
                             </div>
 
                             {/* Right - Mockup Carousel */}
-                            <div className={`rounded-3xl bg-gradient-to-br ${venture.color} p-1.5 overflow-hidden relative group cursor-pointer shadow-2xl border border-white/5 h-full`}>
+                            <div className={`rounded-3xl bg-gradient-to-br ${venture.color} p-1 md:p-1.5 overflow-hidden relative group cursor-pointer shadow-2xl border border-white/5 h-full aspect-video md:aspect-auto`}>
                                 <div className="relative z-10 h-full rounded-2xl overflow-hidden">
                                     <ProjectImageCarousel
                                         images={venture.images}

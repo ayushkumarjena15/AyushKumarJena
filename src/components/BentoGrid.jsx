@@ -60,7 +60,7 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
 
     return (
         <motion.div
-            className="bento-card md:col-span-2 p-6 md:p-8 md:pt-24 flex flex-col md:flex-row gap-8 items-start min-h-[180px] relative overflow-hidden group/card"
+            className="bento-card md:col-span-2 p-6 md:p-8 md:pt-24 flex flex-col md:flex-row gap-6 md:gap-8 items-start min-h-[180px] relative overflow-hidden group/card"
             custom={4}
             variants={cardVariants}
             initial="hidden"
@@ -94,7 +94,7 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
                 <div className="flex justify-end mb-4">
                     <div className="w-16 h-1 bg-accent1 rounded-full opacity-50" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-heading font-black text-white whitespace-nowrap">
+                <h3 className="text-2xl md:text-3xl font-heading font-black text-white md:whitespace-nowrap">
                     Creator of{' '}
                     <AnimatePresence mode="wait">
                         <motion.span
