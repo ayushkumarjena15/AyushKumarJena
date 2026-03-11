@@ -2,7 +2,7 @@ const https = require('https');
 
 const CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
 const CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
-const REDIRECT_URI = 'https://ayushkumarjena.vercel.app/api/callback';
+const REDIRECT_URI = 'https://www.ayushkumarjena.in/api/callback';
 
 export default async function handler(req, res) {
     const { code, error } = req.query;

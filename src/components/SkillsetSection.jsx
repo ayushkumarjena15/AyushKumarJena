@@ -131,6 +131,7 @@ const SkillsetSection = () => {
                     <span className="bg-clip-text text-transparent italic animated-gradient-text">
                         Behind
                     </span>
+                    <span className="sr-only"> - My Skills</span>
                 </h2>
                 <p className="text-[11px] uppercase tracking-[0.4em] text-accent1 font-bold mt-4">My Skillset</p>
                 </motion.div>

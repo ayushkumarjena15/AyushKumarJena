@@ -29,10 +29,11 @@ const Hero = () => {
             <div className="relative z-10 flex flex-col items-center justify-center flex-1 w-full px-6 pt-32 pb-20">
                 {/* Giant Name */}
                 <motion.h1
-                    className="text-[clamp(3.5rem,15vw,14rem)] font-black text-white leading-[0.85] tracking-[-0.04em] uppercase font-heading select-none"
+                    className="text-[clamp(3.5rem,15vw,14rem)] font-black text-white leading-[0.85] tracking-[-0.04em] uppercase font-heading select-none lg:mb-8"
                     style={{ perspective: '600px' }}
                 >
-                    <span className="flex overflow-hidden">
+                    <span className="sr-only">Ayush Kumar Jena - Software Developer Portfolio</span>
+                    <span className="flex overflow-hidden" aria-hidden="true">
                         {name.split('').map((letter, i) => (
                             <motion.span
                                 key={i}
@@ -48,6 +49,7 @@ const Hero = () => {
                         ))}
                     </span>
                 </motion.h1>
+                <h2 className="sr-only">Software Developer Portfolio</h2>
 
                 {/* Subtitle Line 1 */}
                 <motion.p

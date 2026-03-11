@@ -38,6 +38,7 @@ const CTASection = () => {
                         <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-black text-white tracking-tighter leading-none">
                             Let's create
                         </h2>
+                        <span className="sr-only">Contact Ayush Kumar Jena</span>
                     </div>
                     <p className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-heading font-black text-[#555] tracking-tighter leading-none">
                         something real.
