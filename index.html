@@ -65,85 +65,119 @@
     }
 
     .dev-card {
-      background: #111111;
-      padding: 3rem 2rem;
-      border-radius: 20px;
-      border: 1px solid #222;
-      max-width: 450px;
-      width: 90%;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background: #0a0a0a;
+      padding: 3.5rem 2.5rem;
+      border-radius: 24px;
+      border: 1px solid #1a1a1a;
+      max-width: 500px;
+      width: 85%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+      position: relative;
     }
 
-    .dev-icon {
-      width: 50px;
-      height: 50px;
-      margin: 0 auto 1.5rem;
-      background: #222;
+    .dev-icon-wrapper {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 2rem;
+      background: #1a1a1a;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #999;
+      border: 1px solid #333;
     }
 
     .dev-small {
       text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 0.7rem;
-      color: #777;
-      margin-bottom: 0.5rem;
+      letter-spacing: 3px;
+      font-size: 0.65rem;
+      color: #666;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
     }
 
     .dev-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.5px;
     }
 
     .dev-title span {
       font-style: italic;
-      color: #999;
+      color: #555;
       font-weight: 300;
     }
 
     .dev-text {
-      color: #999;
-      font-size: 0.95rem;
+      color: #888;
+      font-size: 1rem;
       line-height: 1.6;
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .dev-btn {
       display: block;
       width: 100%;
-      padding: 0.8rem;
-      border-radius: 10px;
+      padding: 1rem;
+      border-radius: 12px;
       text-decoration: none;
       font-weight: 600;
-      margin-bottom: 0.8rem;
-      transition: all 0.2s;
+      margin-bottom: 1rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-size: 1rem;
     }
 
     .btn-white {
-      background: white;
-      color: black;
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .btn-white:hover {
+      background: #e5e5e5;
+      transform: translateY(-2px);
     }
 
     .btn-outline {
-      border: 1px solid #333;
-      color: white;
+      border: 1px solid #222;
+      color: #ffffff;
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: #111;
+      border-color: #444;
+      transform: translateY(-2px);
     }
 
     .dev-footer {
-      margin-top: 2rem;
-      font-size: 0.75rem;
-      color: #555;
+      margin-top: 2.5rem;
+      font-size: 0.85rem;
+      color: #444;
+    }
+
+    .dev-footer .links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 1rem;
     }
 
     .dev-footer a {
-      color: #777;
+      color: #666;
       text-decoration: none;
-      margin: 0 10px;
+      transition: color 0.2s;
+    }
+
+    .dev-footer a:hover {
+      color: #aaa;
+    }
+
+    .dev-footer span {
+      color: #222;
     }
   </style>
   <script>
@@ -192,19 +226,25 @@
 <body>
   <div id="devtools-screen">
     <div class="dev-card">
-      <div class="dev-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <div class="dev-icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
       </div>
-      <div class="dev-small">Access Restricted</div>
+      <div class="dev-small">ACCESS RESTRICTED</div>
       <div class="dev-title">DEV TOOLS <span>detected</span></div>
       <p class="dev-text">Curious about how this was built? Let's connect and chat about it instead of peeking behind the curtains.</p>
       
       <a href="/" class="dev-btn btn-white">Return Home</a>
-      <a href="/contact" class="dev-btn btn-outline">Get in Touch</a>
+      <a href="/book" class="dev-btn btn-outline">Get in Touch</a>
 
       <div class="dev-footer">
-        <a href="/privacy">Privacy</a> • <a href="/terms">Terms</a> • <a href="/about">About</a>
-        <p style="margin-top: 1rem;">© 2026 Ayush Kumar Jena</p>
+        <div class="links">
+          <a href="/privacy-policy">Privacy</a>
+          <span>•</span>
+          <a href="/terms-of-use">Terms</a>
+          <span>•</span>
+          <a href="/about">About</a>
+        </div>
+        <p>© 2026 Ayush Kumar Jena</p>
       </div>
     </div>
   </div>
