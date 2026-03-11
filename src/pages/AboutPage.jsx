@@ -241,14 +241,14 @@ const AboutPage = () => {
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
-                                src: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80",
-                                alt: "Tech Inspiration",
-                                size: "w-80 h-[480px]",
-                                rounded: "rounded-[2.5rem]"
+                                src: "/gallery/photo4.jpeg",
+                                alt: "Ayush in the mountains",
+                                size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
+                                rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
-                                src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80",
-                                alt: "Coding Passion",
+                                src: "/gallery/photo5.jpeg",
+                                alt: "Ayush hiking",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             }

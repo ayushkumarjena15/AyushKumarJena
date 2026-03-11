@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import { Menu, X, Command, Download, Link2, Monitor, Book, Sun, Moon } from 'lucide-react';
+import { Menu, X, Command, Download, Link2, Monitor, Book } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 const navLinks = [
@@ -16,34 +16,10 @@ const Navbar = () => {
     const [isVisible, setIsVisible] = useState(true);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMoreOpen, setIsMoreOpen] = useState(false);
-    const [isDarkMode, setIsDarkMode] = useState(true);
     const location = useLocation();
     const { scrollY } = useScroll();
 
-    // Theme initialization and toggling
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
-            setIsDarkMode(false);
-            document.documentElement.classList.add('light');
-        } else {
-            setIsDarkMode(true);
-            document.documentElement.classList.remove('light');
-        }
-    }, []);
-
-    const toggleTheme = () => {
-        setIsDarkMode(!isDarkMode);
-        if (isDarkMode) {
-            document.documentElement.classList.add('light');
-            localStorage.setItem('theme', 'light');
-        } else {
-            document.documentElement.classList.remove('light');
-            localStorage.setItem('theme', 'dark');
-        }
-    };
 
     useMotionValueEvent(scrollY, "change", (latest) => {
         if (isMobileMenuOpen) return; // Don't hide navbar if mobile menu is open
@@ -261,12 +237,7 @@ const Navbar = () => {
                             exit={{ opacity: 0, x: 20 }}
                             className="hidden md:flex items-center gap-3"
                         >
-                            <button
-                                onClick={toggleTheme}
-                                className="w-9 h-9 border border-white/10 rounded-xl flex items-center justify-center text-secondary hover:text-white hover:border-white/30 transition-all"
-                            >
-                                {isDarkMode ? <Sun size={14} /> : <Moon size={14} />}
-                            </button>
+
                             <button
                                 onClick={() => window.dispatchEvent(new Event('toggle-command-palette'))}
                                 className="w-9 h-9 border border-white/10 rounded-xl flex items-center justify-center text-secondary hover:text-white hover:border-white/30 transition-all"
@@ -334,12 +305,7 @@ const Navbar = () => {
                                     Resume
                                 </a>
                                 <div className="w-px h-8 bg-white/10" />
-                                <button
-                                    onClick={() => { toggleTheme(); setIsMobileMenuOpen(false); }}
-                                    className="flex items-center gap-3 text-xl font-black uppercase tracking-widest text-secondary hover:text-white transition-colors"
-                                >
-                                    {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-                                </button>
+
                             </div>
                             <Link
                                 to="/book"

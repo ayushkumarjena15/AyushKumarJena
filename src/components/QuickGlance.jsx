@@ -28,8 +28,8 @@ const QuickGlance = () => {
                         <p>
                             I'm Ayush Kumar Jena, an engineering-driven developer who turns complex technical challenges into high-speed web products.
                             I manage the entire stack with a focus on clean, reusable code and seamless performance.
-                            I excel in <span className="text-white font-medium underline decoration-accent1/40 underline-offset-4">React</span> and{' '}
-                            <span className="text-white font-medium underline decoration-accent1/40 underline-offset-4">full-stack architecture</span>,
+                            I excel in <span className="text-white font-medium underline decoration-accent1/40 underline-offset-4">ML</span> and{' '}
+                            <span className="text-white font-medium underline decoration-accent1/40 underline-offset-4">Full Stack Architecture</span>,
                             always delivering modern solutions that actually solve problems for every user.
                         </p>
                         <p>

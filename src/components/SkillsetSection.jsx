@@ -1,23 +1,22 @@
 import { motion, useMotionValue, useAnimationFrame, useScroll, useVelocity, useSpring } from 'framer-motion';
 import * as SiIcons from 'react-icons/si';
 import { VscGraph } from 'react-icons/vsc';
-import { FaJava, FaXbox, FaTerminal } from 'react-icons/fa';
+import { FaJava, FaTerminal } from 'react-icons/fa';
 import propeller from '../assets/propeller.png';
 
 const skillRows = [
-    ['C', 'C++', 'Python', 'Java', 'HTML5', 'CSS3', 'JavaScript', 'TypeScript'],
-    ['Firebase', 'MongoDB', 'MySQL', 'Supabase', 'Prisma'],
-    ['Apache Kafka', 'Django', 'Express.js', 'FastAPI', 'Flask', 'Node.js', 'React', 'TailwindCSS', 'Three.js'],
-    ['Bitbucket', 'Git', 'GitHub'],
-    ['Cloudflare', 'Google Cloud', 'Netlify', 'Render', 'Vercel'],
+    ['C', 'Python', 'Java', 'HTML5', 'CSS3', 'JavaScript', 'TypeScript'],
+    ['Firebase', 'MongoDB', 'MySQL', 'Supabase'],
+    ['Django', 'Express.js', 'FastAPI', 'Node.js', 'React', 'TailwindCSS'],
+    ['Git', 'GitHub'],
+    ['Cloudflare', 'Netlify', 'Render', 'Vercel'],
     ['Matplotlib', 'MLflow', 'NumPy', 'Pandas', 'Plotly', 'PyTorch', 'scikit-learn', 'TensorFlow'],
-    ['Docker', 'Kubernetes', 'Power BI', 'Raspberry Pi', 'Twilio', 'NVIDIA', 'OpenGL', 'PlayStation Network', 'Riot Games', 'Xbox', 'Windows Terminal'],
-    ['Adobe', 'Adobe Photoshop', 'Canva', 'Figma', 'Sketch']
+    ['Docker', 'Kubernetes', 'Raspberry Pi', 'Twilio', 'Windows Terminal'],
+    ['Canva']
 ];
 
 const skillIcons = {
     'C': { icon: SiIcons.SiC, color: '#A8B9CC' },
-    'C++': { icon: SiIcons.SiCplusplus, color: '#00599C' },
     'Python': { icon: SiIcons.SiPython, color: '#3776AB' },
     'Java': { icon: FaJava, color: '#007396' },
     'HTML5': { icon: SiIcons.SiHtml5, color: '#E34F26' },
@@ -28,21 +27,15 @@ const skillIcons = {
     'MongoDB': { icon: SiIcons.SiMongodb, color: '#47A248' },
     'MySQL': { icon: SiIcons.SiMysql, color: '#4479A1' },
     'Supabase': { icon: SiIcons.SiSupabase, color: '#3ECF8E' },
-    'Prisma': { icon: SiIcons.SiPrisma, color: '#2D3748' },
-    'Apache Kafka': { icon: SiIcons.SiApachekafka, color: '#231F20' },
     'Django': { icon: SiIcons.SiDjango, color: '#092E20' },
     'Express.js': { icon: SiIcons.SiExpress, color: '#ffffff' },
     'FastAPI': { icon: SiIcons.SiFastapi, color: '#009688' },
-    'Flask': { icon: SiIcons.SiFlask, color: '#ffffff' },
     'Node.js': { icon: SiIcons.SiNodedotjs, color: '#339933' },
     'React': { icon: SiIcons.SiReact, color: '#61DAFB' },
     'TailwindCSS': { icon: SiIcons.SiTailwindcss, color: '#06B6D4' },
-    'Three.js': { icon: SiIcons.SiThreedotjs, color: '#ffffff' },
-    'Bitbucket': { icon: SiIcons.SiBitbucket, color: '#0052CC' },
     'Git': { icon: SiIcons.SiGit, color: '#F05032' },
     'GitHub': { icon: SiIcons.SiGithub, color: '#ffffff' },
     'Cloudflare': { icon: SiIcons.SiCloudflare, color: '#F38020' },
-    'Google Cloud': { icon: SiIcons.SiGooglecloud, color: '#4285F4' },
     'Netlify': { icon: SiIcons.SiNetlify, color: '#00C7B7' },
     'Render': { icon: SiIcons.SiRender, color: '#ffffff' },
     'Vercel': { icon: SiIcons.SiVercel, color: '#ffffff' },
@@ -56,18 +49,10 @@ const skillIcons = {
     'TensorFlow': { icon: SiIcons.SiTensorflow, color: '#FF6F00' },
     'Docker': { icon: SiIcons.SiDocker, color: '#2496ED' },
     'Kubernetes': { icon: SiIcons.SiKubernetes, color: '#326CE5' },
-    'Power BI': { icon: VscGraph, color: '#F2C811' },
     'Raspberry Pi': { icon: SiIcons.SiRaspberrypi, color: '#A22846' },
     'Twilio': { icon: SiIcons.SiTwilio, color: '#F22F46' },
-    'NVIDIA': { icon: SiIcons.SiNvidia, color: '#76B900' },
-    'OpenGL': { icon: SiIcons.SiOpengl, color: '#5586A4' },
-    'PlayStation Network': { icon: SiIcons.SiPlaystation, color: '#003087' },
-    'Riot Games': { icon: SiIcons.SiRiotgames, color: '#EB0029' },
-    'Xbox': { icon: FaXbox, color: '#107C10' },
     'Windows Terminal': { icon: FaTerminal, color: '#4D4D4D' },
-    'Canva': { icon: SiIcons.SiCanva, color: '#00C4CC' },
-    'Figma': { icon: SiIcons.SiFigma, color: '#F24E1E' },
-    'Sketch': { icon: SiIcons.SiSketch, color: '#F7B500' }
+    'Canva': { icon: SiIcons.SiCanva, color: '#00C4CC' }
 };
 
 /* ── Realistic 3D Propeller Animation ── */
