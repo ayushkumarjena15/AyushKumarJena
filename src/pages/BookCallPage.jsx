@@ -1071,12 +1071,20 @@ const BookingStatusUI = () => {
 
     useEffect(() => {
         supabase.auth.getUser().then(({ data: { user } }) => {
+            if (user?.email === 'ahalyajena28@gmail.com') {
+                window.location.href = '/book?panel=true';
+                return;
+            }
             setUser(user ?? null);
             setLoading(false);
             if (user?.email) fetchBookings(user.email);
         });
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
             const u = session?.user ?? null;
+            if (u?.email === 'ahalyajena28@gmail.com') {
+                window.location.href = '/book?panel=true';
+                return;
+            }
             setUser(u);
             if (u?.email) fetchBookings(u.email);
         });
