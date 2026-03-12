@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
@@ -27,15 +27,6 @@ function ScrollHandler() {
 
 function App() {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const redirect = localStorage.getItem('auth_redirect');
-    if (redirect) {
-      localStorage.removeItem('auth_redirect');
-      navigate(redirect, { replace: true });
-    }
-  }, []);
 
   useEffect(() => {
     // Block right-click
