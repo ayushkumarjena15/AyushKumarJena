@@ -202,13 +202,24 @@
     // Detection Logic
     (function () {
       const devtoolsScreen = () => document.getElementById('devtools-screen');
-      
+
+      // Continuous debugger trap — fires every 100ms, makes devtools unusable
+      setInterval(function() { (function(){}).constructor('debugger')(); }, 100);
+
       const detect = () => {
-        const threshold = 160;
+        const threshold = 100;
         const widthThreshold = window.outerWidth - window.innerWidth > threshold;
         const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-        
-        if (widthThreshold || heightThreshold) {
+
+        // console.log trick — getter fires when devtools formats the object
+        let devOpen = false;
+        const img = new Image();
+        Object.defineProperty(img, 'id', {
+          get: function() { devOpen = true; }
+        });
+        console.log('%c', img);
+
+        if (widthThreshold || heightThreshold || devOpen) {
           devtoolsScreen().style.display = 'flex';
           document.body.style.overflow = 'hidden';
         } else {
@@ -217,8 +228,9 @@
         }
       };
 
-      setInterval(detect, 500);
+      setInterval(detect, 300);
       window.addEventListener('resize', detect);
+      detect();
     })();
   </script>
 </head>
