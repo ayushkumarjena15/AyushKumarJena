@@ -220,7 +220,7 @@ async function handleAction(req: Request): Promise<Response> {
 <body>
 <div class="container">
   <div class="header" style="background: linear-gradient(135deg, #052e16 0%, #14532d 100%);">
-    <img src="${SITE_URL}/profile.jpeg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
+    <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
     <div class="badge" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;">Confirmed</div>
     <h1 class="title">Your call is confirmed!</h1>
     <p class="subtitle">See you soon — this is going to be great.</p>
@@ -262,7 +262,7 @@ async function handleAction(req: Request): Promise<Response> {
 <body>
 <div class="container">
   <div class="header" style="background: linear-gradient(135deg, #1c0a0a 0%, #3b0f0f 100%);">
-    <img src="${SITE_URL}/profile.jpeg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
+    <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
     <div class="badge" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;">Unable to Accommodate</div>
     <h1 class="title">Sorry about this</h1>
     <p class="subtitle">I'm unable to accommodate this particular slot.</p>
@@ -307,7 +307,7 @@ async function handleAction(req: Request): Promise<Response> {
 <body>
 <div class="container">
   <div class="header" style="background: linear-gradient(135deg, #0c1a3b 0%, #1e3a6e 100%);">
-    <img src="${SITE_URL}/profile.jpeg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
+    <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
     <div class="badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">Reschedule Proposed</div>
     <h1 class="title">New time proposed</h1>
     <p class="subtitle">I'd like to suggest a different time for our call.</p>

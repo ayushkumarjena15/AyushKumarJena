@@ -59,7 +59,7 @@ const QuickGlance = () => {
                 >
                     <div className="relative rounded-3xl overflow-hidden aspect-[4/5] max-w-md ml-auto">
                         <img
-                            src="/profile.jpeg"
+                            src="/profile.jpg"
                             alt="Ayush Kumar Jena"
                             className="w-full h-full object-cover"
                         />

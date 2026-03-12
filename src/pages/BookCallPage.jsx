@@ -240,7 +240,7 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
             {/* Details Panel */}
             <div className="w-full md:w-[32%] p-6 md:p-10 border-b md:border-b-0 md:border-r border-white/5 bg-[#181818]/50 flex flex-col gap-8 md:gap-10">
                 <div className="space-y-6">
-                    <img src="/profile.jpeg" className="w-14 h-14 rounded-full border border-white/10 shadow-2xl" alt="Ayush" />
+                    <img src="/profile.jpg" className="w-14 h-14 rounded-full border border-white/10 shadow-2xl" alt="Ayush" />
                     <div className="space-y-1">
                         <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Ayush Kumar Jena</p>
                         <h2 className="text-3xl font-black text-white tracking-tighter leading-tight">30 Min Meeting</h2>
@@ -704,7 +704,7 @@ const ConfirmBookingUI = ({ selectedDate, selectedTime, selectedTimezone, onBack
                     <ChevronLeft size={24} />
                 </button>
                 <div className="space-y-8">
-                    <img src="/profile.jpeg" className="w-16 h-16 rounded-full border border-white/10" alt="Ayush" />
+                    <img src="/profile.jpg" className="w-16 h-16 rounded-full border border-white/10" alt="Ayush" />
                     <div className="space-y-2">
                         <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.3em]">Ayush Kumar Jena</p>
                         <h2 className="text-4xl font-black text-white tracking-tighter leading-tight">30 Min Meeting</h2>
@@ -1634,7 +1634,7 @@ const BookCallPage = () => {
                     </h1>
                 </div>
                 <motion.div className="mt-8 lg:mt-0 relative w-[240px] h-[240px] md:w-[380px] md:h-[380px] rounded-[3rem] md:rounded-[3.5rem] overflow-hidden flex-shrink-0 group mx-auto lg:mx-0 shadow-2xl border border-white/5 order-last lg:order-none">
-                    <img src="/profile.jpeg" alt="Profile" className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 group-hover:rotate-2" />
+                    <img src="/profile.jpg" alt="Profile" className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 group-hover:rotate-2" />
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
                 </motion.div>
             </motion.div>

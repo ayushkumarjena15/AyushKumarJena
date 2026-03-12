@@ -235,7 +235,7 @@ const AboutPage = () => {
                     <div className="relative h-[450px] md:h-[600px] w-full flex items-center justify-center overflow-visible" style={{ perspective: 1500 }}>
                         {[
                             {
-                                src: "/profile.jpeg",
+                                src: "/profile.jpg",
                                 alt: "Ayush Kumar Jena",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"

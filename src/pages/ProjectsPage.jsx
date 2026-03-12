@@ -309,7 +309,7 @@ const ProjectsPage = () => {
                                 boxShadow: avatarBoxShadow
                             }}
                         >
-                            <img src="/profile.jpeg" className="w-full h-full object-cover" alt="Ayush" />
+                            <img src="/profile.jpg" className="w-full h-full object-cover" alt="Ayush" />
                         </motion.div>
                     </motion.div>
                 </div>

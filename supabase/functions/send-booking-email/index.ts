@@ -152,7 +152,7 @@ serve(async (req) => {
 <body>
 <div class="container">
   <div class="header">
-    <img class="avatar" src="${SITE_URL}/profile.jpeg" alt="${OWNER_NAME}" />
+    <img class="avatar" src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" />
     <div class="badge">✓ Booking Received</div>
     <h1 class="title">You're booked in!</h1>
     <p class="subtitle">Here's everything you need to know.</p>

@@ -30,7 +30,7 @@ const CTASection = () => {
                         <div className="relative flex-shrink-0">
                             <div className="absolute inset-0 bg-white/20 blur-md rounded-full -z-10" />
                             <img
-                                src="/profile.jpeg"
+                                src="/profile.jpg"
                                 className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/10 object-cover shadow-2xl"
                                 alt="Ayush"
                             />
