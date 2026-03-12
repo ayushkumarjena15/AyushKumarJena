@@ -1,4 +1,9 @@
 {
+    "redirects": [
+        { "source": "/blog", "destination": "/blogs", "permanent": true },
+        { "source": "/project", "destination": "/projects", "permanent": true },
+        { "source": "/contact", "destination": "/book", "permanent": true }
+    ],
     "rewrites": [
         {
             "source": "/api/(.*)",
