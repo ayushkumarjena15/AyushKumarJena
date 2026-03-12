@@ -191,44 +191,78 @@
       "color: #ffcc00; font-size: 14px;"
     );
 
-    // Disable right-click & shortcuts
+    // Disable right-click
     document.addEventListener('contextmenu', (e) => e.preventDefault());
-    document.onkeydown = (e) => {
-      if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
-        return false;
-      }
-    };
+
+    // Disable text selection
+    document.addEventListener('selectstart', (e) => e.preventDefault());
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+
+    // Block all DevTools keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // F12
+      if (e.keyCode === 123) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (Inspect, Console, Element picker)
+      if (e.ctrlKey && e.shiftKey && [73, 74, 67].includes(e.keyCode)) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+U (View Source)
+      if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+S (Save Page)
+      if (e.ctrlKey && e.keyCode === 83) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+P (Print / Save as PDF)
+      if (e.ctrlKey && e.keyCode === 80) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+Shift+M (Device Toolbar)
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 77) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+Shift+K (Firefox Console)
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 75) { e.preventDefault(); e.stopPropagation(); return false; }
+      // Ctrl+Shift+E (Firefox Network)
+      if (e.ctrlKey && e.shiftKey && e.keyCode === 69) { e.preventDefault(); e.stopPropagation(); return false; }
+    }, true);
 
     // Detection Logic
     (function () {
       const devtoolsScreen = () => document.getElementById('devtools-screen');
 
-      // Continuous debugger trap — fires every 100ms, makes devtools unusable
-      setInterval(function() { (function(){}).constructor('debugger')(); }, 100);
+      // Continuous debugger trap using Function constructor (harder to disable than plain debugger)
+      setInterval(function() {
+        (function(){ (function(){}).constructor('debugger')(); })();
+      }, 50);
+
+      // Override console methods to prevent console use
+      const noop = () => {};
+      ['log','warn','error','info','debug','table','dir','dirxml','trace','group','groupCollapsed','groupEnd','time','timeEnd','assert','profile','profileEnd','count','clear'].forEach(function(m) {
+        try { console[m] = noop; } catch(e) {}
+      });
+
+      const show = () => {
+        devtoolsScreen().style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      };
+      const hide = () => {
+        devtoolsScreen().style.display = 'none';
+        document.body.style.overflow = 'auto';
+      };
 
       const detect = () => {
+        // Size-based detection (catches undocked + docked devtools)
         const threshold = 100;
         const widthThreshold = window.outerWidth - window.innerWidth > threshold;
         const heightThreshold = window.outerHeight - window.innerHeight > threshold;
 
-        // console.log trick — getter fires when devtools formats the object
+        // toString timing trick
         let devOpen = false;
-        const img = new Image();
-        Object.defineProperty(img, 'id', {
-          get: function() { devOpen = true; }
-        });
-        console.log('%c', img);
+        const start = performance.now();
+        (function(){}).constructor('debugger')();
+        const elapsed = performance.now() - start;
+        if (elapsed > 100) devOpen = true;
 
         if (widthThreshold || heightThreshold || devOpen) {
-          devtoolsScreen().style.display = 'flex';
-          document.body.style.overflow = 'hidden';
+          show();
         } else {
-          devtoolsScreen().style.display = 'none';
-          document.body.style.overflow = 'auto';
+          hide();
         }
       };
 
-      setInterval(detect, 300);
+      setInterval(detect, 200);
       window.addEventListener('resize', detect);
       detect();
     })();
