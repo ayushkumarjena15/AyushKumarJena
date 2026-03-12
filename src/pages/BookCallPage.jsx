@@ -1,7 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { supabase } from '../supabaseClient';
+import { FcGoogle } from 'react-icons/fc';
+import { FaGithub } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { PhoneCall, MessageSquare, Clock, Video, Globe2, ChevronLeft, ChevronRight, Send, CheckCircle2, Loader2, UserPlus, Search, X } from 'lucide-react';
+import { PhoneCall, MessageSquare, Clock, Video, Globe2, ChevronLeft, ChevronRight, Send, CheckCircle2, Loader2, UserPlus, Search, X, History, CheckCircle, XCircle, RefreshCw, Lock, Mail, Calendar, ArrowRight, AlertCircle, LogOut } from 'lucide-react';
 
 // ── Comprehensive timezone list ──────────────────────────────────────────────
 const ALL_TIMEZONES = [
@@ -1023,10 +1026,542 @@ const ContactFormUI = () => {
     );
 };
 
+// ── Status badge helper ───────────────────────────────────────────────────────
+const StatusBadge = ({ status }) => {
+    const map = {
+        pending:     { label: 'Pending Review',               cls: 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400' },
+        accepted:    { label: 'Confirmed',                    cls: 'bg-green-500/10 border-green-500/20 text-green-400' },
+        rejected:    { label: 'Declined',                     cls: 'bg-red-500/10 border-red-500/20 text-red-400' },
+        rescheduled: { label: 'Rescheduled — New time proposed', cls: 'bg-blue-500/10 border-blue-500/20 text-blue-400' },
+    };
+    const { label, cls } = map[status] || { label: status, cls: 'bg-white/5 border-white/10 text-white/40' };
+    return (
+        <span className={`inline-block text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border ${cls}`}>
+            {label}
+        </span>
+    );
+};
+
+// ── BookingStatusUI ───────────────────────────────────────────────────────────
+const BookingStatusUI = () => {
+    const [user, setUser] = useState(null);
+    const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [fetching, setFetching] = useState(false);
+    const [error, setError] = useState('');
+
+    const fetchBookings = useCallback(async (email) => {
+        setFetching(true);
+        setError('');
+        try {
+            const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-bookings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` },
+                body: JSON.stringify({ email }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed to fetch bookings');
+            setBookings(data);
+        } catch (err) {
+            setError(err.message);
+        } finally {
+            setFetching(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        supabase.auth.getUser().then(({ data: { user } }) => {
+            setUser(user ?? null);
+            setLoading(false);
+            if (user?.email) fetchBookings(user.email);
+        });
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+            const u = session?.user ?? null;
+            setUser(u);
+            if (u?.email) fetchBookings(u.email);
+        });
+        return () => subscription.unsubscribe();
+    }, [fetchBookings]);
+
+    const handleLogin = async (provider) => {
+        await supabase.auth.signInWithOAuth({
+            provider,
+            options: { redirectTo: window.location.origin + '/book?tab=history' },
+        });
+    };
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        setUser(null);
+        setBookings([]);
+    };
+
+    if (loading) return (
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full max-w-3xl mx-auto mt-8 flex justify-center py-24">
+            <Loader2 size={28} className="animate-spin text-white/20" />
+        </motion.div>
+    );
+
+    return (
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -30 }}
+            className="w-full max-w-3xl mx-auto mt-8">
+
+            {/* Login gate */}
+            {!user ? (
+                <div className="bg-[#141414] rounded-[2.5rem] p-10 border border-white/5 shadow-2xl text-center">
+                    <div className="mb-10 space-y-3">
+                        <h2 className="text-4xl font-black text-white tracking-tighter uppercase italic leading-none">
+                            Booking <span className="text-gradient">Status</span>
+                        </h2>
+                        <p className="text-white/30 font-bold uppercase tracking-[0.2em] text-[10px]">
+                            Sign in to view your booking status
+                        </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 max-w-sm mx-auto">
+                        <button onClick={() => handleLogin('google')}
+                            className="flex-1 flex items-center justify-center gap-3 bg-white/[0.04] border border-white/8 hover:bg-white/[0.07] text-white font-bold text-sm py-4 px-6 rounded-2xl transition-all">
+                            <FcGoogle size={20} /> Continue with Google
+                        </button>
+                        <button onClick={() => handleLogin('github')}
+                            className="flex-1 flex items-center justify-center gap-3 bg-white/[0.04] border border-white/8 hover:bg-white/[0.07] text-white font-bold text-sm py-4 px-6 rounded-2xl transition-all">
+                            <FaGithub size={20} /> Continue with GitHub
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <>
+                    {/* User header */}
+                    <div className="bg-[#141414] rounded-[2rem] px-8 py-5 border border-white/5 shadow-xl mb-5 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                            {user.user_metadata?.avatar_url && (
+                                <img src={user.user_metadata.avatar_url} alt="" className="w-9 h-9 rounded-full border border-white/10 object-cover" />
+                            )}
+                            <div>
+                                <p className="text-white font-bold text-sm leading-tight">{user.user_metadata?.full_name || user.user_metadata?.user_name || 'You'}</p>
+                                <p className="text-white/30 text-[11px]">{user.email}</p>
+                            </div>
+                        </div>
+                        <button onClick={handleLogout}
+                            className="text-white/30 hover:text-white text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 transition-colors">
+                            <LogOut size={14} /> Sign out
+                        </button>
+                    </div>
+
+                    {/* Bookings list */}
+                    {fetching ? (
+                        <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-white/20" /></div>
+                    ) : error ? (
+                        <div className="bg-[#141414] rounded-[2rem] p-10 border border-white/5 text-center">
+                            <p className="text-red-400 text-sm font-semibold flex items-center justify-center gap-2"><AlertCircle size={16} />{error}</p>
+                        </div>
+                    ) : bookings.length === 0 ? (
+                        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                            className="bg-[#141414] rounded-[2rem] p-14 border border-white/5 text-center">
+                            <Calendar size={36} className="text-white/10 mx-auto mb-4" />
+                            <p className="text-white/30 font-bold uppercase tracking-widest text-xs">No bookings found for this account</p>
+                            <p className="text-white/15 text-xs mt-2">Make sure you book using the same email as your {user.app_metadata?.provider} account</p>
+                        </motion.div>
+                    ) : (
+                        <motion.div className="space-y-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                            {bookings.map((b) => (
+                                <motion.div key={b.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                                    className="bg-[#141414] rounded-[2rem] p-8 border border-white/5 shadow-xl">
+                                    <div className="flex flex-wrap items-start justify-between gap-4 mb-5">
+                                        <div>
+                                            <p className="text-white font-black text-lg leading-tight mb-1">{b.topic}</p>
+                                            <p className="text-white/25 text-xs font-semibold uppercase tracking-widest">{b.date} · {b.time_ist} IST</p>
+                                        </div>
+                                        <StatusBadge status={b.status} />
+                                    </div>
+                                    {b.status === 'rescheduled' && (b.reschedule_date || b.reschedule_time_ist) && (
+                                        <div className="bg-blue-500/[0.06] border border-blue-500/10 rounded-xl px-5 py-3 mb-4">
+                                            <p className="text-[10px] font-black text-blue-400/60 uppercase tracking-widest mb-2">Proposed New Time</p>
+                                            <p className="text-blue-300 font-semibold text-sm">
+                                                {b.reschedule_date}{b.reschedule_date && b.reschedule_time_ist ? ' · ' : ''}{b.reschedule_time_ist ? `${b.reschedule_time_ist} IST` : ''}
+                                            </p>
+                                        </div>
+                                    )}
+                                    {b.owner_notes && (
+                                        <div className="bg-white/[0.02] border border-white/5 rounded-xl px-5 py-3 mb-4">
+                                            <p className="text-[10px] font-black text-white/20 uppercase tracking-widest mb-1">Note from Ayush</p>
+                                            <p className="text-white/40 text-sm">{b.owner_notes}</p>
+                                        </div>
+                                    )}
+                                    <div className="flex flex-wrap gap-4 text-[11px] text-white/20 font-semibold mt-2">
+                                        {b.notes && <span>Notes: {b.notes}</span>}
+                                        <span className="ml-auto">Submitted {new Date(b.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    )}
+                </>
+            )}
+        </motion.div>
+    );
+};
+
+// ── AdminPanel ────────────────────────────────────────────────────────────────
+const ADMIN_OWNER_EMAIL = 'ahalyajena28@gmail.com';
+
+const AdminPanel = () => {
+    const [user, setUser]               = useState(null);
+    const [token, setToken]             = useState('');
+    const [authLoading, setAuthLoading] = useState(true);
+    const [bookings, setBookings]       = useState([]);
+    const [fetching, setFetching]       = useState(false);
+    const [actionLoading, setActionLoading] = useState('');
+    const [expandedAction, setExpandedAction] = useState(null);
+    const [actionForm, setActionForm]   = useState({ notes: '', date: '', time: '' });
+
+    const fetchBookings = useCallback(async (jwtHint) => {
+        setFetching(true);
+        try {
+            // Use provided token or get fresh from session
+            let jwt = jwtHint;
+            if (!jwt) {
+                const { data: { session } } = await supabase.auth.getSession();
+                jwt = session?.access_token;
+            }
+            if (!jwt) throw new Error('No active session');
+            const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-bookings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` },
+                body: JSON.stringify({ ownerToken: jwt }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Failed');
+            setBookings(data);
+        } catch (err) {
+            alert(`Error: ${err.message}`);
+        } finally {
+            setFetching(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            const u = session?.user ?? null;
+            setUser(u);
+            setToken(session?.access_token ?? '');
+            setAuthLoading(false);
+            if (u?.email === ADMIN_OWNER_EMAIL && session?.access_token) {
+                fetchBookings(session.access_token);
+            }
+        });
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_e, session) => {
+            const u = session?.user ?? null;
+            setUser(u);
+            setToken(session?.access_token ?? '');
+            if (u?.email === ADMIN_OWNER_EMAIL && session?.access_token) {
+                fetchBookings(session.access_token);
+            }
+        });
+        return () => subscription.unsubscribe();
+    }, [fetchBookings]);
+
+    const handleAdminLogin = async (provider) => {
+        await supabase.auth.signInWithOAuth({
+            provider,
+            options: { redirectTo: window.location.origin + '/book?panel=true' },
+        });
+    };
+
+    const handleAdminLogout = async () => {
+        await supabase.auth.signOut();
+        setUser(null); setToken(''); setBookings([]);
+    };
+
+    const handleAction = async (bookingId, action) => {
+        setActionLoading(bookingId + action);
+        try {
+            // Always get a fresh token — state can be stale after OAuth redirect
+            const { data: { session: freshSession } } = await supabase.auth.getSession();
+            const freshToken = freshSession?.access_token;
+            if (!freshToken) {
+                alert('Session expired. Please sign in again.');
+                setUser(null); setToken(''); setBookings([]);
+                return;
+            }
+            const body = { bookingId, action, ownerToken: freshToken };
+            if (action === 'rejected' && actionForm.notes) body.ownerNotes = actionForm.notes;
+            if (action === 'rescheduled') {
+                if (actionForm.date) body.rescheduleDate = actionForm.date;
+                if (actionForm.time) body.rescheduleTime = actionForm.time;
+                if (actionForm.notes) body.ownerNotes = actionForm.notes;
+            }
+            const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/manage-booking`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}` },
+                body: JSON.stringify(body),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Action failed');
+            setExpandedAction(null);
+            setActionForm({ notes: '', date: '', time: '' });
+            await fetchBookings(token);
+        } catch (err) {
+            alert(`Error: ${err.message}`);
+        } finally {
+            setActionLoading('');
+        }
+    };
+
+    // Loading auth state
+    if (authLoading) return (
+        <div className="min-h-screen bg-background flex items-center justify-center">
+            <Loader2 size={28} className="animate-spin text-white/20" />
+        </div>
+    );
+
+    // Not logged in
+    if (!user) return (
+        <div className="min-h-screen bg-background flex items-center justify-center px-4">
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-md bg-[#141414] rounded-[2.5rem] p-12 border border-white/5 shadow-2xl text-center">
+                <div className="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10">
+                    <Lock size={22} className="text-white/40" />
+                </div>
+                <h2 className="text-3xl font-black text-white tracking-tighter uppercase italic mb-2">Admin Panel</h2>
+                <p className="text-white/25 text-xs font-bold uppercase tracking-widest mb-10">Restricted — owner only</p>
+                <div className="space-y-3">
+                    <button onClick={() => handleAdminLogin('google')}
+                        className="w-full flex items-center justify-center gap-3 bg-white/[0.04] border border-white/8 hover:bg-white/[0.08] text-white font-bold text-sm py-4 px-6 rounded-2xl transition-all">
+                        <FcGoogle size={20} /> Continue with Google
+                    </button>
+                    <button onClick={() => handleAdminLogin('github')}
+                        className="w-full flex items-center justify-center gap-3 bg-white/[0.04] border border-white/8 hover:bg-white/[0.08] text-white font-bold text-sm py-4 px-6 rounded-2xl transition-all">
+                        <FaGithub size={20} /> Continue with GitHub
+                    </button>
+                </div>
+            </motion.div>
+        </div>
+    );
+
+    // Logged in but wrong account
+    if (user.email !== ADMIN_OWNER_EMAIL) return (
+        <div className="min-h-screen bg-background flex items-center justify-center px-4">
+            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-md bg-[#141414] rounded-[2.5rem] p-12 border border-white/5 shadow-2xl text-center">
+                <p className="text-4xl mb-6">🚫</p>
+                <h2 className="text-2xl font-black text-white mb-2">Access Denied</h2>
+                <p className="text-white/30 text-sm mb-8">This panel is restricted to the site owner only.</p>
+                <button onClick={handleAdminLogout}
+                    className="flex items-center gap-2 mx-auto text-white/40 hover:text-white text-sm font-bold transition-colors">
+                    <LogOut size={14} /> Sign out
+                </button>
+            </motion.div>
+        </div>
+    );
+
+    return (
+        <div className="min-h-screen bg-background pt-20 pb-32 px-4">
+            <div className="max-w-5xl mx-auto">
+                <div className="flex items-center justify-between mb-10">
+                    <div>
+                        <h1 className="text-4xl font-black text-white tracking-tighter uppercase italic">Bookings</h1>
+                        <p className="text-white/25 text-xs font-bold uppercase tracking-widest mt-1">{bookings.length} total</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <button onClick={() => fetchBookings(token)} disabled={fetching}
+                            className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/5 text-white/60 hover:text-white text-[10px] font-black uppercase tracking-widest px-5 py-3 rounded-xl transition-all disabled:opacity-50">
+                            <RefreshCw size={14} className={fetching ? 'animate-spin' : ''} /> Refresh
+                        </button>
+                        <button onClick={handleAdminLogout}
+                            className="flex items-center gap-2 text-white/30 hover:text-white text-[10px] font-black uppercase tracking-widest px-5 py-3 rounded-xl transition-colors">
+                            <LogOut size={14} /> Sign out
+                        </button>
+                    </div>
+                </div>
+
+                {fetching && bookings.length === 0 ? (
+                    <div className="flex justify-center py-20"><Loader2 size={24} className="animate-spin text-white/20" /></div>
+                ) : bookings.length === 0 ? (
+                    <div className="bg-[#141414] rounded-[2rem] p-16 border border-white/5 text-center">
+                        <Calendar size={40} className="text-white/10 mx-auto mb-4" />
+                        <p className="text-white/25 font-bold uppercase tracking-widest text-xs">No bookings yet</p>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {bookings.map((b) => {
+                            const isExpanded = expandedAction?.id === b.id;
+                            const expandType = expandedAction?.type;
+                            return (
+                                <motion.div
+                                    key={b.id}
+                                    layout
+                                    className="bg-[#141414] rounded-[2rem] border border-white/5 shadow-xl overflow-hidden"
+                                >
+                                    <div className="p-7">
+                                        {/* Header row */}
+                                        <div className="flex flex-wrap items-start justify-between gap-4 mb-5">
+                                            <div>
+                                                <p className="text-white font-black text-lg leading-tight">{b.name}</p>
+                                                <p className="text-white/30 text-xs font-semibold">{b.email}</p>
+                                            </div>
+                                            <StatusBadge status={b.status} />
+                                        </div>
+
+                                        {/* Details grid */}
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
+                                            {[
+                                                { label: 'Topic', value: b.topic },
+                                                { label: 'Date', value: b.date },
+                                                { label: 'Time (IST)', value: b.time_ist },
+                                                { label: 'Timezone', value: b.timezone },
+                                            ].map(({ label, value }) => value ? (
+                                                <div key={label} className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3">
+                                                    <p className="text-[9px] font-black uppercase tracking-widest text-white/20 mb-1">{label}</p>
+                                                    <p className="text-white/70 text-xs font-semibold truncate">{value}</p>
+                                                </div>
+                                            ) : null)}
+                                        </div>
+
+                                        {b.notes && (
+                                            <div className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 mb-4">
+                                                <p className="text-[9px] font-black uppercase tracking-widest text-white/20 mb-1">Notes</p>
+                                                <p className="text-white/50 text-xs">{b.notes}</p>
+                                            </div>
+                                        )}
+
+                                        {b.owner_notes && (
+                                            <div className="bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 mb-4">
+                                                <p className="text-[9px] font-black uppercase tracking-widest text-white/20 mb-1">Your Note</p>
+                                                <p className="text-white/50 text-xs">{b.owner_notes}</p>
+                                            </div>
+                                        )}
+
+                                        {b.status === 'rescheduled' && (b.reschedule_date || b.reschedule_time_ist) && (
+                                            <div className="bg-blue-500/[0.06] border border-blue-500/10 rounded-xl px-4 py-3 mb-4">
+                                                <p className="text-[9px] font-black uppercase tracking-widest text-blue-400/50 mb-1">Proposed New Time</p>
+                                                <p className="text-blue-300 text-xs font-semibold">
+                                                    {b.reschedule_date}{b.reschedule_date && b.reschedule_time_ist ? ' · ' : ''}{b.reschedule_time_ist ? `${b.reschedule_time_ist} IST` : ''}
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        <p className="text-white/15 text-[10px] font-semibold mb-5">
+                                            Submitted: {new Date(b.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+
+                                        {/* Action buttons */}
+                                        <div className="flex flex-wrap gap-2">
+                                            <button
+                                                onClick={() => handleAction(b.id, 'accepted')}
+                                                disabled={!!actionLoading}
+                                                className="flex items-center gap-2 bg-green-500/10 hover:bg-green-500/20 border border-green-500/20 text-green-400 font-black text-[10px] uppercase tracking-widest px-5 py-2.5 rounded-xl transition-all disabled:opacity-40"
+                                            >
+                                                {actionLoading === b.id + 'accepted' ? <Loader2 size={13} className="animate-spin" /> : <CheckCircle size={13} />}
+                                                Accept
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setExpandedAction(isExpanded && expandType === 'reject' ? null : { id: b.id, type: 'reject' });
+                                                    setActionForm({ notes: '', date: '', time: '' });
+                                                }}
+                                                disabled={!!actionLoading}
+                                                className="flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 font-black text-[10px] uppercase tracking-widest px-5 py-2.5 rounded-xl transition-all disabled:opacity-40"
+                                            >
+                                                <XCircle size={13} /> Reject
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setExpandedAction(isExpanded && expandType === 'reschedule' ? null : { id: b.id, type: 'reschedule' });
+                                                    setActionForm({ notes: '', date: '', time: '' });
+                                                }}
+                                                disabled={!!actionLoading}
+                                                className="flex items-center gap-2 bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 font-black text-[10px] uppercase tracking-widest px-5 py-2.5 rounded-xl transition-all disabled:opacity-40"
+                                            >
+                                                <RefreshCw size={13} /> Reschedule
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Inline action form */}
+                                    <AnimatePresence>
+                                        {isExpanded && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.25 }}
+                                                className="overflow-hidden border-t border-white/5"
+                                            >
+                                                <div className="px-7 py-6 space-y-4">
+                                                    {expandType === 'reschedule' && (
+                                                        <div className="grid grid-cols-2 gap-3">
+                                                            <div className="space-y-2">
+                                                                <label className="text-[9px] font-black uppercase tracking-widest text-white/25">New Date</label>
+                                                                <input
+                                                                    type="date"
+                                                                    value={actionForm.date}
+                                                                    onChange={(e) => setActionForm(f => ({ ...f, date: e.target.value }))}
+                                                                    className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/20 transition-all"
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-2">
+                                                                <label className="text-[9px] font-black uppercase tracking-widest text-white/25">New Time (IST)</label>
+                                                                <input
+                                                                    type="time"
+                                                                    value={actionForm.time}
+                                                                    onChange={(e) => setActionForm(f => ({ ...f, time: e.target.value }))}
+                                                                    className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-white/20 transition-all"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    <div className="space-y-2">
+                                                        <label className="text-[9px] font-black uppercase tracking-widest text-white/25">
+                                                            {expandType === 'reject' ? 'Reason / Note (optional)' : 'Additional Note (optional)'}
+                                                        </label>
+                                                        <textarea
+                                                            value={actionForm.notes}
+                                                            onChange={(e) => setActionForm(f => ({ ...f, notes: e.target.value }))}
+                                                            placeholder={expandType === 'reject' ? 'e.g. I have a conflict that day...' : 'e.g. Please confirm if this works for you'}
+                                                            rows={3}
+                                                            className="w-full bg-white/[0.02] border border-white/5 rounded-xl px-4 py-3 text-white text-sm placeholder-white/10 focus:outline-none focus:border-white/20 transition-all resize-none"
+                                                        />
+                                                    </div>
+                                                    <div className="flex gap-3">
+                                                        <button
+                                                            onClick={() => handleAction(b.id, expandType === 'reject' ? 'rejected' : 'rescheduled')}
+                                                            disabled={!!actionLoading}
+                                                            className={`flex items-center gap-2 font-black text-[10px] uppercase tracking-widest px-6 py-3 rounded-xl transition-all disabled:opacity-40 ${expandType === 'reject' ? 'bg-red-500/15 hover:bg-red-500/25 border border-red-500/25 text-red-400' : 'bg-blue-500/15 hover:bg-blue-500/25 border border-blue-500/25 text-blue-400'}`}
+                                                        >
+                                                            {actionLoading ? <Loader2 size={13} className="animate-spin" /> : (expandType === 'reject' ? <><XCircle size={13} /> Confirm Reject</> : <><RefreshCw size={13} /> Confirm Reschedule</>)}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => { setExpandedAction(null); setActionForm({ notes: '', date: '', time: '' }); }}
+                                                            className="flex items-center gap-2 bg-white/[0.03] hover:bg-white/[0.07] border border-white/5 text-white/30 hover:text-white/60 font-black text-[10px] uppercase tracking-widest px-6 py-3 rounded-xl transition-all"
+                                                        >
+                                                            <X size={13} /> Cancel
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+                .text-gradient { background: linear-gradient(135deg, #fff 0%, #ffffff60 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+            `}</style>
+        </div>
+    );
+};
+
 // ── BookCallPage ─────────────────────────────────────────────────────────────
 const BookCallPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const initialTab = searchParams.get('tab') === 'message' ? 'message' : 'book';
+    const isAdminPanel = searchParams.get('panel') === 'true';
+    const initialTab = searchParams.get('tab') === 'message' ? 'message' : searchParams.get('tab') === 'history' ? 'history' : 'book';
     const [activeTab, setActiveTab] = useState(initialTab);
     const [bookingStep, setBookingStep] = useState(1);
     const [selectedDate, setSelectedDate] = useState(() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.getDate(); });
@@ -1040,6 +1575,10 @@ const BookCallPage = () => {
         setSearchParams({ tab });
         setTimeout(() => contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
     };
+
+    if (isAdminPanel) {
+        return <AdminPanel />;
+    }
 
     return (
         <section className="min-h-screen bg-background pt-32 pb-40 max-w-7xl mx-auto relative overflow-visible px-4">
@@ -1071,6 +1610,10 @@ const BookCallPage = () => {
                         className={`px-6 md:px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-700 ${activeTab === 'message' ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.15)]' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
                         <MessageSquare size={16} /> Send a Message
                     </button>
+                    <button onClick={() => switchTab('history')}
+                        className={`px-6 md:px-10 py-4 rounded-[1.5rem] font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all duration-700 ${activeTab === 'history' ? 'bg-white text-black shadow-[0_10px_30px_rgba(255,255,255,0.15)]' : 'text-white/30 hover:text-white hover:bg-white/5'}`}>
+                        <History size={16} /> Booking Status
+                    </button>
                 </div>
             </div>
 
@@ -1089,8 +1632,10 @@ const BookCallPage = () => {
                                 selectedTimezone={selectedTimezone}
                                 onBack={() => setBookingStep(1)} />
                         )
-                    ) : (
+                    ) : activeTab === 'message' ? (
                         <ContactFormUI key="contact" />
+                    ) : (
+                        <BookingStatusUI key="history" />
                     )}
                 </AnimatePresence>
             </div>

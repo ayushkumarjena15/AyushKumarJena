@@ -3,9 +3,10 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts';
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')!;
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const ADMIN_SECRET = Deno.env.get('ADMIN_SECRET') || '';
 const OWNER_EMAIL = 'ahalyajena28@gmail.com';
 const OWNER_NAME = 'Ayush Kumar Jena';
-const SITE_URL = 'https://ayushkumarjena.com';
+const SITE_URL = 'https://ayushkumarjena.in';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -43,11 +44,21 @@ serve(async (req) => {
       }),
     });
 
-    if (!dbRes.ok) {
+    // Parse booking ID for action buttons
+    let bookingId: string | null = null;
+    if (dbRes.ok) {
+      const inserted = await dbRes.json();
+      bookingId = inserted[0]?.id || null;
+    } else {
       const dbErr = await dbRes.text();
       console.error('DB insert failed:', dbErr);
-      // Don't throw — still send the emails even if DB fails
     }
+
+    // Build one-click action URLs (GET requests → returns HTML confirmation page)
+    const fnBase = `${SUPABASE_URL}/functions/v1/manage-booking`;
+    const acceptUrl  = bookingId ? `${fnBase}?bookingId=${bookingId}&action=accepted&secret=${encodeURIComponent(ADMIN_SECRET)}` : '#';
+    const rejectUrl  = bookingId ? `${fnBase}?bookingId=${bookingId}&action=rejected&secret=${encodeURIComponent(ADMIN_SECRET)}` : '#';
+    const reschedUrl = `${SITE_URL}/book?panel=true`;
 
     // ── Email 1: Alert to Ayush ──────────────────────────────────────────
     const ownerEmailHtml = `
@@ -88,9 +99,24 @@ serve(async (req) => {
       <div class="row"><span class="label">Time (IST)</span><span class="value">${timeIST}</span></div>
       <div class="row"><span class="label">Their Time</span><span class="value">${timeLocal} (${timezone})</span></div>
     </div>
-    <p style="font-size:13px; color:rgba(255,255,255,0.3); margin-top:24px; line-height:1.6;">
-      Submitted: <code style="font-size:11px; color:rgba(255,255,255,0.2);">${new Date().toUTCString()}</code><br>
-      Reply directly to this email to contact ${name}.
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0;">
+    <p style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.3em;color:rgba(255,255,255,0.2);margin-bottom:16px;">Quick Actions</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+      <tr>
+        <td style="padding:0 6px 0 0;">
+          <a href="${acceptUrl}" style="display:block;background:#16a34a;color:#ffffff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;padding:14px 0;border-radius:12px;text-decoration:none;text-align:center;">✓ Accept</a>
+        </td>
+        <td style="padding:0 6px;">
+          <a href="${rejectUrl}" style="display:block;background:#dc2626;color:#ffffff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;padding:14px 0;border-radius:12px;text-decoration:none;text-align:center;">✗ Reject</a>
+        </td>
+        <td style="padding:0 0 0 6px;">
+          <a href="${reschedUrl}" style="display:block;background:#1d4ed8;color:#ffffff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;padding:14px 0;border-radius:12px;text-decoration:none;text-align:center;">↻ Reschedule</a>
+        </td>
+      </tr>
+    </table>
+    <p style="font-size:11px;color:rgba(255,255,255,0.2);margin:0;line-height:1.6;">
+      Accept and Reject update the status instantly. Reschedule opens your admin panel.<br>
+      Submitted: <code style="font-size:10px;">${new Date().toUTCString()}</code>
     </p>
   </div>
   <div class="footer"><span class="dot"></span>${OWNER_NAME}'s Portfolio — Booking System</div>
@@ -163,15 +189,11 @@ serve(async (req) => {
 </body></html>`;
 
     // ── Send owner notification email via Resend ────────────────────────
-    // NOTE: Guest confirmation email is skipped because we don't have a
-    // verified custom domain on Resend. onboarding@resend.dev can only
-    // deliver to the Resend account holder's email (OWNER_EMAIL).
-    // To enable guest emails, verify a custom domain at resend.com/domains.
     const ownerRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: `Booking System <onboarding@resend.dev>`,
+        from: `${OWNER_NAME} <contact@ayushkumarjena.in>`,
         to: [OWNER_EMAIL],
         reply_to: email,
         subject: `📅 New Call Request from ${name} — ${date}`,
@@ -181,7 +203,26 @@ serve(async (req) => {
 
     if (!ownerRes.ok) {
       const ownerErr = await ownerRes.text();
-      throw new Error(`Resend error: ${ownerErr}`);
+      throw new Error(`Resend owner email error: ${ownerErr}`);
+    }
+
+    // ── Send confirmation email to the guest ─────────────────────────────
+    const guestRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: `${OWNER_NAME} <contact@ayushkumarjena.in>`,
+        to: [email],
+        reply_to: OWNER_EMAIL,
+        subject: `✅ Booking Received — ${date} with ${OWNER_NAME}`,
+        html: guestEmailHtml,
+      }),
+    });
+
+    if (!guestRes.ok) {
+      const guestErr = await guestRes.text();
+      // Log but don't fail — owner was already notified
+      console.error(`Resend guest email error: ${guestErr}`);
     }
 
     return new Response(JSON.stringify({ success: true }), {

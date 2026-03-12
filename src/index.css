@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Disable text selection and drag globally */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Block image interactions */
+img {
+  pointer-events: none !important;
+  -webkit-user-drag: none !important;
+  -webkit-touch-callout: none !important;
+  position: relative;
+}
+
+/* Overlay on top of every image to block right-click and drag */
+img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: all;
+}
+
+/* Hide everything when printing (blocks Ctrl+P screenshots) */
+@media print {
+  body * {
+    visibility: hidden !important;
+    display: none !important;
+  }
+}
+
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
