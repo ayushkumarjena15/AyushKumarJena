@@ -358,10 +358,9 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                         const isWeekendDay = isWeekend(year, month, date);
                         const isDisabled = isPast || isWeekendDay;
                         return (
-                            <div key={date} className="flex justify-center">
+                            <div key={date} className="flex justify-center relative group">
                                 <button
                                     onClick={() => !isDisabled && setSelectedDate(date)}
-                                    title={isWeekendDay ? 'Weekends unavailable' : undefined}
                                     className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl flex items-center justify-center text-xs sm:text-sm font-bold transition-all relative
                                         ${isSelected ? 'bg-white text-black shadow-xl' :
                                             isDisabled ? 'text-white/10 cursor-not-allowed opacity-40' :
@@ -371,6 +370,14 @@ const CalendarUI = ({ selectedDate, setSelectedDate, selectedTime, setSelectedTi
                                     {isToday && !isSelected && <span className="absolute -bottom-3.5 left-1/2 -translate-x-1/2 text-[8px] font-bold text-white/30 uppercase tracking-wider">Today</span>}
                                     {isWeekendDay && !isPast && <span className="absolute top-1 right-1.5 w-1 h-1 rounded-full bg-red-500/40"></span>}
                                 </button>
+                                {isWeekendDay && !isPast && (
+                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-50 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                                        <div className="bg-[#1a1a1a] border border-white/10 rounded-xl px-3 py-2 text-center whitespace-nowrap shadow-xl">
+                                            <p className="text-[10px] font-black text-white/60 uppercase tracking-widest">Weekends Off</p>
+                                            <p className="text-[9px] text-white/30 mt-0.5">Pick a Mon–Fri date</p>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}
@@ -1092,6 +1099,7 @@ const BookingStatusUI = () => {
     }, [fetchBookings]);
 
     const handleLogin = async (provider) => {
+        localStorage.setItem('auth_redirect', '/book?tab=history');
         await supabase.auth.signInWithOAuth({
             provider,
             options: { redirectTo: window.location.origin + '/book?tab=history' },
@@ -1269,6 +1277,7 @@ const AdminPanel = () => {
     }, [fetchBookings]);
 
     const handleAdminLogin = async (provider) => {
+        localStorage.setItem('auth_redirect', '/book?panel=true');
         await supabase.auth.signInWithOAuth({
             provider,
             options: { redirectTo: window.location.origin + '/book?panel=true' },
@@ -1452,7 +1461,8 @@ const AdminPanel = () => {
                                             Submitted: {new Date(b.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </p>
 
-                                        {/* Action buttons */}
+                                        {/* Action buttons — only show for pending bookings */}
+                                        {b.status === 'pending' ? (
                                         <div className="flex flex-wrap gap-2">
                                             <button
                                                 onClick={() => handleAction(b.id, 'accepted')}
@@ -1483,6 +1493,11 @@ const AdminPanel = () => {
                                                 <RefreshCw size={13} /> Reschedule
                                             </button>
                                         </div>
+                                        ) : (
+                                        <div className="flex items-center gap-2 text-white/30 text-[10px] font-black uppercase tracking-widest border border-white/5 rounded-xl px-4 py-2.5 w-fit">
+                                            <CheckCircle size={13} /> Already Responded
+                                        </div>
+                                        )}
                                     </div>
 
                                     {/* Inline action form */}
@@ -1572,10 +1587,26 @@ const BookCallPage = () => {
     const initialTab = searchParams.get('tab') === 'message' ? 'message' : searchParams.get('tab') === 'history' ? 'history' : 'book';
     const [activeTab, setActiveTab] = useState(initialTab);
     const [bookingStep, setBookingStep] = useState(1);
-    const [selectedDate, setSelectedDate] = useState(() => { const d = new Date(); d.setDate(d.getDate() + 2); return d.getDate(); });
+    const [selectedDate, setSelectedDate] = useState(() => { const d = new Date(); d.setDate(d.getDate() + 2); while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1); return d.getDate(); });
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedTimezone, setSelectedTimezone] = useState('Asia/Kolkata');
     const contentRef = useRef(null);
+
+    useEffect(() => {
+        const redirect = localStorage.getItem('auth_redirect');
+        if (redirect) {
+            localStorage.removeItem('auth_redirect');
+            const url = new URL(redirect, window.location.origin);
+            const tab = url.searchParams.get('tab');
+            const panel = url.searchParams.get('panel');
+            if (panel === 'true') {
+                setSearchParams({ panel: 'true' });
+            } else if (tab) {
+                setActiveTab(tab);
+                setSearchParams({ tab });
+            }
+        }
+    }, []);
 
     const switchTab = (tab) => {
         setActiveTab(tab);

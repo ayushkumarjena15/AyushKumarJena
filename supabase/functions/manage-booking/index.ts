@@ -81,6 +81,26 @@ serve(async (req) => {
       return htmlPage('Error', 'Invalid request.', '#ef4444', '⚠️');
     }
 
+    // Check if booking was already actioned
+    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/bookings?id=eq.${bookingId}&select=status`, {
+      headers: { 'apikey': SUPABASE_SERVICE_ROLE_KEY, 'Authorization': `Bearer ${SUPABASE_SERVICE_ROLE_KEY}` },
+    });
+    if (checkRes.ok) {
+      const rows = await checkRes.json();
+      const status = rows[0]?.status;
+      if (status && status !== 'pending') {
+        const statusLabels: Record<string, string> = { accepted: 'Confirmed', rejected: 'Declined', rescheduled: 'Rescheduled' };
+        const statusColors: Record<string, string> = { accepted: '#22c55e', rejected: '#ef4444', rescheduled: '#3b82f6' };
+        const statusEmojis: Record<string, string> = { accepted: '✅', rejected: '❌', rescheduled: '📅' };
+        return htmlPage(
+          'Already Responded',
+          `Booking already ${statusLabels[status] ?? status}.`,
+          statusColors[status] ?? '#888',
+          statusEmojis[status] ?? 'ℹ️'
+        );
+      }
+    }
+
     // Reuse the POST handler by forwarding as JSON internally
     const syntheticReq = new Request(req.url, {
       method: 'POST',
