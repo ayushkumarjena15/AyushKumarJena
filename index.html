@@ -187,8 +187,20 @@
       "color: #ff4a4a; font-size: 30px; font-weight: bold; text-shadow: 2px 2px black;"
     );
     console.log(
-      "%cStealing code is not cool baby! If you wanna learn, ask me from the contact page 😉",
-      "color: #ffcc00; font-size: 14px;"
+      "%c📜  Please take a moment to read our Privacy Policy and Terms & Conditions.",
+      "color: #a0a0a0; font-size: 13px; font-style: italic;"
+    );
+    console.log(
+      "%c⚠️  You have been caught.",
+      "color: #ff4a4a; font-size: 18px; font-weight: bold;"
+    );
+    console.log(
+      "%cCopying code, images, or any content from this website is strictly against our Terms & Conditions and is considered intellectual property theft.",
+      "color: #ffcc00; font-size: 13px; line-height: 1.6;"
+    );
+    console.log(
+      "%c💡  But hey — if you want to learn, I am always here to help you.\nFeel free to reach out via the Contact page or Book a Call. I would be happy to guide you. 🙌",
+      "color: #4ade80; font-size: 13px; line-height: 1.8;"
     );
 
     // Disable right-click
@@ -227,28 +239,30 @@
         (function(){ (function(){}).constructor('debugger')(); })();
       }, 50);
 
-      // Override console methods to prevent console use
+      // Override console methods to prevent console use (after branding logs above)
       const noop = () => {};
-      ['log','warn','error','info','debug','table','dir','dirxml','trace','group','groupCollapsed','groupEnd','time','timeEnd','assert','profile','profileEnd','count','clear'].forEach(function(m) {
+      ['warn','error','info','debug','table','dir','dirxml','trace','group','groupCollapsed','groupEnd','time','timeEnd','assert','profile','profileEnd','count','clear'].forEach(function(m) {
         try { console[m] = noop; } catch(e) {}
       });
+      // Delay overriding console.log so branding messages above still show
+      setTimeout(function() {
+        try { console.log = noop; } catch(e) {}
+      }, 500);
 
       const show = () => {
-        devtoolsScreen().style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+        const el = devtoolsScreen();
+        if (el) { el.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
       };
       const hide = () => {
-        devtoolsScreen().style.display = 'none';
-        document.body.style.overflow = 'auto';
+        const el = devtoolsScreen();
+        if (el) { el.style.display = 'none'; document.body.style.overflow = 'auto'; }
       };
 
       const detect = () => {
-        // Size-based detection (catches undocked + docked devtools)
         const threshold = 100;
         const widthThreshold = window.outerWidth - window.innerWidth > threshold;
         const heightThreshold = window.outerHeight - window.innerHeight > threshold;
 
-        // toString timing trick
         let devOpen = false;
         const start = performance.now();
         (function(){}).constructor('debugger')();
@@ -264,7 +278,12 @@
 
       setInterval(detect, 200);
       window.addEventListener('resize', detect);
-      detect();
+      // Wait for DOM before running detect
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', detect);
+      } else {
+        detect();
+      }
     })();
   </script>
 </head>
