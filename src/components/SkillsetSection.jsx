@@ -84,6 +84,7 @@ const SpinningWheel = () => {
                             src={propeller}
                             alt="Propeller"
                             className="w-full h-full object-contain"
+                            style={{ mixBlendMode: 'screen' }}
                         />
                     </motion.div>
                 </div>
