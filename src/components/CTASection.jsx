@@ -99,35 +99,35 @@ const CTASection = () => {
                             </filter>
                         </defs>
 
-                        {/* Thought bubble */}
+                        {/* Thought bubble — right side */}
                         <motion.g
                             animate={{ scale: [1, 1.04, 1], opacity: [0.95, 1, 0.95] }}
                             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                            style={{ transformOrigin: '140px -20px' }}
+                            style={{ transformOrigin: '200px -20px' }}
                         >
-                            {/* Cloud shape — shifted left and down */}
+                            {/* Cloud shape — right of robot */}
                             <path d="
-                                M 90 15
-                                Q 65 15 63 -7
-                                Q 53 -23 67 -35
-                                Q 63 -57 81 -61
-                                Q 90 -80 107 -72
-                                Q 117 -87 135 -79
-                                Q 150 -89 163 -75
-                                Q 181 -73 179 -55
-                                Q 193 -45 185 -27
-                                Q 193 -9 179 -1
-                                Q 177 15 159 13
-                                Q 147 23 131 13
-                                Q 117 23 101 13
-                                Q 90 23 90 15 Z
+                                M 160 15
+                                Q 135 15 133 -7
+                                Q 123 -23 137 -35
+                                Q 133 -57 151 -61
+                                Q 160 -80 177 -72
+                                Q 187 -87 205 -79
+                                Q 220 -89 233 -75
+                                Q 251 -73 249 -55
+                                Q 263 -45 255 -27
+                                Q 263 -9 249 -1
+                                Q 247 15 229 13
+                                Q 217 23 201 13
+                                Q 187 23 171 13
+                                Q 160 23 160 15 Z
                             " fill="#0c0a09" stroke="white" strokeWidth="1.8" opacity="0.97"/>
                             {/* "Hi there!" text */}
-                            <text x="122" y="-27" textAnchor="middle" fontSize="13" fontWeight="700" fill="white" fontFamily="sans-serif">Hi there!</text>
-                            {/* Thought dots */}
-                            <circle cx="88" cy="27" r="5" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
-                            <circle cx="80" cy="40" r="4" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
-                            <circle cx="74" cy="52" r="3" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
+                            <text x="196" y="-27" textAnchor="middle" fontSize="13" fontWeight="700" fill="white" fontFamily="sans-serif">Hi there!</text>
+                            {/* Thought dots — bottom-left of cloud toward head */}
+                            <circle cx="157" cy="26" r="5" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
+                            <circle cx="148" cy="39" r="4" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
+                            <circle cx="140" cy="50" r="3" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
                         </motion.g>
 
                         {/* Ground shadow */}
