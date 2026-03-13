@@ -237,6 +237,7 @@ const ProjectsPage = () => {
             animate={{ opacity: 1 }}
             className="min-h-screen bg-background text-white bg-grain pb-40"
         >
+            <h1 className="sr-only">Projects by Ayush Kumar Jena - Full Stack & AI Engineering Portfolio</h1>
             {/* Hero Section */}
             <section className="relative h-[85vh] flex flex-col items-center justify-center overflow-hidden">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] md:w-[40vw] md:h-[40vw] bg-white/5 rounded-full blur-[120px] pointer-events-none" />

@@ -18,6 +18,7 @@ const HomePage = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
+            <h1 className="sr-only">Ayush Kumar Jena - Creative Engineer & Full Stack Developer based in Sambalpur, India</h1>
             <Hero />
             <BentoGrid />
             <VentureShowcase />
