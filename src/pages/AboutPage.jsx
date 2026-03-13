@@ -435,11 +435,11 @@ const AboutPage = () => {
                         </h2>
                     </div>
 
-                    <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 gap-8">
-                        {/* Live Profile Card */}
+                    <div className="flex flex-col gap-8">
+                        {/* Live Profile Card — full width */}
                         <motion.div
                             whileHover={{ y: -5 }}
-                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-[450px]"
+                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center w-full"
                         >
                             {githubUser ? (
                                 <div className="space-y-8">
@@ -477,6 +477,9 @@ const AboutPage = () => {
                                 </div>
                             )}
                         </motion.div>
+
+                        {/* Bottom 3 cards in a row */}
+                        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
 
                         {/* Recent Activity Feed */}
                         <motion.div
@@ -619,7 +622,8 @@ const AboutPage = () => {
                                 <div className="flex-1 flex items-center justify-center text-secondary text-sm">Loading...</div>
                             )}
                         </motion.div>
-                    </div>
+                        </div>{/* end 3-col grid */}
+                    </div>{/* end flex-col */}
 
                 </section>
 
