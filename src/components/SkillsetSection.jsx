@@ -84,11 +84,6 @@ const SpinningWheel = () => {
                             src={propeller}
                             alt="Propeller"
                             className="w-full h-full object-contain"
-                            style={{
-                                mixBlendMode: 'screen',
-                                maskImage: 'radial-gradient(ellipse 70% 70% at center, black 50%, transparent 75%)',
-                                WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at center, black 50%, transparent 75%)',
-                            }}
                         />
                     </motion.div>
                 </div>
