@@ -24,18 +24,22 @@ const LeetCodeHeatmap = ({ leetcode }) => {
     });
 
     const today = new Date(); today.setHours(0, 0, 0, 0);
+    // Start on the Sunday of the week 51 weeks before current week → gives exactly 52 weeks
     const start = new Date(today);
-    start.setDate(start.getDate() - 52 * 7 + 1 - start.getDay());
+    start.setDate(start.getDate() - start.getDay() - 51 * 7);
+
     const weeks = [];
-    const cur = new Date(start);
     const months = [];
+    const cur = new Date(start);
     while (cur <= today) {
         const week = [];
         for (let i = 0; i < 7; i++) {
             if (i === 0) {
-                const mn = cur.toLocaleString('default', { month: 'short' });
-                const prev = weeks.length > 0 ? new Date(start.getTime() + (weeks.length - 1) * 7 * 86400000) : null;
-                if (!prev || prev.getMonth() !== cur.getMonth()) months.push({ week: weeks.length, label: mn });
+                // Add month label when month changes between this week's Sunday and previous week's Sunday
+                const prevSun = new Date(cur); prevSun.setDate(prevSun.getDate() - 7);
+                if (weeks.length === 0 || prevSun.getMonth() !== cur.getMonth()) {
+                    months.push({ week: weeks.length, label: cur.toLocaleString('default', { month: 'short' }) });
+                }
             }
             const key = toKey(cur);
             week.push({ date: new Date(cur), count: lookup[key] || 0, future: cur > today });
