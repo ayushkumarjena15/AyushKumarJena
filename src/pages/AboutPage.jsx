@@ -435,7 +435,7 @@ const AboutPage = () => {
                         </h2>
                     </div>
 
-                    <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+                    <div className="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 gap-8">
                         {/* Live Profile Card */}
                         <motion.div
                             whileHover={{ y: -5 }}
