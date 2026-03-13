@@ -13,10 +13,13 @@ const LeetCodeHeatmap = ({ leetcode }) => {
     const [tooltip, setTooltip] = useState(null); // { x, y, label }
 
     const cal = leetcode.submissionCalendar || {};
+    const toKey = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+
+    // Build lookup using LOCAL date (same as grid cells use)
     const lookup = {};
     Object.entries(cal).forEach(([ts, count]) => {
         const d = new Date(Number(ts) * 1000);
-        const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
+        const key = toKey(d);
         lookup[key] = (lookup[key] || 0) + count;
     });
 
@@ -28,13 +31,13 @@ const LeetCodeHeatmap = ({ leetcode }) => {
     const months = [];
     while (cur <= today) {
         const week = [];
-        for (let d = 0; d < 7; d++) {
-            if (d === 0) {
+        for (let i = 0; i < 7; i++) {
+            if (i === 0) {
                 const mn = cur.toLocaleString('default', { month: 'short' });
                 const prev = weeks.length > 0 ? new Date(start.getTime() + (weeks.length - 1) * 7 * 86400000) : null;
                 if (!prev || prev.getMonth() !== cur.getMonth()) months.push({ week: weeks.length, label: mn });
             }
-            const key = `${cur.getFullYear()}-${cur.getMonth()}-${cur.getDate()}`;
+            const key = toKey(cur);
             week.push({ date: new Date(cur), count: lookup[key] || 0, future: cur > today });
             cur.setDate(cur.getDate() + 1);
         }
@@ -159,33 +162,32 @@ const AboutPage = () => {
                 const acSub = data.matchedUserStats?.acSubmissionNum?.[0]?.submissions || 0;
                 const acceptanceRate = totalSub > 0 ? (acSub / totalSub) * 100 : null;
 
-                // Calculate streak stats from submissionCalendar
+                // Calculate streak stats from submissionCalendar (use local dates consistently)
                 const cal = data.submissionCalendar || {};
-                const activeDays = new Set(
-                    Object.keys(cal).map(ts => {
-                        const d = new Date(Number(ts) * 1000);
-                        return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
-                    })
-                );
-                const totalActiveDays = activeDays.size;
+                const toLocalKey = (ts) => {
+                    const d = new Date(Number(ts) * 1000);
+                    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                };
+                const activeDayKeys = new Set(Object.keys(cal).map(toLocalKey));
+                const totalActiveDays = activeDayKeys.size;
 
-                // Sort unique day strings into sorted date objects
-                const sortedDates = Array.from(activeDays)
-                    .map(s => { const [y,m,d] = s.split('-').map(Number); return new Date(Date.UTC(y,m,d)); })
-                    .sort((a,b) => a-b);
+                // Sort into actual date objects (midnight local)
+                const sortedDates = Array.from(activeDayKeys)
+                    .map(s => { const [y,m,d] = s.split('-').map(Number); const dt = new Date(y, m-1, d); dt.setHours(0,0,0,0); return dt; })
+                    .sort((a, b) => a - b);
 
-                let maxStreak = 0, curStreak = 0, streak = 1;
+                let maxStreak = 0, streak = 1;
                 for (let i = 1; i < sortedDates.length; i++) {
                     const diff = (sortedDates[i] - sortedDates[i-1]) / 86400000;
                     if (diff === 1) { streak++; } else { maxStreak = Math.max(maxStreak, streak); streak = 1; }
                 }
                 maxStreak = Math.max(maxStreak, streak);
 
-                // Current streak: count backwards from today
-                const todayUTC = new Date(); todayUTC.setUTCHours(0,0,0,0);
-                curStreak = 0;
+                // Current streak: walk back from today
+                const now = new Date(); now.setHours(0,0,0,0);
+                let curStreak = 0;
                 for (let i = sortedDates.length - 1; i >= 0; i--) {
-                    const diff = (todayUTC - sortedDates[i]) / 86400000;
+                    const diff = Math.round((now - sortedDates[i]) / 86400000);
                     if (diff === curStreak || diff === curStreak + 1) { curStreak++; } else break;
                 }
 
