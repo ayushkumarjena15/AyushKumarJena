@@ -65,73 +65,123 @@ const CTASection = () => {
                     animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <svg width="220" height="280" viewBox="0 0 220 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        {/* Glow under feet */}
-                        <ellipse cx="110" cy="268" rx="55" ry="8" fill="#c2a07a" opacity="0.15" />
+                    <svg width="260" height="360" viewBox="0 0 260 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <radialGradient id="rg-head" cx="38%" cy="32%" r="65%">
+                                <stop offset="0%" stopColor="#ffffff"/>
+                                <stop offset="55%" stopColor="#e8e8e8"/>
+                                <stop offset="100%" stopColor="#b8b8b8"/>
+                            </radialGradient>
+                            <radialGradient id="rg-body" cx="32%" cy="28%" r="72%">
+                                <stop offset="0%" stopColor="#f8f8f8"/>
+                                <stop offset="50%" stopColor="#d5d5d5"/>
+                                <stop offset="100%" stopColor="#a5a5a5"/>
+                            </radialGradient>
+                            <radialGradient id="rg-joint" cx="38%" cy="35%" r="65%">
+                                <stop offset="0%" stopColor="#e0e0e0"/>
+                                <stop offset="100%" stopColor="#787878"/>
+                            </radialGradient>
+                            <linearGradient id="lg-limb" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stopColor="#b8b8b8"/>
+                                <stop offset="35%" stopColor="#f2f2f2"/>
+                                <stop offset="100%" stopColor="#a8a8a8"/>
+                            </linearGradient>
+                            <linearGradient id="lg-visor" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stopColor="#1e2030"/>
+                                <stop offset="100%" stopColor="#0a0a15"/>
+                            </linearGradient>
+                            <filter id="f-drop" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="1" dy="3" stdDeviation="3" floodColor="#00000030"/>
+                            </filter>
+                            <filter id="f-glow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="3" result="blur"/>
+                                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                            </filter>
+                        </defs>
 
-                        {/* Legs */}
-                        <rect x="82" y="210" width="22" height="48" rx="10" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                        <rect x="116" y="210" width="22" height="48" rx="10" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                        {/* Feet */}
-                        <rect x="76" y="250" width="34" height="16" rx="8" fill="#c2a07a" opacity="0.8"/>
-                        <rect x="110" y="250" width="34" height="16" rx="8" fill="#c2a07a" opacity="0.8"/>
+                        {/* Ground shadow */}
+                        <ellipse cx="130" cy="352" rx="60" ry="8" fill="#00000025"/>
+
+                        {/* Hip joints */}
+                        <circle cx="105" cy="260" r="14" fill="url(#rg-joint)" filter="url(#f-drop)"/>
+                        <circle cx="155" cy="260" r="14" fill="url(#rg-joint)" filter="url(#f-drop)"/>
+
+                        {/* Left leg */}
+                        <rect x="91" y="260" width="28" height="46" rx="13" fill="url(#lg-limb)" filter="url(#f-drop)"/>
+                        <circle cx="105" cy="308" r="14" fill="url(#rg-joint)"/>
+                        <rect x="91" y="304" width="28" height="36" rx="12" fill="url(#lg-limb)"/>
+                        <ellipse cx="101" cy="342" rx="22" ry="11" fill="url(#rg-joint)" filter="url(#f-drop)"/>
+
+                        {/* Right leg */}
+                        <rect x="141" y="260" width="28" height="46" rx="13" fill="url(#lg-limb)" filter="url(#f-drop)"/>
+                        <circle cx="155" cy="308" r="14" fill="url(#rg-joint)"/>
+                        <rect x="141" y="304" width="28" height="36" rx="12" fill="url(#lg-limb)"/>
+                        <ellipse cx="159" cy="342" rx="22" ry="11" fill="url(#rg-joint)" filter="url(#f-drop)"/>
 
                         {/* Body */}
-                        <rect x="70" y="130" width="80" height="88" rx="18" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                        {/* Chest panel */}
-                        <rect x="84" y="148" width="52" height="36" rx="8" fill="#0c0a09" stroke="#c2a07a" strokeWidth="1" opacity="0.8"/>
-                        {/* Chest lights */}
-                        <circle cx="98" cy="162" r="5" fill="#c2a07a" opacity="0.9"/>
-                        <circle cx="114" cy="162" r="5" fill="#c2a07a" opacity="0.5"/>
-                        <circle cx="130" cy="162" r="5" fill="#c2a07a" opacity="0.3"/>
-                        {/* Belly dot */}
-                        <circle cx="110" cy="196" r="4" fill="#c2a07a" opacity="0.4"/>
+                        <ellipse cx="130" cy="210" rx="55" ry="62" fill="url(#rg-body)" filter="url(#f-drop)"/>
+                        <ellipse cx="130" cy="210" rx="36" ry="44" fill="none" stroke="#c8c8c8" strokeWidth="1.5" opacity="0.5"/>
+                        <rect x="106" y="185" width="48" height="36" rx="10" fill="url(#lg-visor)" opacity="0.9"/>
+                        <circle cx="122" cy="203" r="6" fill="#2563eb" filter="url(#f-glow)"/>
+                        <circle cx="138" cy="203" r="6" fill="#60a5fa" opacity="0.8" filter="url(#f-glow)"/>
+                        <ellipse cx="130" cy="258" rx="44" ry="9" fill="#c0c0c0" opacity="0.3"/>
 
-                        {/* Left arm (static) */}
-                        <rect x="42" y="136" width="28" height="16" rx="8" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                        <rect x="34" y="148" width="16" height="40" rx="8" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                        {/* Left hand */}
-                        <circle cx="42" cy="194" r="9" fill="#c2a07a" opacity="0.7"/>
+                        {/* Shoulder joints */}
+                        <circle cx="75" cy="184" r="18" fill="url(#rg-joint)" filter="url(#f-drop)"/>
+                        <circle cx="185" cy="184" r="18" fill="url(#rg-joint)" filter="url(#f-drop)"/>
 
-                        {/* Right arm (waving) — rotates from shoulder */}
+                        {/* Left arm (hanging) */}
+                        <rect x="61" y="194" width="28" height="52" rx="13" fill="url(#lg-limb)" filter="url(#f-drop)"/>
+                        <circle cx="75" cy="248" r="14" fill="url(#rg-joint)"/>
+                        <rect x="61" y="244" width="28" height="42" rx="12" fill="url(#lg-limb)"/>
+                        <ellipse cx="75" cy="292" rx="14" ry="12" fill="url(#rg-joint)"/>
+                        <rect x="65" y="299" width="5" height="15" rx="3" fill="url(#lg-limb)"/>
+                        <rect x="72" y="300" width="5" height="17" rx="3" fill="url(#lg-limb)"/>
+                        <rect x="79" y="299" width="5" height="15" rx="3" fill="url(#lg-limb)"/>
+
+                        {/* Right arm — waving, whole arm rotates from shoulder */}
                         <motion.g
-                            style={{ transformOrigin: "148px 144px" }}
-                            animate={{ rotate: [-10, -50, -10] }}
-                            transition={{ duration: 0.8, repeat: Infinity, ease: "easeInOut" }}
+                            style={{ transformOrigin: '185px 184px' }}
+                            animate={{ rotate: [-115, -140, -115] }}
+                            transition={{ duration: 0.75, repeat: Infinity, ease: 'easeInOut' }}
                         >
-                            <rect x="150" y="136" width="28" height="16" rx="8" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                            <rect x="170" y="148" width="16" height="40" rx="8" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                            {/* Right hand */}
-                            <circle cx="178" cy="194" r="9" fill="#c2a07a" opacity="0.7"/>
+                            <rect x="171" y="186" width="28" height="52" rx="13" fill="url(#lg-limb)" filter="url(#f-drop)"/>
+                            <circle cx="185" cy="240" r="14" fill="url(#rg-joint)"/>
+                            {/* Forearm + hand with elbow bend oscillation */}
+                            <motion.g
+                                style={{ transformOrigin: '185px 240px' }}
+                                animate={{ rotate: [15, 30, 15] }}
+                                transition={{ duration: 0.75, repeat: Infinity, ease: 'easeInOut' }}
+                            >
+                                <rect x="171" y="242" width="28" height="40" rx="12" fill="url(#lg-limb)"/>
+                                <ellipse cx="185" cy="288" rx="14" ry="13" fill="url(#rg-joint)"/>
+                                <rect x="173" y="295" width="5" height="16" rx="3" fill="url(#lg-limb)"/>
+                                <rect x="180" y="296" width="5" height="18" rx="3" fill="url(#lg-limb)"/>
+                                <rect x="187" y="295" width="5" height="17" rx="3" fill="url(#lg-limb)"/>
+                                <rect x="194" y="293" width="5" height="14" rx="3" fill="url(#lg-limb)"/>
+                            </motion.g>
                         </motion.g>
 
                         {/* Neck */}
-                        <rect x="100" y="118" width="20" height="16" rx="6" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
+                        <rect x="118" y="152" width="24" height="22" rx="8" fill="url(#lg-limb)" filter="url(#f-drop)"/>
 
                         {/* Head */}
-                        <rect x="68" y="60" width="84" height="64" rx="20" fill="#1e1b18" stroke="#c2a07a" strokeWidth="1.5"/>
-                        {/* Antenna */}
-                        <line x1="110" y1="60" x2="110" y2="40" stroke="#c2a07a" strokeWidth="2" strokeLinecap="round"/>
-                        <motion.circle
-                            cx="110" cy="36" r="5" fill="#c2a07a"
-                            animate={{ opacity: [1, 0.3, 1] }}
-                            transition={{ duration: 1.2, repeat: Infinity }}
-                        />
-                        {/* Eyes */}
-                        <motion.rect
-                            x="82" y="80" width="22" height="14" rx="6" fill="#c2a07a"
-                            animate={{ scaleY: [1, 0.1, 1] }}
-                            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                            style={{ transformOrigin: "93px 87px" }}
-                        />
-                        <motion.rect
-                            x="116" y="80" width="22" height="14" rx="6" fill="#c2a07a"
-                            animate={{ scaleY: [1, 0.1, 1] }}
-                            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-                            style={{ transformOrigin: "127px 87px" }}
-                        />
-                        {/* Mouth */}
-                        <path d="M90 108 Q110 118 130 108" stroke="#c2a07a" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7"/>
+                        <circle cx="130" cy="95" r="64" fill="url(#rg-head)" filter="url(#f-drop)"/>
+                        <ellipse cx="108" cy="70" rx="28" ry="20" fill="white" opacity="0.25"/>
+
+                        {/* Visor */}
+                        <rect x="86" y="85" width="88" height="28" rx="9" fill="url(#lg-visor)"/>
+                        {/* Left eye LED */}
+                        <rect x="94" y="91" width="30" height="16" rx="5" fill="#1d4ed8"/>
+                        <rect x="94" y="91" width="30" height="16" rx="5" fill="#3b82f6" opacity="0.7" filter="url(#f-glow)"/>
+                        {/* Right eye LED */}
+                        <rect x="136" y="91" width="30" height="16" rx="5" fill="#1d4ed8"/>
+                        <rect x="136" y="91" width="30" height="16" rx="5" fill="#3b82f6" opacity="0.7" filter="url(#f-glow)"/>
+                        <rect x="94" y="91" width="30" height="16" rx="5" fill="none" stroke="#93c5fd" strokeWidth="1.5" opacity="0.5"/>
+                        <rect x="136" y="91" width="30" height="16" rx="5" fill="none" stroke="#93c5fd" strokeWidth="1.5" opacity="0.5"/>
+
+                        {/* Smile */}
+                        <path d="M108 124 Q130 136 152 124" stroke="#c0c0c0" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.5"/>
                     </svg>
                 </motion.div>
 
