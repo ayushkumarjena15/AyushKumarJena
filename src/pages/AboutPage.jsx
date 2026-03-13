@@ -328,7 +328,7 @@ const AboutPage = () => {
                                     { title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens.", img: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80" },
                                     { title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion.", img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" },
                                     { title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life.", img: "https://images.unsplash.com/photo-1607798748738-b15c40d33d57?w=800&q=80" },
-                                    { title: "Cooking", desc: "Experimenting with flavours and recipes — because great food, like great code, is all about the right ingredients.", img: "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=800&q=80" }
+                                    { title: "Cooking", desc: "Experimenting with flavours and recipes — because great food, like great code, is all about the right ingredients.", img: "https://images.unsplash.com/photo-1507048331197-7d4ac70811cf?w=800&q=80" }
                                 ].map((hobby, i) => (
                                     <div key={i} className="relative rounded-[2rem] overflow-hidden border border-white/5 h-36 flex items-end group">
                                         <img src={hobby.img} alt={hobby.title} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500" />
@@ -361,7 +361,7 @@ const AboutPage = () => {
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact.", img: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80" },
+                                    { title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact.", img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80" },
                                     { title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity.", img: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=800&q=80" },
                                     { title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public.", img: "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?w=800&q=80" }
                                 ].map((act, i) => (
