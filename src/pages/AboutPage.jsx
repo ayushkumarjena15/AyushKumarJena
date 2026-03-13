@@ -299,8 +299,6 @@ const AboutPage = () => {
                     </div>
                 </section>
 
-                <BehindCurtains />
-
                 {/* Live GitHub Section */}
                 <section className="space-y-20">
                     <div className="text-center space-y-4">
@@ -432,6 +430,8 @@ const AboutPage = () => {
                 </section>
 
                 <GitHubActivity />
+
+                <BehindCurtains />
 
                 <CTASection />
             </div>
