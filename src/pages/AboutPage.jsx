@@ -360,13 +360,17 @@ const AboutPage = () => {
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact." },
-                                    { title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity." },
-                                    { title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public." }
+                                    { title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact.", img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80" },
+                                    { title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity.", img: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80" },
+                                    { title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public.", img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80" }
                                 ].map((act, i) => (
-                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:border-accent1/20 transition-all">
-                                        <h3 className="text-white text-lg font-bold font-heading italic mb-2">{act.title}</h3>
-                                        <p className="text-secondary text-sm leading-relaxed font-light">{act.desc}</p>
+                                    <div key={i} className="relative rounded-[2rem] overflow-hidden border border-white/5 h-36 flex items-end group">
+                                        <img src={act.img} alt={act.title} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                                        <div className="relative z-10 p-6">
+                                            <h3 className="text-white text-lg font-bold font-heading italic">{act.title}</h3>
+                                            <p className="text-secondary text-sm leading-relaxed font-light">{act.desc}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
