@@ -43,7 +43,38 @@ const AboutPage = () => {
                 const totalSub = data.matchedUserStats?.totalSubmissionNum?.[0]?.submissions || data.totalSubmissions?.[0]?.submissions || 0;
                 const acSub = data.matchedUserStats?.acSubmissionNum?.[0]?.submissions || 0;
                 const acceptanceRate = totalSub > 0 ? (acSub / totalSub) * 100 : null;
-                setLeetcode({ ...data, acceptanceRate });
+
+                // Calculate streak stats from submissionCalendar
+                const cal = data.submissionCalendar || {};
+                const activeDays = new Set(
+                    Object.keys(cal).map(ts => {
+                        const d = new Date(Number(ts) * 1000);
+                        return `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
+                    })
+                );
+                const totalActiveDays = activeDays.size;
+
+                // Sort unique day strings into sorted date objects
+                const sortedDates = Array.from(activeDays)
+                    .map(s => { const [y,m,d] = s.split('-').map(Number); return new Date(Date.UTC(y,m,d)); })
+                    .sort((a,b) => a-b);
+
+                let maxStreak = 0, curStreak = 0, streak = 1;
+                for (let i = 1; i < sortedDates.length; i++) {
+                    const diff = (sortedDates[i] - sortedDates[i-1]) / 86400000;
+                    if (diff === 1) { streak++; } else { maxStreak = Math.max(maxStreak, streak); streak = 1; }
+                }
+                maxStreak = Math.max(maxStreak, streak);
+
+                // Current streak: count backwards from today
+                const todayUTC = new Date(); todayUTC.setUTCHours(0,0,0,0);
+                curStreak = 0;
+                for (let i = sortedDates.length - 1; i >= 0; i--) {
+                    const diff = (todayUTC - sortedDates[i]) / 86400000;
+                    if (diff === curStreak || diff === curStreak + 1) { curStreak++; } else break;
+                }
+
+                setLeetcode({ ...data, acceptanceRate, totalActiveDays, currentStreak: curStreak, maxStreak });
             })
             .catch(e => console.error(e));
 
@@ -563,6 +594,19 @@ const AboutPage = () => {
                                                     <div className="h-full rounded-full" style={{ width: `${(solved / total) * 100}%`, backgroundColor: color }}/>
                                                 </div>
                                                 <span className="text-xs text-secondary w-14 text-right">{solved}/{total}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {/* Streak stats */}
+                                    <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
+                                        {[
+                                            { label: 'Current Streak', value: leetcode.currentStreak, suffix: 'd' },
+                                            { label: 'Max Streak', value: leetcode.maxStreak, suffix: 'd' },
+                                            { label: 'Active Days', value: leetcode.totalActiveDays, suffix: '' },
+                                        ].map(({ label, value, suffix }) => (
+                                            <div key={label} className="text-center">
+                                                <div className="text-lg font-black text-accent1">{value}{suffix}</div>
+                                                <div className="text-[9px] text-secondary uppercase tracking-wider">{label}</div>
                                             </div>
                                         ))}
                                     </div>
