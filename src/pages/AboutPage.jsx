@@ -431,7 +431,7 @@ const AboutPage = () => {
                                 <span className="text-2xl md:text-4xl">GitHub</span>
                                 <span className="text-2xl md:text-4xl">LeetCode</span>
                             </div>
-                            <span className="animated-gradient-text italic font-serif text-6xl md:text-9xl leading-none">Live</span>
+                            <span className="animated-gradient-text italic font-serif text-4xl md:text-7xl leading-none">Live</span>
                         </h2>
                     </div>
 
