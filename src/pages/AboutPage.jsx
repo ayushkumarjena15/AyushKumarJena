@@ -616,6 +616,94 @@ const AboutPage = () => {
                             )}
                         </motion.div>
                     </div>
+
+                    {/* LeetCode Activity Heatmap */}
+                    {leetcode && (() => {
+                        const cal = leetcode.submissionCalendar || {};
+                        // Build date→count lookup
+                        const lookup = {};
+                        Object.entries(cal).forEach(([ts, count]) => {
+                            const d = new Date(Number(ts) * 1000);
+                            const key = `${d.getUTCFullYear()}-${d.getUTCMonth()}-${d.getUTCDate()}`;
+                            lookup[key] = (lookup[key] || 0) + count;
+                        });
+
+                        // Build 52 weeks of data starting from Sunday 52 weeks ago
+                        const today = new Date(); today.setHours(0,0,0,0);
+                        const start = new Date(today);
+                        start.setDate(start.getDate() - 52 * 7 + 1 - start.getDay());
+                        const weeks = [];
+                        const cur = new Date(start);
+                        const months = [];
+                        while (cur <= today) {
+                            const week = [];
+                            for (let d = 0; d < 7; d++) {
+                                if (d === 0) {
+                                    const mn = cur.toLocaleString('default', { month: 'short' });
+                                    const prev = weeks.length > 0 ? new Date(start.getTime() + (weeks.length - 1) * 7 * 86400000) : null;
+                                    if (!prev || prev.getMonth() !== cur.getMonth()) months.push({ week: weeks.length, label: mn });
+                                }
+                                const key = `${cur.getFullYear()}-${cur.getMonth()}-${cur.getDate()}`;
+                                const count = lookup[key] || 0;
+                                week.push({ date: new Date(cur), count, future: cur > today });
+                                cur.setDate(cur.getDate() + 1);
+                            }
+                            weeks.push(week);
+                        }
+                        const getColor = (count) => {
+                            if (count === 0) return '#1a1a1a';
+                            if (count <= 2) return '#0e4429';
+                            if (count <= 5) return '#006d32';
+                            if (count <= 9) return '#26a641';
+                            return '#39d353';
+                        };
+                        return (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+                                className="glass-card p-6 bg-surface/5 border border-white/5 overflow-x-auto"
+                            >
+                                <div className="flex items-center gap-3 mb-5">
+                                    <Star size={18} className="text-accent1 flex-shrink-0" />
+                                    <h3 className="text-base font-bold text-white">LeetCode Activity</h3>
+                                    <span className="text-xs text-secondary ml-auto">{leetcode.totalActiveDays} active days</span>
+                                </div>
+                                <div className="min-w-[600px]">
+                                    {/* Month labels */}
+                                    <div className="relative h-5 mb-1" style={{ display: 'grid', gridTemplateColumns: `repeat(${weeks.length}, 1fr)` }}>
+                                        {months.map((m, i) => (
+                                            <div key={i} className="absolute text-[10px] text-secondary" style={{ left: `${(m.week / weeks.length) * 100}%` }}>{m.label}</div>
+                                        ))}
+                                    </div>
+                                    {/* Grid */}
+                                    <div style={{ display: 'flex', gap: '3px' }}>
+                                        {weeks.map((week, wi) => (
+                                            <div key={wi} style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                                                {week.map((day, di) => (
+                                                    <div
+                                                        key={di}
+                                                        title={`${day.date.toDateString()}: ${day.count} submissions`}
+                                                        style={{
+                                                            width: '11px', height: '11px', borderRadius: '2px',
+                                                            backgroundColor: day.future ? 'transparent' : getColor(day.count),
+                                                            transition: 'background-color 0.2s'
+                                                        }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    {/* Legend */}
+                                    <div className="flex items-center gap-1.5 mt-3 justify-end">
+                                        <span className="text-[10px] text-secondary">Less</span>
+                                        {['#1a1a1a','#0e4429','#006d32','#26a641','#39d353'].map(c => (
+                                            <div key={c} style={{ width: '11px', height: '11px', borderRadius: '2px', backgroundColor: c }} />
+                                        ))}
+                                        <span className="text-[10px] text-secondary">More</span>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        );
+                    })()}
                 </section>
 
                 <GitHubActivity />
