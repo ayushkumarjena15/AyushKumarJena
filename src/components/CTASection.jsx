@@ -65,7 +65,7 @@ const CTASection = () => {
                     animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 >
-                    <svg width="260" height="360" viewBox="0 0 260 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="300" height="460" viewBox="-20 -100 300 460" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <defs>
                             <radialGradient id="rg-head" cx="38%" cy="32%" r="65%">
                                 <stop offset="0%" stopColor="#ffffff"/>
@@ -98,6 +98,37 @@ const CTASection = () => {
                                 <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
                             </filter>
                         </defs>
+
+                        {/* Thought bubble */}
+                        <motion.g
+                            animate={{ scale: [1, 1.04, 1], opacity: [0.95, 1, 0.95] }}
+                            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                            style={{ transformOrigin: '185px -55px' }}
+                        >
+                            {/* Cloud shape */}
+                            <path d="
+                                M 155 -20
+                                Q 130 -20 128 -42
+                                Q 118 -58 132 -70
+                                Q 128 -92 146 -96
+                                Q 155 -115 172 -107
+                                Q 182 -122 200 -114
+                                Q 215 -124 228 -110
+                                Q 246 -108 244 -90
+                                Q 258 -80 250 -62
+                                Q 258 -44 244 -36
+                                Q 242 -20 224 -22
+                                Q 212 -12 196 -22
+                                Q 182 -12 166 -22
+                                Q 155 -12 155 -20 Z
+                            " fill="white" stroke="#ddd" strokeWidth="1.5" opacity="0.95"/>
+                            {/* "Hi there!" text */}
+                            <text x="188" y="-62" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0c0a09" fontFamily="sans-serif">Hi there!</text>
+                            {/* Thought dots */}
+                            <circle cx="152" cy="-8" r="5" fill="white" stroke="#ddd" strokeWidth="1.2"/>
+                            <circle cx="144" cy="6" r="4" fill="white" stroke="#ddd" strokeWidth="1.2"/>
+                            <circle cx="138" cy="18" r="3" fill="white" stroke="#ddd" strokeWidth="1.2"/>
+                        </motion.g>
 
                         {/* Ground shadow */}
                         <ellipse cx="130" cy="352" rx="60" ry="8" fill="#00000025"/>
