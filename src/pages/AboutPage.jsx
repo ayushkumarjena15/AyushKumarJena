@@ -426,10 +426,12 @@ const AboutPage = () => {
                 <section className="space-y-20">
                     <div className="text-center space-y-4">
                         <p className="text-[10px] font-black uppercase tracking-[0.6em] text-accent1/60">My code journey</p>
-                        <h2 className="text-4xl md:text-7xl font-bold tracking-tighter flex flex-col items-center leading-tight">
-                            <span>GitHub</span>
-                            <span className="animated-gradient-text italic font-serif">Live</span>
-                            <span>LeetCode</span>
+                        <h2 className="font-bold tracking-tighter flex items-center justify-center gap-4">
+                            <div className="flex flex-col items-end leading-none">
+                                <span className="text-2xl md:text-4xl">GitHub</span>
+                                <span className="text-2xl md:text-4xl">LeetCode</span>
+                            </div>
+                            <span className="animated-gradient-text italic font-serif text-6xl md:text-9xl leading-none">Live</span>
                         </h2>
                     </div>
 
