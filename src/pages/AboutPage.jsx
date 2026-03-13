@@ -320,14 +320,15 @@ const AboutPage = () => {
                                     My <span className="animated-gradient-text italic font-serif">Hobbies</span>
                                 </h2>
                                 <p className="text-secondary text-lg font-light leading-relaxed max-w-xl">
-                                    When I'm not coding, I'm in the pool, cutting a video, or animating something with Framer Motion — creativity runs across everything I do.
+                                    When I'm not coding, I'm in the pool, cutting a video, animating with Framer Motion, or experimenting in the kitchen — creativity runs across everything I do.
                                 </p>
                             </div>
                             <div className="space-y-4">
                                 {[
                                     { title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens.", img: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80" },
                                     { title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion.", img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" },
-                                    { title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" }
+                                    { title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" },
+                                    { title: "Cooking", desc: "Experimenting with flavours and recipes — because great food, like great code, is all about the right ingredients.", img: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80" }
                                 ].map((hobby, i) => (
                                     <div key={i} className="relative rounded-[2rem] overflow-hidden border border-white/5 h-36 flex items-end group">
                                         <img src={hobby.img} alt={hobby.title} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500" />
