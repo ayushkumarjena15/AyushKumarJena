@@ -70,7 +70,7 @@ serve(async (req) => {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                from: `Portfolio Contact <onboarding@resend.dev>`,
+                from: `${OWNER_NAME} <contact@ayushkumarjena.in>`,
                 to: [OWNER_EMAIL],
                 reply_to: email,
                 subject: `✉️ New Message from ${name}`,

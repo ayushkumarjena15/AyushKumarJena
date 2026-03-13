@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guest Email Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #050505; font-family: 'Inter', sans-serif; }
+  .page { padding: 48px 20px; }
+  .label { text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 28px; }
+
+  /* ─── Email Shell ─── */
+  .email { max-width: 600px; margin: 0 auto; background: #111; border-radius: 28px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 0 1px #000, 0 60px 120px rgba(0,0,0,0.8); }
+
+  /* ─── Header ─── */
+  .hd { position: relative; padding: 52px 48px 48px; text-align: center; background: #0c0c0c; border-bottom: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
+  .hd-glow { position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 300px; background: radial-gradient(ellipse at center, rgba(16,185,129,0.18) 0%, transparent 65%); pointer-events: none; }
+  .hd-line { position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent 0%, rgba(16,185,129,0.5) 50%, transparent 100%); }
+
+  .avatar-wrap { position: relative; display: inline-block; margin-bottom: 24px; }
+  .avatar { width: 80px; height: 80px; border-radius: 50%; border: 2.5px solid rgba(255,255,255,0.1); display: block; object-fit: cover; background: #1a1a1a; }
+  .av-check { position: absolute; bottom: -1px; right: -1px; width: 26px; height: 26px; background: #10b981; border-radius: 50%; border: 2.5px solid #111; font-size: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; }
+
+  .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #34d399; font-size: 10px; font-weight: 800; letter-spacing: 0.4em; text-transform: uppercase; padding: 8px 20px; border-radius: 100px; margin-bottom: 20px; }
+
+  .hd h1 { font-size: 36px; font-weight: 900; color: #fff; margin: 0 0 10px; letter-spacing: -1px; }
+  .hd p  { font-size: 13px; color: rgba(255,255,255,0.28); margin: 0; }
+
+  /* ─── Body ─── */
+  .bd { padding: 44px 48px; }
+  .greeting { font-size: 19px; font-weight: 700; color: #f2f2f2; margin: 0 0 10px; }
+  .para { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.8; margin: 0 0 32px; }
+
+  .slabel { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.45em; color: rgba(255,255,255,0.16); margin: 0 0 14px; display: flex; align-items: center; gap: 12px; }
+  .slabel::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+  .card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 24px 28px; margin-bottom: 20px; }
+  .crow { display: flex; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .crow:first-child { padding-top: 0; }
+  .crow:last-child { border-bottom: none; padding-bottom: 0; }
+  .ck { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.35em; color: rgba(255,255,255,0.18); min-width: 76px; flex-shrink: 0; padding-top: 4px; }
+  .cv { font-size: 14px; font-weight: 600; color: #e0e0e0; line-height: 1.45; }
+
+  /* ─── Notice ─── */
+  .notice { background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.16); border-radius: 16px; padding: 20px 24px; margin-bottom: 30px; }
+  .nt { font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(251,191,36,0.75); margin: 0 0 8px; }
+  .nb { font-size: 13px; color: rgba(255,255,255,0.32); line-height: 1.7; margin: 0; }
+
+  .contact { font-size: 13px; color: rgba(255,255,255,0.28); line-height: 1.75; }
+  .contact a { color: #60a5fa; text-decoration: none; }
+
+  /* ─── Footer ─── */
+  .ft { background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.05); padding: 28px 48px; text-align: center; }
+  .ft-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.22); margin: 0 0 5px; }
+  .ft-link { font-size: 11px; color: rgba(255,255,255,0.14); text-decoration: none; }
+  .ft-note { font-size: 10px; color: rgba(255,255,255,0.1); margin: 12px 0 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="label">&#x2705; Guest Confirmation — what the person who booked receives</p>
+
+  <div class="email">
+    <div class="hd">
+      <div class="hd-glow"></div>
+      <div class="avatar-wrap">
+        <img class="avatar" src="https://ayushkumarjena.in/profile.jpg" alt="Ayush" onerror="this.style.background='#1e1e2e';this.style.border='2.5px solid rgba(99,102,241,0.3)'" />
+        <div class="av-check">&#x2713;</div>
+      </div>
+      <div class="badge">&#x2713;&nbsp; Booking Received</div>
+      <h1>You're all set!</h1>
+      <p>Your request is in — I'll confirm within 24 hours.</p>
+      <div class="hd-line"></div>
+    </div>
+
+    <div class="bd">
+      <p class="greeting">Hey Rahul,</p>
+      <p class="para">
+        Thanks for reaching out! I've received your booking request and will review it
+        within 24 hours. Once confirmed, you'll get another email with the Google Meet
+        link — so keep an eye on your inbox.
+      </p>
+
+      <p class="slabel">Your Booking Details</p>
+      <div class="card">
+        <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+        <div class="crow"><span class="ck">Date</span><span class="cv">Sunday, March 16, 2026</span></div>
+        <div class="crow"><span class="ck">Your Time</span><span class="cv">12:30 AM — America/New_York</span></div>
+        <div class="crow"><span class="ck">IST</span><span class="cv">10:00 AM — India Standard Time</span></div>
+        <div class="crow"><span class="ck">Duration</span><span class="cv">30 minutes &middot; Google Meet</span></div>
+      </div>
+
+      <div class="notice">
+        <p class="nt">&#x23F3;&nbsp; Pending Confirmation</p>
+        <p class="nb">This is not yet a confirmed booking. I'll review and confirm within 24 hours. If the slot doesn't work, I'll suggest an alternative time.</p>
+      </div>
+
+      <p class="contact">
+        Questions? Reply to this email or reach out at
+        <a href="mailto:ahalyajena28@gmail.com">ahalyajena28@gmail.com</a>
+      </p>
+    </div>
+
+    <div class="ft">
+      <p class="ft-name">Ayush Kumar Jena</p>
+      <a href="https://ayushkumarjena.in" class="ft-link">ayushkumarjena.in</a>
+      <p class="ft-note">You received this because you submitted a booking request on my portfolio.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

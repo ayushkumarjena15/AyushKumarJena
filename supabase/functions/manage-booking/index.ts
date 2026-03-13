@@ -5,7 +5,10 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 const ADMIN_SECRET = Deno.env.get('ADMIN_SECRET')!;
+const GUEST_SECRET = Deno.env.get('GUEST_SECRET') || '';
 const OWNER_EMAIL = 'ahalyajena28@gmail.com';
+const OWNER_NAME = 'Ayush Kumar Jena';
+const SITE_URL = 'https://ayushkumarjena.in';
 
 async function verifyOwnerToken(token: string): Promise<boolean> {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
@@ -15,36 +18,11 @@ async function verifyOwnerToken(token: string): Promise<boolean> {
   const user = await res.json();
   return user?.email === OWNER_EMAIL;
 }
-const OWNER_NAME = 'Ayush Kumar Jena';
-const SITE_URL = 'https://ayushkumarjena.in';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-const emailStyles = `
-  body { font-family: 'Inter', -apple-system, sans-serif; background: #0c0a09; color: #e5e5e5; margin: 0; padding: 0; }
-  .container { max-width: 600px; margin: 40px auto; background: #141414; border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; overflow: hidden; }
-  .header { padding: 48px 40px; text-align: center; }
-  .badge { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 16px; }
-  .title { font-size: 30px; font-weight: 900; color: #ffffff; margin: 0 0 8px; letter-spacing: -0.5px; }
-  .subtitle { font-size: 15px; color: rgba(255,255,255,0.4); margin: 0; }
-  .body { padding: 40px; }
-  .greeting { font-size: 17px; color: #e5e5e5; font-weight: 600; margin-bottom: 12px; }
-  .para { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.7; margin-bottom: 28px; }
-  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-  .card-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.2); margin-bottom: 16px; }
-  .row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
-  .row:last-child { margin-bottom: 0; }
-  .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255,255,255,0.2); min-width: 80px; padding-top: 2px; }
-  .value { font-size: 14px; font-weight: 600; color: #d4d4d4; }
-  .notice { border-radius: 12px; padding: 16px 20px; font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; margin-bottom: 24px; }
-  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 28px 0; }
-  .cta-btn { display: inline-block; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.2em; padding: 14px 28px; border-radius: 12px; text-decoration: none; margin-top: 8px; }
-  .footer { background: #0f0f0f; padding: 24px 40px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 0.05em; line-height: 1.8; }
-  a { color: #60a5fa; text-decoration: none; }
-`;
 
 // Returns a simple HTML confirmation page for email button clicks
 function htmlPage(title: string, message: string, color: string, emoji: string) {
@@ -213,141 +191,177 @@ async function handleAction(req: Request): Promise<Response> {
     const guestEmail = booking.email;
 
     if (action === 'accepted') {
-      emailSubject = `Your call is confirmed! — ${booking.date} with ${OWNER_NAME}`;
+      // ── Template #3: Accepted — Confirmed ──────────────────────────────
+      emailSubject = `✅ Your call is confirmed! — ${booking.date} with ${OWNER_NAME}`;
       emailHtml = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><style>${emailStyles}</style></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #030303; color: #e5e5e5; margin: 0; padding: 40px 16px; }
+</style>
+</head>
 <body>
-<div class="container">
-  <div class="header" style="background: linear-gradient(135deg, #052e16 0%, #14532d 100%);">
-    <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
-    <div class="badge" style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:#4ade80;">Confirmed</div>
-    <h1 class="title">Your call is confirmed!</h1>
-    <p class="subtitle">See you soon — this is going to be great.</p>
-  </div>
-  <div class="body">
-    <p class="greeting">Hey ${guestName},</p>
-    <p class="para">
-      Great news! I've confirmed your booking. Looking forward to connecting with you.
-      I'll send over the Google Meet link closer to the time — keep an eye on your inbox.
-    </p>
-    <div class="card">
-      <div class="card-label">Confirmed Booking</div>
-      <div class="row"><span class="label">Topic</span><span class="value">${booking.topic}</span></div>
-      <div class="row"><span class="label">Date</span><span class="value">${booking.date}</span></div>
-      <div class="row"><span class="label">Time (IST)</span><span class="value">${booking.time_ist}</span></div>
-      ${booking.time_local ? `<div class="row"><span class="label">Your Time</span><span class="value">${booking.time_local} (${booking.timezone})</span></div>` : ''}
-      <div class="row"><span class="label">Duration</span><span class="value">30 minutes · Google Meet</span></div>
+<div style="max-width:600px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 0 1px #000,0 40px 100px rgba(0,0,0,.9);">
+  <!-- HEADER -->
+  <div style="background:#071a0e;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(34,197,94,.22) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.5),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(34,197,94,.35);display:block;margin:0 auto;background:#0a1a0e;" onerror="this.style.background='#0a1a0e'" />
+      <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#22c55e;border-radius:50%;border:2.5px solid #071a0e;display:flex;align-items:center;justify-content:center;font-size:13px;color:#000;font-weight:900;">&#x2713;</div>
     </div>
-    <div class="notice" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.15);">
-      See you soon! If anything comes up and you need to reschedule, just reply to this email.
+    <div style="display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:#4ade80;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
+      <span style="display:inline-block;width:5px;height:5px;background:#22c55e;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px rgba(34,197,94,.9);"></span>Confirmed
     </div>
-    <hr class="divider">
-    <p class="para" style="margin:0;font-size:13px;">
-      Questions? Reply to this email or reach out at <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a>.
-    </p>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">Your call is confirmed!</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">See you soon — this is going to be great.</p>
   </div>
-  <div class="footer">
-    <strong style="color:rgba(255,255,255,0.3)">${OWNER_NAME}</strong><br>
-    <a href="${SITE_URL}">${SITE_URL}</a><br><br>
-    You received this because you submitted a booking request on my portfolio.
+  <!-- BODY -->
+  <div style="padding:40px 44px;background:#111;">
+    <p style="font-size:18px;font-weight:700;color:#f0f0f0;margin:0 0 10px;">Hey ${guestName},</p>
+    <p style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.8;margin:0 0 28px;">Great news! I've confirmed your booking. Looking forward to connecting. I'll send the Google Meet link closer to the time — keep an eye on your inbox.</p>
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Confirmed Booking<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.12);border-radius:16px;padding:20px 24px;margin-bottom:20px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(34,197,94,.08);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Topic</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.topic}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(34,197,94,.08);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Date</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.date}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(34,197,94,.08);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">IST</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.time_ist} — India Standard Time</span></div>
+      ${booking.time_local ? `<div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(34,197,94,.08);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Your Time</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.time_local} (${booking.timezone})</span></div>` : ''}
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Duration</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">30 min &middot; Google Meet</span></div>
+    </div>
+    <!-- Meet CTA -->
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:16px;padding:26px 24px;margin-bottom:20px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:10px;">&#x1F4F9;</div>
+      <p style="font-size:15px;font-weight:800;color:#fff;margin:0 0 6px;">Google Meet link coming soon</p>
+      <p style="font-size:12px;color:rgba(255,255,255,.3);margin:0;line-height:1.6;">I'll send it before the call. Add to your calendar in the meantime.</p>
+    </div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.28);line-height:1.7;">
+      &#x1F44B; If anything comes up, just reply to this email and I'll sort it out.
+    </div>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);line-height:1.75;margin-top:8px;">Questions? <a href="mailto:${OWNER_EMAIL}" style="color:#60a5fa;text-decoration:none;">${OWNER_EMAIL}</a></p>
+  </div>
+  <div style="background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:11px;color:rgba(255,255,255,.16);display:flex;align-items:center;gap:8px;"><div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6);"></div>${OWNER_NAME}</div>
+    <div style="font-size:10px;"><a href="${SITE_URL}" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div>
   </div>
 </div>
 </body></html>`;
+
     } else if (action === 'rejected') {
+      // ── Template #4: Rejected ──────────────────────────────────────────
       emailSubject = `Booking Update — Unable to accommodate this slot`;
       emailHtml = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><style>${emailStyles}</style></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #030303; color: #e5e5e5; margin: 0; padding: 40px 16px; }
+</style>
+</head>
 <body>
-<div class="container">
-  <div class="header" style="background: linear-gradient(135deg, #1c0a0a 0%, #3b0f0f 100%);">
-    <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
-    <div class="badge" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#f87171;">Unable to Accommodate</div>
-    <h1 class="title">Sorry about this</h1>
-    <p class="subtitle">I'm unable to accommodate this particular slot.</p>
+<div style="max-width:600px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 0 1px #000,0 40px 100px rgba(0,0,0,.9);">
+  <!-- HEADER -->
+  <div style="background:#130808;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(239,68,68,.18) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(239,68,68,.45),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(239,68,68,.2);display:block;margin:0 auto;background:#1a0808;" onerror="this.style.background='#1a0808'" />
+    </div>
+    <div style="display:inline-block;background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Unable to Accommodate</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">Sorry about this.</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">I'm unable to accommodate this particular slot.</p>
   </div>
-  <div class="body">
-    <p class="greeting">Hey ${guestName},</p>
-    <p class="para">
-      Unfortunately I won't be able to make it to the call you requested. I apologize for any inconvenience.
-      I'd love to connect — please feel free to book another slot that might work better.
-    </p>
-    <div class="card">
-      <div class="card-label">Booking Details</div>
-      <div class="row"><span class="label">Topic</span><span class="value">${booking.topic}</span></div>
-      <div class="row"><span class="label">Date</span><span class="value">${booking.date}</span></div>
-      <div class="row"><span class="label">Time (IST)</span><span class="value">${booking.time_ist}</span></div>
+  <!-- BODY -->
+  <div style="padding:40px 44px;background:#111;">
+    <p style="font-size:18px;font-weight:700;color:#f0f0f0;margin:0 0 10px;">Hey ${guestName},</p>
+    <p style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.8;margin:0 0 28px;">Unfortunately I won't be able to make this call. I apologize for the inconvenience — I'd genuinely love to connect, so please feel free to book another slot.</p>
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Original Booking<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:20px;opacity:.7;">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Topic</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.topic}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Date</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.date}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">IST</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.time_ist} — India Standard Time</span></div>
     </div>
     ${ownerNotes ? `
-    <div class="notice" style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);">
-      <strong style="color:rgba(255,255,255,0.5)">Note from ${OWNER_NAME}:</strong><br>
-      ${ownerNotes}
+    <div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.14);border-radius:14px;padding:18px 22px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.38);line-height:1.65;">
+      <strong style="color:rgba(255,255,255,.5);">Note from ${OWNER_NAME}:</strong><br>${ownerNotes}
     </div>` : ''}
-    <div class="notice" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);">
-      Would you like to find another time? You can book a new slot at <a href="${SITE_URL}/book">${SITE_URL}/book</a>
+    <!-- Rebook CTA -->
+    <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:16px;padding:26px 24px;margin-bottom:20px;text-align:center;">
+      <p style="font-size:15px;font-weight:800;color:#fff;margin:0 0 6px;">Let's find another time</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);margin:0 0 18px;line-height:1.6;">My calendar is open — pick a slot that works for you.</p>
+      <a href="${SITE_URL}/book" style="display:inline-block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.28);color:#a5b4fc;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.2em;padding:12px 26px;border-radius:100px;text-decoration:none;">&#x1F4C5;&nbsp; Book a New Slot</a>
     </div>
-    <hr class="divider">
-    <p class="para" style="margin:0;font-size:13px;">
-      Questions? Reply to this email or reach out at <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a>.
-    </p>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);line-height:1.75;margin-top:8px;">Questions? <a href="mailto:${OWNER_EMAIL}" style="color:#60a5fa;text-decoration:none;">${OWNER_EMAIL}</a></p>
   </div>
-  <div class="footer">
-    <strong style="color:rgba(255,255,255,0.3)">${OWNER_NAME}</strong><br>
-    <a href="${SITE_URL}">${SITE_URL}</a><br><br>
-    You received this because you submitted a booking request on my portfolio.
+  <div style="background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:11px;color:rgba(255,255,255,.16);display:flex;align-items:center;gap:8px;"><div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#ef4444;"></div>${OWNER_NAME}</div>
+    <div style="font-size:10px;"><a href="${SITE_URL}" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div>
   </div>
 </div>
 </body></html>`;
+
     } else if (action === 'rescheduled') {
-      emailSubject = `New time proposed for your call — Please confirm`;
+      // ── Template #5: Rescheduled — guest receives with Accept/Reject ───
+      emailSubject = `🔄 New time proposed for your call — Please confirm`;
+      const guestRespondBase = `${SUPABASE_URL}/functions/v1/guest-respond`;
+      const guestAcceptUrl = `${guestRespondBase}?bookingId=${bookingId}&action=accept&secret=${encodeURIComponent(GUEST_SECRET)}`;
+      const guestRejectUrl = `${guestRespondBase}?bookingId=${bookingId}&action=reject&secret=${encodeURIComponent(GUEST_SECRET)}`;
       emailHtml = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><style>${emailStyles}</style></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #030303; color: #e5e5e5; margin: 0; padding: 40px 16px; }
+</style>
+</head>
 <body>
-<div class="container">
-  <div class="header" style="background: linear-gradient(135deg, #0c1a3b 0%, #1e3a6e 100%);">
-    <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:72px;height:72px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);margin:0 auto 20px;display:block;" />
-    <div class="badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3);color:#60a5fa;">Reschedule Proposed</div>
-    <h1 class="title">New time proposed</h1>
-    <p class="subtitle">I'd like to suggest a different time for our call.</p>
+<div style="max-width:600px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 0 1px #000,0 40px 100px rgba(0,0,0,.9);">
+  <!-- HEADER -->
+  <div style="background:#07101e;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(59,130,246,.2) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.5),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(59,130,246,.25);display:block;margin:0 auto;background:#080f1a;" onerror="this.style.background='#080f1a'" />
+      <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#3b82f6;border-radius:50%;border:2.5px solid #07101e;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:900;">&#x21BB;</div>
+    </div>
+    <div style="display:inline-block;background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.2);color:#60a5fa;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Reschedule Proposed</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">New time proposed</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">I'd like to suggest a different time for our call.</p>
   </div>
-  <div class="body">
-    <p class="greeting">Hey ${guestName},</p>
-    <p class="para">
-      The original slot doesn't quite work for me, but I'd love to still connect!
-      I'm proposing a new time below — please let me know if this works for you, or feel free to book a different slot.
-    </p>
-    <div class="card">
-      <div class="card-label">Original Request</div>
-      <div class="row"><span class="label">Topic</span><span class="value">${booking.topic}</span></div>
-      <div class="row"><span class="label">Date</span><span class="value">${booking.date}</span></div>
-      <div class="row"><span class="label">Time (IST)</span><span class="value">${booking.time_ist}</span></div>
+  <!-- BODY -->
+  <div style="padding:40px 44px;background:#111;">
+    <p style="font-size:18px;font-weight:700;color:#f0f0f0;margin:0 0 10px;">Hey ${guestName},</p>
+    <p style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.8;margin:0 0 28px;">The original slot doesn't quite work for me, but I'd love to still connect! I'm proposing a new time below — let me know if it works with a single click.</p>
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Original Request<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:14px;opacity:.65;">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Topic</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${booking.topic}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Date</span><span style="font-size:14px;font-weight:600;color:rgba(255,255,255,.3);line-height:1.45;text-decoration:line-through;">${booking.date}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">IST</span><span style="font-size:14px;font-weight:600;color:rgba(255,255,255,.3);line-height:1.45;text-decoration:line-through;">${booking.time_ist}</span></div>
     </div>
     ${(rescheduleDate || rescheduleTime) ? `
-    <div class="card" style="border-color:rgba(59,130,246,0.2);background:rgba(59,130,246,0.05);">
-      <div class="card-label" style="color:rgba(96,165,250,0.6);">Proposed New Time</div>
-      ${rescheduleDate ? `<div class="row"><span class="label">New Date</span><span class="value" style="color:#93c5fd;">${rescheduleDate}</span></div>` : ''}
-      ${rescheduleTime ? `<div class="row"><span class="label">New Time (IST)</span><span class="value" style="color:#93c5fd;">${rescheduleTime}</span></div>` : ''}
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Proposed New Time<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.18);border-radius:16px;padding:20px 24px;margin-bottom:24px;">
+      <div style="display:inline-block;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.25);color:#60a5fa;font-size:8px;font-weight:900;letter-spacing:.3em;text-transform:uppercase;padding:3px 8px;border-radius:6px;margin-bottom:12px;">New Proposal</div>
+      ${rescheduleDate ? `<div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(59,130,246,.1);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Date</span><span style="font-size:14px;font-weight:700;color:#93c5fd;line-height:1.45;">${rescheduleDate}</span></div>` : ''}
+      ${rescheduleTime ? `<div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">IST</span><span style="font-size:14px;font-weight:700;color:#93c5fd;line-height:1.45;">${rescheduleTime} — India Standard Time</span></div>` : ''}
     </div>` : ''}
-    ${ownerNotes ? `
-    <div class="notice" style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.15);">
-      <strong style="color:rgba(255,255,255,0.5)">Note from ${OWNER_NAME}:</strong><br>
-      ${ownerNotes}
-    </div>` : ''}
-    <div class="notice" style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);">
-      If this new time works, please reply to confirm. If not, you can book any available slot at
-      <a href="${SITE_URL}/book">${SITE_URL}/book</a>
+    ${ownerNotes ? `<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.28);line-height:1.7;"><strong style="color:rgba(255,255,255,.5);">Note from ${OWNER_NAME}:</strong><br>${ownerNotes}</div>` : ''}
+    <!-- Guest response buttons -->
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 14px;display:flex;align-items:center;gap:10px;">Your Response<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">
+      <tr>
+        <td style="padding:0 5px 0 0;width:50%"><a href="${guestAcceptUrl}" style="display:block;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;border:1px solid rgba(255,255,255,.1);">&#x2713;&nbsp; Works for me!</a></td>
+        <td style="padding:0 0 0 5px;width:50%"><a href="${guestRejectUrl}" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x2717;&nbsp; Doesn't work</a></td>
+      </tr>
+    </table>
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.28);line-height:1.7;">
+      &#x1F4AC; Click a button above — Ayush will be notified instantly. Can't make either? <a href="${SITE_URL}/book" style="color:#60a5fa;text-decoration:none;">Book a new slot</a>
     </div>
-    <hr class="divider">
-    <p class="para" style="margin:0;font-size:13px;">
-      Questions? Reply to this email or reach out at <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a>.
-    </p>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);line-height:1.75;margin-top:8px;">Questions? <a href="mailto:${OWNER_EMAIL}" style="color:#60a5fa;text-decoration:none;">${OWNER_EMAIL}</a></p>
   </div>
-  <div class="footer">
-    <strong style="color:rgba(255,255,255,0.3)">${OWNER_NAME}</strong><br>
-    <a href="${SITE_URL}">${SITE_URL}</a><br><br>
-    You received this because you submitted a booking request on my portfolio.
+  <div style="background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:11px;color:rgba(255,255,255,.16);display:flex;align-items:center;gap:8px;"><div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#3b82f6;"></div>${OWNER_NAME}</div>
+    <div style="font-size:10px;"><a href="${SITE_URL}" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div>
   </div>
 </div>
 </body></html>`;

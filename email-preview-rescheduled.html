@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rescheduled Email Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #050505; font-family: 'Inter', sans-serif; }
+  .page { padding: 48px 20px; }
+  .label { text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 0.4em; text-transform: uppercase; color: rgba(255,255,255,0.2); margin-bottom: 28px; }
+  .email { max-width: 600px; margin: 0 auto; background: #111; border-radius: 28px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 0 1px #000, 0 60px 120px rgba(0,0,0,0.8); }
+
+  /* HEADER */
+  .hd { position: relative; padding: 56px 48px 48px; text-align: center; background: #080e1c; border-bottom: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
+  .hd-glow { position: absolute; top: -80px; left: 50%; transform: translateX(-50%); width: 500px; height: 340px; background: radial-gradient(ellipse at center, rgba(59,130,246,0.18) 0%, transparent 65%); pointer-events: none; }
+  .hd-line { position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(59,130,246,0.5), transparent); }
+
+  .avatar-wrap { position: relative; display: inline-block; margin-bottom: 26px; }
+  .avatar { width: 80px; height: 80px; border-radius: 50%; border: 2.5px solid rgba(59,130,246,0.25); display: block; background: #0a0f1a; }
+  .av-badge { position: absolute; bottom: -1px; right: -1px; width: 26px; height: 26px; background: #3b82f6; border-radius: 50%; border: 2.5px solid #080e1c; font-size: 14px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; }
+
+  .badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.22); color: #60a5fa; font-size: 10px; font-weight: 800; letter-spacing: 0.4em; text-transform: uppercase; padding: 8px 20px; border-radius: 100px; margin-bottom: 20px; }
+  .hd h1 { font-size: 34px; font-weight: 900; color: #fff; margin: 0 0 10px; letter-spacing: -1px; line-height: 1.1; }
+  .hd p  { font-size: 14px; color: rgba(255,255,255,0.3); margin: 0; }
+
+  /* BODY */
+  .bd { padding: 44px 48px; }
+  .greeting { font-size: 19px; font-weight: 700; color: #f2f2f2; margin: 0 0 10px; }
+  .para { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.8; margin: 0 0 30px; }
+
+  .slabel { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.45em; color: rgba(255,255,255,0.16); margin: 0 0 14px; display: flex; align-items: center; gap: 12px; }
+  .slabel::after { content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.06); }
+
+  .card { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; padding: 24px 28px; margin-bottom: 14px; }
+  .card-new { background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.18); border-radius: 18px; padding: 24px 28px; margin-bottom: 20px; }
+  .crow { display: flex; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .crow-new { display: flex; align-items: flex-start; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(59,130,246,0.08); }
+  .crow:first-child, .crow-new:first-child { padding-top: 0; }
+  .crow:last-child, .crow-new:last-child { border-bottom: none; padding-bottom: 0; }
+  .ck { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.35em; color: rgba(255,255,255,0.18); min-width: 76px; flex-shrink: 0; padding-top: 4px; }
+  .cv { font-size: 14px; font-weight: 600; color: #e0e0e0; line-height: 1.45; }
+  .cv-new { font-size: 14px; font-weight: 700; color: #93c5fd; line-height: 1.45; }
+
+  .new-tag { display: inline-block; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.25); color: #60a5fa; font-size: 8px; font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; margin-bottom: 12px; }
+
+  .notice { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 18px 22px; margin-bottom: 28px; font-size: 13px; color: rgba(255,255,255,0.3); line-height: 1.7; }
+  .notice a { color: #60a5fa; text-decoration: none; }
+  .btn-accept { display: block; background: linear-gradient(135deg,#16a34a,#15803d); color: #fff; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.2em; padding: 15px 0; border-radius: 14px; text-decoration: none; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+  .btn-ghost { display: block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.2em; padding: 15px 0; border-radius: 14px; text-decoration: none; text-align: center; }
+
+  .contact { font-size: 13px; color: rgba(255,255,255,0.28); line-height: 1.75; }
+  .contact a { color: #60a5fa; text-decoration: none; }
+
+  /* FOOTER */
+  .ft { background: #0a0a0a; border-top: 1px solid rgba(255,255,255,0.05); padding: 28px 48px; text-align: center; }
+  .ft-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.22); margin: 0 0 5px; }
+  .ft-link { font-size: 11px; color: rgba(255,255,255,0.14); text-decoration: none; }
+  .ft-note { font-size: 10px; color: rgba(255,255,255,0.1); margin: 12px 0 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="label">&#x1F4C5; Rescheduled — sent to guest when you propose a new time</p>
+
+  <div class="email">
+    <div class="hd">
+      <div class="hd-glow"></div>
+      <div class="avatar-wrap">
+        <img class="avatar" src="https://ayushkumarjena.in/profile.jpg" alt="Ayush" onerror="this.style.background='#0a0f1a'" />
+        <div class="av-badge">&#x21BB;</div>
+      </div>
+      <div class="badge">Reschedule Proposed</div>
+      <h1>New time proposed</h1>
+      <p>I'd like to suggest a different time for our call.</p>
+      <div class="hd-line"></div>
+    </div>
+
+    <div class="bd">
+      <p class="greeting">Hey Rahul,</p>
+      <p class="para">
+        The original slot doesn't quite work for me, but I'd love to still connect!
+        I'm proposing a new time below — please let me know if this works for you, or feel free to book a different slot.
+      </p>
+
+      <p class="slabel">Original Request</p>
+      <div class="card">
+        <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+        <div class="crow"><span class="ck">Date</span><span class="cv" style="color:rgba(255,255,255,0.4);text-decoration:line-through">Sunday, March 16, 2026</span></div>
+        <div class="crow"><span class="ck">IST</span><span class="cv" style="color:rgba(255,255,255,0.4);text-decoration:line-through">10:00 AM</span></div>
+      </div>
+
+      <p class="slabel">Proposed New Time</p>
+      <div class="card-new">
+        <div class="new-tag">New Proposal</div>
+        <div class="crow-new"><span class="ck">Date</span><span class="cv-new">Tuesday, March 18, 2026</span></div>
+        <div class="crow-new"><span class="ck">IST</span><span class="cv-new">3:00 PM — India Standard Time</span></div>
+      </div>
+
+      <p class="slabel">Your Response</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+        <tr>
+          <td style="padding:0 6px 0 0; width:50%">
+            <a href="#" class="btn-accept">&#x2713;&nbsp; Works for me!</a>
+          </td>
+          <td style="padding:0 0 0 6px; width:50%">
+            <a href="#" class="btn-ghost">&#x2717;&nbsp; Doesn't work</a>
+          </td>
+        </tr>
+      </table>
+
+      <div class="notice">
+        &#x1F4AC; Click one of the buttons above — Ayush will be notified instantly. If neither time works, you can also <a href="https://ayushkumarjena.in/book">book a new slot</a>.
+      </div>
+
+      <p class="contact">
+        Questions? Reply to this email or reach out at <a href="mailto:ahalyajena28@gmail.com">ahalyajena28@gmail.com</a>
+      </p>
+    </div>
+
+    <div class="ft">
+      <p class="ft-name">Ayush Kumar Jena</p>
+      <a href="https://ayushkumarjena.in" class="ft-link">ayushkumarjena.in</a>
+      <p class="ft-note">You received this because you submitted a booking request on my portfolio.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

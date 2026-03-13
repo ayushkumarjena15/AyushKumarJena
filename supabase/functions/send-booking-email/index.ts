@@ -54,136 +54,111 @@ serve(async (req) => {
       console.error('DB insert failed:', dbErr);
     }
 
-    // Build one-click action URLs (GET requests → returns HTML confirmation page)
+    // Build one-click action URLs
     const fnBase = `${SUPABASE_URL}/functions/v1/manage-booking`;
     const acceptUrl  = bookingId ? `${fnBase}?bookingId=${bookingId}&action=accepted&secret=${encodeURIComponent(ADMIN_SECRET)}` : '#';
     const rejectUrl  = bookingId ? `${fnBase}?bookingId=${bookingId}&action=rejected&secret=${encodeURIComponent(ADMIN_SECRET)}` : '#';
     const reschedUrl = `${SITE_URL}/book?panel=true`;
 
-    // ── Email 1: Alert to Ayush ──────────────────────────────────────────
-    const ownerEmailHtml = `
-<!DOCTYPE html>
+    // ── Email 1: Owner Notification (Template #1) ─────────────────────────
+    const ownerEmailHtml = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><style>
-  body { font-family: 'Inter', -apple-system, sans-serif; background: #0c0a09; color: #e5e5e5; margin: 0; padding: 0; }
-  .container { max-width: 600px; margin: 40px auto; background: #141414; border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; overflow: hidden; }
-  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .badge { display: inline-block; background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #60a5fa; font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 20px; }
-  .title { font-size: 28px; font-weight: 900; color: #ffffff; margin: 0; letter-spacing: -0.5px; }
-  .body { padding: 36px 40px; }
-  .row { display: flex; gap: 12px; margin-bottom: 14px; }
-  .label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.25); min-width: 90px; padding-top: 3px; }
-  .value { font-size: 15px; font-weight: 600; color: #e5e5e5; }
-  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 24px 0; }
-  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 20px 24px; margin-bottom: 16px; }
-  .footer { background: #0f0f0f; padding: 24px 40px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 0.05em; }
-  .dot { display: inline-block; width: 8px; height: 8px; background: #22c55e; border-radius: 50%; margin-right: 8px; }
-</style></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #030303; color: #e5e5e5; margin: 0; padding: 40px 16px; }
+</style>
+</head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="badge">📅 New Booking</div>
-    <h1 class="title">You have a new call request</h1>
+<div style="max-width:600px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 0 1px #000,0 40px 100px rgba(0,0,0,.9);">
+  <!-- HEADER -->
+  <div style="background:#0b0b18;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(99,102,241,.22) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.5),transparent);"></div>
+    <div style="width:56px;height:56px;border-radius:50%;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);display:inline-flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:22px;">&#x1F4C5;</div>
+    <div style="display:inline-block;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.22);color:#a5b4fc;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
+      <span style="display:inline-block;width:5px;height:5px;background:#6366f1;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px #6366f1;"></span>New Booking
+    </div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;line-height:1.1;">New call request<br>just landed.</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">Someone wants to connect — review below</p>
   </div>
-  <div class="body">
-    <div class="card">
-      <div class="row"><span class="label">From</span><span class="value">${name}</span></div>
-      <div class="row"><span class="label">Email</span><span class="value">${email}</span></div>
-      <div class="row"><span class="label">Topic</span><span class="value">${topic}</span></div>
-      ${notes ? `<div class="row"><span class="label">Notes</span><span class="value">${notes}</span></div>` : ''}
-      ${guests?.filter((g: string) => g.trim()).length ? `<div class="row"><span class="label">Guests</span><span class="value">${guestList}</span></div>` : ''}
+  <!-- BODY -->
+  <div style="padding:40px 44px;background:#111;">
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Requester<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">From</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${name}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Email</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${email}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Topic</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${topic}</span></div>
+      ${notes ? `<div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Notes</span><span style="font-size:14px;font-weight:600;color:rgba(255,255,255,.4);line-height:1.45;font-size:13px;">${notes}</span></div>` : ''}
+      ${guests?.filter((g: string) => g.trim()).length ? `<div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Guests</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${guestList}</span></div>` : ''}
     </div>
-    <hr class="divider">
-    <div class="card">
-      <div class="row"><span class="label">Date</span><span class="value">${date}</span></div>
-      <div class="row"><span class="label">Time (IST)</span><span class="value">${timeIST}</span></div>
-      <div class="row"><span class="label">Their Time</span><span class="value">${timeLocal} (${timezone})</span></div>
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Schedule<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.14);border-radius:16px;padding:20px 24px;margin-bottom:24px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(99,102,241,.08);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Date</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${date}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(99,102,241,.08);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">IST</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${timeIST} — India Standard Time</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Their Time</span><span style="font-size:14px;font-weight:600;color:rgba(255,255,255,.4);line-height:1.45;">${timeLocal} — ${timezone}</span></div>
     </div>
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:24px 0;">
-    <p style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.3em;color:rgba(255,255,255,0.2);margin-bottom:16px;">Quick Actions</p>
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Quick Actions<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">
       <tr>
-        <td style="padding:0 6px 0 0;">
-          <a href="${acceptUrl}" style="display:block;background:#16a34a;color:#ffffff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;padding:14px 0;border-radius:12px;text-decoration:none;text-align:center;">✓ Accept</a>
-        </td>
-        <td style="padding:0 6px;">
-          <a href="${rejectUrl}" style="display:block;background:#dc2626;color:#ffffff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;padding:14px 0;border-radius:12px;text-decoration:none;text-align:center;">✗ Reject</a>
-        </td>
-        <td style="padding:0 0 0 6px;">
-          <a href="${reschedUrl}" style="display:block;background:#1d4ed8;color:#ffffff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;padding:14px 0;border-radius:12px;text-decoration:none;text-align:center;">↻ Reschedule</a>
-        </td>
+        <td style="padding:0 5px 0 0;width:50%"><a href="${acceptUrl}" style="display:block;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x2713;&nbsp; Accept</a></td>
+        <td style="padding:0 0 0 5px;width:50%"><a href="${rejectUrl}" style="display:block;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x2717;&nbsp; Reject</a></td>
       </tr>
     </table>
-    <p style="font-size:11px;color:rgba(255,255,255,0.2);margin:0;line-height:1.6;">
-      Accept and Reject update the status instantly. Reschedule opens your admin panel.<br>
-      Submitted: <code style="font-size:10px;">${new Date().toUTCString()}</code>
-    </p>
+    <a href="${reschedUrl}" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:15px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x21BB;&nbsp; Suggest Different Time</a>
+    <p style="font-size:11px;color:rgba(255,255,255,.15);margin-top:18px;line-height:1.7;">Accept / Reject update status instantly &middot; Submitted <span style="background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-size:10px;">${new Date().toUTCString()}</span></p>
   </div>
-  <div class="footer"><span class="dot"></span>${OWNER_NAME}'s Portfolio — Booking System</div>
+  <div style="background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:11px;color:rgba(255,255,255,.16);display:flex;align-items:center;gap:8px;"><div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6);"></div>${OWNER_NAME} &middot; Booking System</div>
+    <div style="font-size:10px;"><a href="${SITE_URL}" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div>
+  </div>
 </div>
 </body></html>`;
 
-    // ── Email 2: Confirmation to Guest ───────────────────────────────────
-    const guestEmailHtml = `
-<!DOCTYPE html>
+    // ── Email 2: Guest Confirmation (Template #2) ──────────────────────────
+    const guestEmailHtml = `<!DOCTYPE html>
 <html>
-<head><meta charset="utf-8"><style>
-  body { font-family: 'Inter', -apple-system, sans-serif; background: #0c0a09; color: #e5e5e5; margin: 0; padding: 0; }
-  .container { max-width: 600px; margin: 40px auto; background: #141414; border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; overflow: hidden; }
-  .header { background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); padding: 48px 40px; text-align: center; }
-  .avatar { width: 72px; height: 72px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.15); margin: 0 auto 20px; display: block; }
-  .badge { display: inline-block; background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; font-size: 11px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 16px; }
-  .title { font-size: 30px; font-weight: 900; color: #ffffff; margin: 0 0 8px; letter-spacing: -0.5px; }
-  .subtitle { font-size: 15px; color: rgba(255,255,255,0.4); margin: 0; }
-  .body { padding: 40px; }
-  .greeting { font-size: 17px; color: #e5e5e5; font-weight: 600; margin-bottom: 12px; }
-  .para { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.7; margin-bottom: 28px; }
-  .card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
-  .card-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255,255,255,0.2); margin-bottom: 16px; }
-  .row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
-  .row:last-child { margin-bottom: 0; }
-  .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255,255,255,0.2); min-width: 70px; padding-top: 2px; }
-  .value { font-size: 14px; font-weight: 600; color: #d4d4d4; }
-  .notice { background: rgba(59,130,246,0.08); border: 1px solid rgba(59,130,246,0.15); border-radius: 12px; padding: 16px 20px; font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; margin-bottom: 24px; }
-  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 28px 0; }
-  .footer { background: #0f0f0f; padding: 24px 40px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 0.05em; line-height: 1.8; }
-  a { color: #60a5fa; text-decoration: none; }
-</style></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #030303; color: #e5e5e5; margin: 0; padding: 40px 16px; }
+</style>
+</head>
 <body>
-<div class="container">
-  <div class="header">
-    <img class="avatar" src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" />
-    <div class="badge">✓ Booking Received</div>
-    <h1 class="title">You're booked in!</h1>
-    <p class="subtitle">Here's everything you need to know.</p>
-  </div>
-  <div class="body">
-    <p class="greeting">Hey ${name},</p>
-    <p class="para">
-      Thanks for reaching out! I've received your booking request and will confirm the meeting shortly.
-      You'll receive another email once it's confirmed, along with the Google Meet link.
-    </p>
-    <div class="card">
-      <div class="card-label">Booking Summary</div>
-      <div class="row"><span class="label">Topic</span><span class="value">${topic}</span></div>
-      <div class="row"><span class="label">Date</span><span class="value">${date}</span></div>
-      <div class="row"><span class="label">Time</span><span class="value">${timeLocal} (${timezone})</span></div>
-      <div class="row"><span class="label">IST</span><span class="value">${timeIST} — India Standard Time</span></div>
-      <div class="row"><span class="label">Duration</span><span class="value">30 minutes · Google Meet</span></div>
+<div style="max-width:600px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 0 1px #000,0 40px 100px rgba(0,0,0,.9);">
+  <!-- HEADER -->
+  <div style="background:#080f0b;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(16,185,129,.2) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(16,185,129,.5),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(16,185,129,.3);display:block;margin:0 auto;background:#0a1a12;" onerror="this.style.background='#0a1a12'" />
+      <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#10b981;border-radius:50%;border:2.5px solid #080f0b;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:900;">&#x2713;</div>
     </div>
-    <div class="notice">
-      📌 <strong style="color:rgba(255,255,255,0.6)">Pending Confirmation</strong> — This is not yet a confirmed booking.
-      I'll review and confirm within 24 hours. If the slot doesn't work, I'll suggest an alternative.
-    </div>
-    <hr class="divider">
-    <p class="para" style="margin:0; font-size:13px;">
-      Questions? Reply to this email or reach out at <a href="mailto:${OWNER_EMAIL}">${OWNER_EMAIL}</a>.
-    </p>
+    <div style="display:inline-block;background:rgba(16,185,129,.09);border:1px solid rgba(16,185,129,.2);color:#34d399;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">&#x2713;&nbsp; Booking Received</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">You're all set!</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">Request received — I'll confirm within 24 hours.</p>
   </div>
-  <div class="footer">
-    <strong style="color:rgba(255,255,255,0.3)">${OWNER_NAME}</strong><br>
-    <a href="${SITE_URL}">${SITE_URL}</a><br><br>
-    You received this because you submitted a booking request on my portfolio.
+  <!-- BODY -->
+  <div style="padding:40px 44px;background:#111;">
+    <p style="font-size:18px;font-weight:700;color:#f0f0f0;margin:0 0 10px;">Hey ${name},</p>
+    <p style="font-size:14px;color:rgba(255,255,255,.38);line-height:1.8;margin:0 0 28px;">Thanks for reaching out! I've received your booking request and will review it within 24 hours. Once confirmed, you'll get another email with the Google Meet link.</p>
+    <p style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;">Your Booking<span style="flex:1;height:1px;background:rgba(255,255,255,.05);"></span></p>
+    <div style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:16px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);padding-top:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Topic</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${topic}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Date</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${date}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Your Time</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${timeLocal} — ${timezone}</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">IST</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">${timeIST} — India Standard Time</span></div>
+      <div style="display:flex;align-items:flex-start;gap:14px;padding:9px 0;padding-bottom:0;"><span style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;">Duration</span><span style="font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;">30 min &middot; Google Meet</span></div>
+    </div>
+    <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:14px;padding:18px 22px;margin-bottom:24px;">
+      <p style="font-size:10px;font-weight:900;color:rgba(251,191,36,.7);text-transform:uppercase;letter-spacing:.2em;margin:0 0 6px;">&#x23F3; Pending Confirmation</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);line-height:1.65;margin:0;">Not yet confirmed. I'll review within 24 hrs — if the slot doesn't work I'll suggest another.</p>
+    </div>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);line-height:1.75;margin-top:8px;">Questions? Reply to this email or reach out at <a href="mailto:${OWNER_EMAIL}" style="color:#60a5fa;text-decoration:none;">${OWNER_EMAIL}</a></p>
+  </div>
+  <div style="background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:11px;color:rgba(255,255,255,.16);display:flex;align-items:center;gap:8px;"><div style="width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#10b981;"></div>${OWNER_NAME}</div>
+    <div style="font-size:10px;"><a href="${SITE_URL}" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div>
   </div>
 </div>
 </body></html>`;
@@ -231,7 +206,7 @@ serve(async (req) => {
 
   } catch (err) {
     console.error(err);
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: (err as Error).message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

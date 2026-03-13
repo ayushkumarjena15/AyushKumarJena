@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Email Templates — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;padding:0;background:#030303;font-family:'Inter',sans-serif;}
+  .page{padding:60px 20px;}
+  .section-title{text-align:center;font-size:9px;font-weight:900;letter-spacing:.5em;text-transform:uppercase;color:rgba(255,255,255,0.15);margin:0 auto 20px;max-width:600px;}
+  .section-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);font-size:9px;font-weight:900;color:rgba(255,255,255,0.2);margin-right:10px;}
+  .sep{max-width:600px;margin:60px auto;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent);}
+  .email{max-width:600px;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);box-shadow:0 0 0 1px #000,0 40px 100px rgba(0,0,0,.9);}
+
+  /* ── SHARED ── */
+  .bd{padding:40px 44px;background:#111;}
+  .greeting{font-size:18px;font-weight:700;color:#f0f0f0;margin:0 0 10px;}
+  .para{font-size:14px;color:rgba(255,255,255,.38);line-height:1.8;margin:0 0 28px;}
+  .slabel{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.42em;color:rgba(255,255,255,.16);margin:0 0 12px;display:flex;align-items:center;gap:10px;}
+  .slabel::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.05);}
+  .card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:20px 24px;margin-bottom:16px;}
+  .crow{display:flex;align-items:flex-start;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+  .crow:first-child{padding-top:0;}.crow:last-child{border-bottom:none;padding-bottom:0;}
+  .ck{font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:.3em;color:rgba(255,255,255,.18);min-width:72px;flex-shrink:0;padding-top:3px;}
+  .cv{font-size:14px;font-weight:600;color:#e0e0e0;line-height:1.45;}
+  .cv-dim{color:rgba(255,255,255,.3);text-decoration:line-through;}
+  .cv-hi{color:#93c5fd;font-weight:700;}
+  .contact{font-size:13px;color:rgba(255,255,255,.28);line-height:1.75;margin-top:8px;}
+  .contact a{color:#60a5fa;text-decoration:none;}
+  .ft{background:#0a0a0a;border-top:1px solid rgba(255,255,255,.05);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;}
+  .ft-l{font-size:11px;color:rgba(255,255,255,.16);display:flex;align-items:center;gap:8px;}
+  .ft-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+  .ft-r{font-size:10px;color:rgba(255,255,255,.1);}
+</style>
+</head>
+<body>
+<div class="page">
+
+
+<!-- ════════════════════════════════════════
+     1 · OWNER NOTIFICATION
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">1</span> Owner Notification — you receive this when someone books</p>
+<div class="email">
+  <!-- HEADER -->
+  <div style="background:#0b0b18;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(99,102,241,.22) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.5),transparent);"></div>
+    <!-- Icon circle -->
+    <div style="width:56px;height:56px;border-radius:50%;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:22px;">&#x1F4C5;</div>
+    <div style="display:inline-block;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.22);color:#a5b4fc;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
+      <span style="display:inline-block;width:5px;height:5px;background:#6366f1;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px #6366f1;animation:p 2s infinite;"></span>New Booking
+    </div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;line-height:1.1;">New call request<br>just landed.</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">Someone wants to connect — review below</p>
+  </div>
+  <!-- BODY -->
+  <div class="bd">
+    <p class="slabel">Requester</p>
+    <div class="card">
+      <div class="crow"><span class="ck">From</span><span class="cv">Rahul Sharma</span></div>
+      <div class="crow"><span class="ck">Email</span><span class="cv">rahul@example.com</span></div>
+      <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+      <div class="crow"><span class="ck">Notes</span><span class="cv" style="color:rgba(255,255,255,.4);font-size:13px;">Looking forward to your insights on our product direction.</span></div>
+    </div>
+    <p class="slabel">Schedule</p>
+    <div class="card" style="background:rgba(99,102,241,.05);border-color:rgba(99,102,241,.14);margin-bottom:24px;">
+      <div class="crow" style="border-color:rgba(99,102,241,.08)"><span class="ck">Date</span><span class="cv">Sunday, March 16, 2026</span></div>
+      <div class="crow" style="border-color:rgba(99,102,241,.08)"><span class="ck">IST</span><span class="cv">10:00 AM — India Standard Time</span></div>
+      <div class="crow" style="border-color:transparent"><span class="ck">Their Time</span><span class="cv" style="color:rgba(255,255,255,.4)">12:30 AM — America/New_York</span></div>
+    </div>
+    <p class="slabel">Quick Actions</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">
+      <tr>
+        <td style="padding:0 5px 0 0;width:50%"><a href="#" style="display:block;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x2713;&nbsp; Accept</a></td>
+        <td style="padding:0 0 0 5px;width:50%"><a href="#" style="display:block;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x2717;&nbsp; Reject</a></td>
+      </tr>
+    </table>
+    <a href="#" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:15px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x21BB;&nbsp; Suggest Different Time</a>
+    <p style="font-size:11px;color:rgba(255,255,255,.15);margin-top:18px;line-height:1.7;">Accept / Reject update status instantly &middot; Submitted <span style="background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-size:10px;">Sat, 14 Mar 2026 08:30 UTC</span></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6);"></div>Ayush Kumar Jena &middot; Booking System</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ════════════════════════════════════════
+     2 · GUEST CONFIRMATION
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">2</span> Guest Confirmation — booker receives this immediately after booking</p>
+<div class="email">
+  <div style="background:#080f0b;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(16,185,129,.2) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(16,185,129,.5),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="https://ayushkumarjena.in/profile.jpg" alt="Ayush" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(16,185,129,.3);display:block;margin:0 auto;background:#0a1a12;" onerror="this.style.background='#0a1a12'"/>
+      <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#10b981;border-radius:50%;border:2.5px solid #080f0b;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:900;">&#x2713;</div>
+    </div>
+    <div style="display:inline-block;background:rgba(16,185,129,.09);border:1px solid rgba(16,185,129,.2);color:#34d399;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">&#x2713;&nbsp; Booking Received</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">You're all set!</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">Request received — I'll confirm within 24 hours.</p>
+  </div>
+  <div class="bd">
+    <p class="greeting">Hey Rahul,</p>
+    <p class="para">Thanks for reaching out! I've received your booking request and will review it within 24 hours. Once confirmed, you'll get another email with the Google Meet link.</p>
+    <p class="slabel">Your Booking</p>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+      <div class="crow"><span class="ck">Date</span><span class="cv">Sunday, March 16, 2026</span></div>
+      <div class="crow"><span class="ck">Your Time</span><span class="cv">12:30 AM — America/New_York</span></div>
+      <div class="crow"><span class="ck">IST</span><span class="cv">10:00 AM — India Standard Time</span></div>
+      <div class="crow"><span class="ck">Duration</span><span class="cv">30 min &middot; Google Meet</span></div>
+    </div>
+    <div style="background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:14px;padding:18px 22px;margin-bottom:24px;">
+      <p style="font-size:10px;font-weight:900;color:rgba(251,191,36,.7);text-transform:uppercase;letter-spacing:.2em;margin:0 0 6px;">&#x23F3; Pending Confirmation</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);line-height:1.65;margin:0;">Not yet confirmed. I'll review within 24 hrs — if the slot doesn't work I'll suggest another.</p>
+    </div>
+    <p class="contact">Questions? Reply to this email or reach out at <a href="mailto:ahalyajena28@gmail.com">ahalyajena28@gmail.com</a></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#10b981;"></div>Ayush Kumar Jena</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ════════════════════════════════════════
+     3 · ACCEPTED
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">3</span> Accepted — sent to guest when you confirm the booking</p>
+<div class="email">
+  <div style="background:#071a0e;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(34,197,94,.22) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.5),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="https://ayushkumarjena.in/profile.jpg" alt="Ayush" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(34,197,94,.35);display:block;margin:0 auto;background:#0a1a0e;" onerror="this.style.background='#0a1a0e'"/>
+      <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#22c55e;border-radius:50%;border:2.5px solid #071a0e;display:flex;align-items:center;justify-content:center;font-size:13px;color:#000;font-weight:900;">&#x2713;</div>
+    </div>
+    <div style="display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:#4ade80;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
+      <span style="display:inline-block;width:5px;height:5px;background:#22c55e;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px rgba(34,197,94,.9);"></span>Confirmed
+    </div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">Your call is confirmed!</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">See you soon — this is going to be great.</p>
+  </div>
+  <div class="bd">
+    <p class="greeting">Hey Rahul,</p>
+    <p class="para">Great news! I've confirmed your booking. Looking forward to connecting. I'll send the Google Meet link closer to the time — keep an eye on your inbox.</p>
+    <p class="slabel">Confirmed Booking</p>
+    <div class="card" style="background:rgba(34,197,94,.04);border-color:rgba(34,197,94,.12);margin-bottom:20px;">
+      <div class="crow" style="border-color:rgba(34,197,94,.08)"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+      <div class="crow" style="border-color:rgba(34,197,94,.08)"><span class="ck">Date</span><span class="cv">Sunday, March 16, 2026</span></div>
+      <div class="crow" style="border-color:rgba(34,197,94,.08)"><span class="ck">IST</span><span class="cv">10:00 AM — India Standard Time</span></div>
+      <div class="crow" style="border-color:rgba(34,197,94,.08)"><span class="ck">Your Time</span><span class="cv">12:30 AM — America/New_York</span></div>
+      <div class="crow" style="border-color:transparent"><span class="ck">Duration</span><span class="cv">30 min &middot; Google Meet</span></div>
+    </div>
+    <!-- Meet CTA -->
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:16px;padding:26px 24px;margin-bottom:20px;text-align:center;">
+      <div style="font-size:28px;margin-bottom:10px;">&#x1F4F9;</div>
+      <p style="font-size:15px;font-weight:800;color:#fff;margin:0 0 6px;">Google Meet link coming soon</p>
+      <p style="font-size:12px;color:rgba(255,255,255,.3);margin:0 0 18px;line-height:1.6;">I'll send it before the call. Add to your calendar in the meantime.</p>
+      <a href="#" style="display:inline-block;background:#22c55e;color:#000;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.2em;padding:12px 26px;border-radius:100px;text-decoration:none;">+ Add to Calendar</a>
+    </div>
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.28);line-height:1.7;">
+      &#x1F44B; If anything comes up, just reply to this email and I'll sort it out.
+    </div>
+    <p class="contact">Questions? <a href="mailto:ahalyajena28@gmail.com">ahalyajena28@gmail.com</a></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6);"></div>Ayush Kumar Jena</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ════════════════════════════════════════
+     4 · REJECTED
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">4</span> Rejected — sent to guest when you decline</p>
+<div class="email">
+  <div style="background:#130808;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(239,68,68,.18) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(239,68,68,.45),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="https://ayushkumarjena.in/profile.jpg" alt="Ayush" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(239,68,68,.2);display:block;margin:0 auto;background:#1a0808;" onerror="this.style.background='#1a0808'"/>
+    </div>
+    <div style="display:inline-block;background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Unable to Accommodate</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">Sorry about this.</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">I'm unable to accommodate this particular slot.</p>
+  </div>
+  <div class="bd">
+    <p class="greeting">Hey Rahul,</p>
+    <p class="para">Unfortunately I won't be able to make this call. I apologize for the inconvenience — I'd genuinely love to connect, so please feel free to book another slot.</p>
+    <p class="slabel">Original Booking</p>
+    <div class="card" style="margin-bottom:20px;opacity:.7;">
+      <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+      <div class="crow"><span class="ck">Date</span><span class="cv">Sunday, March 16, 2026</span></div>
+      <div class="crow"><span class="ck">IST</span><span class="cv">10:00 AM — India Standard Time</span></div>
+    </div>
+    <!-- Rebook CTA -->
+    <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:16px;padding:26px 24px;margin-bottom:20px;text-align:center;">
+      <p style="font-size:15px;font-weight:800;color:#fff;margin:0 0 6px;">Let's find another time</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);margin:0 0 18px;line-height:1.6;">My calendar is open — pick a slot that works for you.</p>
+      <a href="https://ayushkumarjena.in/book" style="display:inline-block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.28);color:#a5b4fc;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.2em;padding:12px 26px;border-radius:100px;text-decoration:none;">&#x1F4C5;&nbsp; Book a New Slot</a>
+    </div>
+    <p class="contact">Questions? <a href="mailto:ahalyajena28@gmail.com">ahalyajena28@gmail.com</a></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#ef4444;"></div>Ayush Kumar Jena</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ════════════════════════════════════════
+     5 · RESCHEDULED
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">5</span> Rescheduled — guest receives this with Accept / Reject buttons</p>
+<div class="email">
+  <div style="background:#07101e;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(59,130,246,.2) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.5),transparent);"></div>
+    <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
+      <img src="https://ayushkumarjena.in/profile.jpg" alt="Ayush" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(59,130,246,.25);display:block;margin:0 auto;background:#080f1a;" onerror="this.style.background='#080f1a'"/>
+      <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#3b82f6;border-radius:50%;border:2.5px solid #07101e;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:900;">&#x21BB;</div>
+    </div>
+    <div style="display:inline-block;background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.2);color:#60a5fa;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Reschedule Proposed</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">New time proposed</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">I'd like to suggest a different time for our call.</p>
+  </div>
+  <div class="bd">
+    <p class="greeting">Hey Rahul,</p>
+    <p class="para">The original slot doesn't quite work for me, but I'd love to still connect! I'm proposing a new time below — let me know if it works with a single click.</p>
+    <p class="slabel">Original Request</p>
+    <div class="card" style="margin-bottom:14px;opacity:.65;">
+      <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+      <div class="crow"><span class="ck">Date</span><span class="cv cv-dim">Sunday, March 16, 2026</span></div>
+      <div class="crow"><span class="ck">IST</span><span class="cv cv-dim">10:00 AM</span></div>
+    </div>
+    <p class="slabel">Proposed New Time</p>
+    <div class="card" style="background:rgba(59,130,246,.06);border-color:rgba(59,130,246,.18);margin-bottom:24px;">
+      <div style="display:inline-block;background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.25);color:#60a5fa;font-size:8px;font-weight:900;letter-spacing:.3em;text-transform:uppercase;padding:3px 8px;border-radius:6px;margin-bottom:12px;">New Proposal</div>
+      <div class="crow" style="border-color:rgba(59,130,246,.1)"><span class="ck">Date</span><span class="cv cv-hi">Tuesday, March 18, 2026</span></div>
+      <div class="crow" style="border-color:transparent"><span class="ck">IST</span><span class="cv cv-hi">3:00 PM — India Standard Time</span></div>
+    </div>
+    <!-- Guest response buttons -->
+    <p class="slabel">Your Response</p>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:10px;">
+      <tr>
+        <td style="padding:0 5px 0 0;width:50%"><a href="#" style="display:block;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;border:1px solid rgba(255,255,255,.1);">&#x2713;&nbsp; Works for me!</a></td>
+        <td style="padding:0 0 0 5px;width:50%"><a href="#" style="display:block;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.22em;padding:16px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x2717;&nbsp; Doesn't work</a></td>
+      </tr>
+    </table>
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:16px 20px;margin-bottom:20px;font-size:13px;color:rgba(255,255,255,.28);line-height:1.7;">
+      &#x1F4AC; Click a button above — Ayush will be notified instantly. Can't make either? <a href="https://ayushkumarjena.in/book" style="color:#60a5fa;text-decoration:none;">Book a new slot</a>
+    </div>
+    <p class="contact">Questions? <a href="mailto:ahalyajena28@gmail.com">ahalyajena28@gmail.com</a></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#3b82f6;"></div>Ayush Kumar Jena</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+
+<div class="sep"></div>
+
+<!-- ════════════════════════════════════════
+     6 · OWNER — GUEST ACCEPTED RESCHEDULE
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">6</span> Owner Alert — guest accepted your reschedule proposal</p>
+<div class="email">
+  <div style="background:#071a0e;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(34,197,94,.22) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.5),transparent);"></div>
+    <!-- Trophy/party icon -->
+    <div style="width:56px;height:56px;border-radius:50%;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:22px;">&#x1F389;</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:#4ade80;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
+      <span style="width:5px;height:5px;background:#22c55e;border-radius:50%;flex-shrink:0;box-shadow:0 0 8px rgba(34,197,94,.9);display:inline-block;"></span>Guest Accepted
+    </div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;line-height:1.1;">Reschedule accepted!</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">Rahul is happy with the new time — action required</p>
+  </div>
+  <div class="bd">
+    <p class="slabel">Guest Details</p>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="crow"><span class="ck">Name</span><span class="cv">Rahul Sharma</span></div>
+      <div class="crow"><span class="ck">Email</span><span class="cv">rahul@example.com</span></div>
+      <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+    </div>
+    <p class="slabel">Confirmed Time</p>
+    <div class="card" style="background:rgba(34,197,94,.04);border-color:rgba(34,197,94,.12);margin-bottom:24px;">
+      <div class="crow" style="border-color:rgba(34,197,94,.08)"><span class="ck">Date</span><span class="cv" style="color:#4ade80;">Tuesday, March 18, 2026</span></div>
+      <div class="crow" style="border-color:transparent"><span class="ck">IST</span><span class="cv" style="color:#4ade80;">3:00 PM — India Standard Time</span></div>
+    </div>
+    <!-- Send meet link CTA -->
+    <div style="background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:16px;padding:26px 24px;margin-bottom:20px;text-align:center;">
+      <div style="font-size:26px;margin-bottom:10px;">&#x1F4E7;</div>
+      <p style="font-size:15px;font-weight:800;color:#fff;margin:0 0 6px;">Next step: Send the Meet link</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);margin:0 0 18px;line-height:1.6;">The call is confirmed. Send Rahul the Google Meet link now.</p>
+      <a href="mailto:rahul@example.com" style="display:inline-block;background:#22c55e;color:#000;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.2em;padding:12px 26px;border-radius:100px;text-decoration:none;">Send Meet Link to Rahul</a>
+    </div>
+    <p style="font-size:11px;color:rgba(255,255,255,.15);line-height:1.7;margin:0;">Booking status updated to <span style="background:rgba(34,197,94,.1);color:#4ade80;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;">guest_confirmed</span></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.6);"></div>Ayush Kumar Jena &middot; Booking System</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+<div class="sep"></div>
+
+<!-- ════════════════════════════════════════
+     7 · OWNER — GUEST REJECTED RESCHEDULE
+════════════════════════════════════════ -->
+<p class="section-title"><span class="section-num">7</span> Owner Alert — guest rejected your reschedule proposal</p>
+<div class="email">
+  <div style="background:#130b07;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
+    <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(249,115,22,.18) 0%,transparent 65%);pointer-events:none;"></div>
+    <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(249,115,22,.45),transparent);"></div>
+    <div style="width:56px;height:56px;border-radius:50%;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.22);display:flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:22px;">&#x1F614;</div>
+    <div style="display:inline-block;background:rgba(249,115,22,.09);border:1px solid rgba(249,115,22,.2);color:#fb923c;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Guest Rejected</div>
+    <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;line-height:1.1;">Reschedule rejected.</h1>
+    <p style="font-size:13px;color:rgba(255,255,255,.28);margin:0;">Rahul couldn't make the proposed time</p>
+  </div>
+  <div class="bd">
+    <p class="slabel">Guest Details</p>
+    <div class="card" style="margin-bottom:16px;">
+      <div class="crow"><span class="ck">Name</span><span class="cv">Rahul Sharma</span></div>
+      <div class="crow"><span class="ck">Email</span><span class="cv">rahul@example.com</span></div>
+      <div class="crow"><span class="ck">Topic</span><span class="cv">Product design collab &amp; portfolio review</span></div>
+    </div>
+    <p class="slabel">Proposed Time (Rejected)</p>
+    <div class="card" style="opacity:.6;margin-bottom:24px;">
+      <div class="crow"><span class="ck">Date</span><span class="cv" style="text-decoration:line-through;color:rgba(255,255,255,.35);">Tuesday, March 18, 2026</span></div>
+      <div class="crow"><span class="ck">IST</span><span class="cv" style="text-decoration:line-through;color:rgba(255,255,255,.35);">3:00 PM — India Standard Time</span></div>
+    </div>
+    <!-- Next step CTA -->
+    <div style="background:rgba(99,102,241,.06);border:1px solid rgba(99,102,241,.15);border-radius:16px;padding:26px 24px;margin-bottom:20px;text-align:center;">
+      <p style="font-size:15px;font-weight:800;color:#fff;margin:0 0 6px;">Suggest another time</p>
+      <p style="font-size:13px;color:rgba(255,255,255,.3);margin:0 0 18px;line-height:1.6;">Reach out to Rahul directly or propose a new slot from the admin panel.</p>
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="padding:0 5px 0 0;width:50%">
+            <a href="mailto:rahul@example.com" style="display:block;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.28);color:#a5b4fc;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.18em;padding:13px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x1F4E7;&nbsp; Email Rahul</a>
+          </td>
+          <td style="padding:0 0 0 5px;width:50%">
+            <a href="https://ayushkumarjena.in/book?panel=true" style="display:block;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:rgba(255,255,255,.45);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.18em;padding:13px 0;border-radius:12px;text-decoration:none;text-align:center;">&#x1F4C5;&nbsp; Admin Panel</a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p style="font-size:11px;color:rgba(255,255,255,.15);line-height:1.7;margin:0;">Booking status updated to <span style="background:rgba(249,115,22,.1);color:#fb923c;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700;">guest_rejected_reschedule</span></p>
+  </div>
+  <div class="ft"><div class="ft-l"><div class="ft-dot" style="background:#f97316;"></div>Ayush Kumar Jena &middot; Booking System</div><div class="ft-r"><a href="https://ayushkumarjena.in" style="color:rgba(255,255,255,.1);text-decoration:none;">ayushkumarjena.in</a></div></div>
+</div>
+
+</div><!-- end page -->
+<style>@keyframes p{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}</style>
+</body>
+</html>
