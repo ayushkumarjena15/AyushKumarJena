@@ -139,30 +139,14 @@ const CTASection = () => {
                         <rect x="72" y="300" width="5" height="17" rx="3" fill="url(#lg-limb)"/>
                         <rect x="79" y="299" width="5" height="15" rx="3" fill="url(#lg-limb)"/>
 
-                        {/* Right arm — waving, single rotation from shoulder */}
-                        <motion.g
-                            style={{ transformOrigin: '185px 184px' }}
-                            animate={{ rotate: [-115, -140, -115] }}
-                            transition={{ duration: 0.75, repeat: Infinity, ease: 'easeInOut' }}
-                        >
-                            {/* Upper arm */}
-                            <rect x="171" y="186" width="28" height="52" rx="13" fill="url(#lg-limb)" filter="url(#f-drop)"/>
-                            {/* Elbow joint */}
-                            <circle cx="185" cy="240" r="14" fill="url(#rg-joint)"/>
-                            {/* Forearm — static angle relative to upper arm */}
-                            <g transform="rotate(25, 185, 240)">
-                                <rect x="171" y="242" width="28" height="40" rx="12" fill="url(#lg-limb)"/>
-                                {/* Wrist joint */}
-                                <circle cx="185" cy="284" r="13" fill="url(#rg-joint)"/>
-                                {/* Hand palm */}
-                                <ellipse cx="185" cy="284" rx="14" ry="12" fill="url(#rg-joint)"/>
-                                {/* Fingers */}
-                                <rect x="173" y="291" width="5" height="15" rx="3" fill="url(#lg-limb)"/>
-                                <rect x="180" y="292" width="5" height="17" rx="3" fill="url(#lg-limb)"/>
-                                <rect x="187" y="291" width="5" height="16" rx="3" fill="url(#lg-limb)"/>
-                                <rect x="194" y="289" width="5" height="13" rx="3" fill="url(#lg-limb)"/>
-                            </g>
-                        </motion.g>
+                        {/* Right arm (straight down — same as left) */}
+                        <rect x="171" y="194" width="28" height="52" rx="13" fill="url(#lg-limb)" filter="url(#f-drop)"/>
+                        <circle cx="185" cy="248" r="14" fill="url(#rg-joint)"/>
+                        <rect x="171" y="244" width="28" height="42" rx="12" fill="url(#lg-limb)"/>
+                        <ellipse cx="185" cy="292" rx="14" ry="12" fill="url(#rg-joint)"/>
+                        <rect x="175" y="299" width="5" height="15" rx="3" fill="url(#lg-limb)"/>
+                        <rect x="182" y="300" width="5" height="17" rx="3" fill="url(#lg-limb)"/>
+                        <rect x="189" y="299" width="5" height="15" rx="3" fill="url(#lg-limb)"/>
 
                         {/* Neck */}
                         <rect x="118" y="152" width="24" height="22" rx="8" fill="url(#lg-limb)" filter="url(#f-drop)"/>
