@@ -7,11 +7,11 @@ import propeller from '../assets/propeller.png';
 const skillRows = [
     ['C', 'Python', 'Java', 'HTML5', 'CSS3', 'JavaScript', 'TypeScript'],
     ['Firebase', 'MongoDB', 'MySQL', 'Supabase'],
-    ['Django', 'Express.js', 'FastAPI', 'Node.js', 'React', 'TailwindCSS'],
+    ['FastAPI', 'Node.js', 'React', 'TailwindCSS'],
     ['Git', 'GitHub'],
-    ['Cloudflare', 'Netlify', 'Render', 'Vercel'],
+    ['Netlify', 'Render', 'Vercel'],
     ['Matplotlib', 'MLflow', 'NumPy', 'Pandas', 'Plotly', 'PyTorch', 'scikit-learn', 'TensorFlow'],
-    ['Docker', 'Kubernetes', 'Raspberry Pi', 'Twilio', 'Windows Terminal'],
+    ['Docker', 'Kubernetes', 'Raspberry Pi', 'Windows Terminal'],
     ['Canva']
 ];
 
@@ -27,15 +27,12 @@ const skillIcons = {
     'MongoDB': { icon: SiIcons.SiMongodb, color: '#47A248' },
     'MySQL': { icon: SiIcons.SiMysql, color: '#4479A1' },
     'Supabase': { icon: SiIcons.SiSupabase, color: '#3ECF8E' },
-    'Django': { icon: SiIcons.SiDjango, color: '#092E20' },
-    'Express.js': { icon: SiIcons.SiExpress, color: '#ffffff' },
     'FastAPI': { icon: SiIcons.SiFastapi, color: '#009688' },
     'Node.js': { icon: SiIcons.SiNodedotjs, color: '#339933' },
     'React': { icon: SiIcons.SiReact, color: '#61DAFB' },
     'TailwindCSS': { icon: SiIcons.SiTailwindcss, color: '#06B6D4' },
     'Git': { icon: SiIcons.SiGit, color: '#F05032' },
     'GitHub': { icon: SiIcons.SiGithub, color: '#ffffff' },
-    'Cloudflare': { icon: SiIcons.SiCloudflare, color: '#F38020' },
     'Netlify': { icon: SiIcons.SiNetlify, color: '#00C7B7' },
     'Render': { icon: SiIcons.SiRender, color: '#ffffff' },
     'Vercel': { icon: SiIcons.SiVercel, color: '#ffffff' },
@@ -50,7 +47,6 @@ const skillIcons = {
     'Docker': { icon: SiIcons.SiDocker, color: '#2496ED' },
     'Kubernetes': { icon: SiIcons.SiKubernetes, color: '#326CE5' },
     'Raspberry Pi': { icon: SiIcons.SiRaspberrypi, color: '#A22846' },
-    'Twilio': { icon: SiIcons.SiTwilio, color: '#F22F46' },
     'Windows Terminal': { icon: FaTerminal, color: '#4D4D4D' },
     'Canva': { icon: SiIcons.SiCanva, color: '#00C4CC' }
 };

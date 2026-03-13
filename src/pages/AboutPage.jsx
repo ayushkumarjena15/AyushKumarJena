@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, ExternalLink, Music, PenTool, Layout, Box, Star, Users, Briefcase, GitBranch, GitCommit, Camera, BookOpen, Trophy, Award, Waves, Mic } from 'lucide-react';
+import { Github, Linkedin, Twitter, ExternalLink, Star, Users, Briefcase, GitBranch, GitCommit, Waves, Mic } from 'lucide-react';
+import { SiFramer, SiAdobepremierepro, SiDevpost } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
@@ -320,16 +321,14 @@ const AboutPage = () => {
                                     My <span className="animated-gradient-text italic font-serif">Hobbies</span>
                                 </h2>
                                 <p className="text-secondary text-lg font-light leading-relaxed max-w-xl">
-                                    When I'm not architecting systems, you'll find me in the water, behind a lens, or lost in a good read — balance is part of the process.
+                                    When I'm not coding, I'm in the pool, cutting a video, or animating something with Framer Motion — creativity runs across everything I do.
                                 </p>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[
-                                    { icon: <Camera size={20} />, title: "Photography", desc: "Capturing the interplay of light, shadow, and urban geometry through a lens." },
-                                    { icon: <Music size={20} />, title: "Audio Production", desc: "Crafting ambient and lo-fi soundscapes as a form of creative expression." },
-                                    { icon: <BookOpen size={20} />, title: "Tech Research", desc: "Deep diving into startup ecosystems, AI trends, and product case studies." },
-                                    { icon: <Box size={20} />, title: "3D Modeling", desc: "Experimenting with spatial design, motion, and digital artifacts." },
-                                    { icon: <Waves size={20} />, title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." }
+                                    { icon: <Waves size={20} />, title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." },
+                                    { icon: <SiAdobepremierepro size={20} />, title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion." },
+                                    { icon: <SiFramer size={20} />, title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life." }
                                 ].map((hobby, i) => (
                                     <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:bg-surface/10 transition-all group">
                                         <div className="w-12 h-12 rounded-2xl bg-accent1/10 flex items-center justify-center text-accent1 mb-6 group-hover:scale-110 group-hover:bg-accent1/20 transition-all duration-500">
@@ -356,15 +355,14 @@ const AboutPage = () => {
                                     <span className="animated-gradient-text italic font-serif">Extracurricular</span> Activities
                                 </h2>
                                 <p className="text-secondary text-lg font-light leading-relaxed max-w-xl">
-                                    I believe in growing through collaboration, mentorship, and leadership — actively building, organising, and contributing to communities beyond just code.
+                                    From competing in hackathons to anchoring stages and organising community events — I thrive beyond the screen as much as behind it.
                                 </p>
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { icon: <Trophy size={20} />, title: "Hackathon Enthusiast", desc: "Competed in and won multiple national-level hackathons with a focus on AI/ML solutions and real-world social impact." },
-                                    { icon: <Users size={20} />, title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public." },
-                                    { icon: <Award size={20} />, title: "Student Leader", desc: "Held leadership positions in university societies — managing cross-functional teams and coordinating large-scale tech festivals end-to-end." },
-                                    { icon: <Mic size={20} />, title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity." }
+                                    { icon: <SiDevpost size={20} />, title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact." },
+                                    { icon: <Mic size={20} />, title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity." },
+                                    { icon: <Users size={20} />, title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public." }
                                 ].map((act, i) => (
                                     <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 flex gap-8 items-start hover:border-accent1/20 transition-all group">
                                         <div className="mt-1 w-12 h-12 rounded-2xl bg-accent1/10 flex items-center justify-center text-accent1 shrink-0 group-hover:scale-110 group-hover:bg-accent1/20 transition-all duration-500">
@@ -502,7 +500,7 @@ const AboutPage = () => {
                             </div>
                             <div className="flex-1 flex items-center justify-center">
                                 <img
-                                    src="https://github-readme-streak-stats.herokuapp.com/?user=ayushkumarjena15&theme=transparent&hide_border=true&stroke=c2a07a&ring=c2a07a&fire=c2a07a&currStreakNum=e7e5e4&sideNums=e7e5e4&sideLabels=a8a29e&dates=a8a29e"
+                                    src="https://github-readme-streak-stats.herokuapp.com/?user=ayushkumarjena15&theme=transparent&hide_border=true&stroke=FF6B00&ring=FF6B00&fire=FF4500&currStreakNum=e7e5e4&sideNums=e7e5e4&sideLabels=a8a29e&dates=a8a29e"
                                     alt="GitHub Streak"
                                     className="w-full h-auto object-contain scale-[1.10]"
                                 />
