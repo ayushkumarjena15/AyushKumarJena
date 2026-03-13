@@ -1,25 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { BookOpen, Calendar, Clock, ArrowRight } from 'lucide-react';
-
-const blogs = [
-    {
-        title: "The Future of Web Engineering",
-        date: "March 2026",
-        readTime: "5 min read",
-        excerpt: "Exploring the shift towards AI-integrated web architecture and what it means for the next generation of developers.",
-        category: "Engineering",
-        imageUrl: "/gallery/sphere.jpg"
-    },
-    {
-        title: "Building Scalable Systems",
-        date: "February 2026",
-        readTime: "8 min read",
-        excerpt: "Lessons learned from scaling SkillTwin to handle thousands of concurrent users in a fast-paced environment.",
-        category: "System Design",
-        imageUrl: "/gallery/torus.jpg"
-    }
-];
+import { BookOpen } from 'lucide-react';
 
 const BlogsPage = () => {
     return (
@@ -41,55 +22,18 @@ const BlogsPage = () => {
                 </h1>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {blogs.map((blog, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="group cursor-pointer"
-                    >
-                        <div className="relative aspect-[16/9] rounded-3xl overflow-hidden mb-6 bg-white/5 border border-white/5 group-hover:border-white/20 transition-all duration-500">
-                            <img
-                                src={blog.imageUrl}
-                                alt={blog.title}
-                                className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity duration-500" />
-                            <div className="absolute top-6 left-6 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10">
-                                <span className="text-[10px] font-black uppercase text-accent1 tracking-wider">{blog.category}</span>
-                            </div>
-                        </div>
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-4 text-white/40 text-[10px] font-mono tracking-widest uppercase">
-                                <span className="flex items-center gap-1.5"><Calendar size={12} /> {blog.date}</span>
-                                <span className="flex items-center gap-1.5"><Clock size={12} /> {blog.readTime}</span>
-                            </div>
-                            <h3 className="text-2xl md:text-3xl font-bold text-white group-hover:text-accent1 transition-colors duration-300 tracking-tight leading-tight">
-                                {blog.title}
-                            </h3>
-                            <p className="text-secondary text-base leading-relaxed line-clamp-2 max-w-xl">
-                                {blog.excerpt}
-                            </p>
-                            <div className="pt-4">
-                                <div className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white group-hover:gap-4 transition-all duration-300">
-                                    Read Article <ArrowRight size={14} className="text-accent1" />
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
-
-            {/* Coming Soon Message */}
-            <div className="mt-32 text-center p-20 rounded-[3rem] border border-white/5 bg-white/[0.02]">
-                <BookOpen size={48} className="mx-auto text-white/20 mb-6" />
-                <h2 className="text-2xl font-bold text-white mb-2 tracking-tight">Writing things down...</h2>
-                <p className="text-secondary text-sm max-w-sm mx-auto">
-                    I'm currently working on some deep dives into engineering and product strategy. Check back soon!
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="flex flex-col items-center justify-center text-center py-32 rounded-[3rem] border border-white/5 bg-white/[0.02]"
+            >
+                <BookOpen size={52} className="text-white/20 mb-6" />
+                <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">Writing things down...</h2>
+                <p className="text-secondary text-sm max-w-sm mx-auto leading-relaxed">
+                    I'm currently working on some deep dives into engineering, AI, and product strategy. Check back soon!
                 </p>
-            </div>
+            </motion.div>
         </section>
     );
 };
