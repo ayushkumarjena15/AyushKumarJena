@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, ExternalLink, Music, PenTool, Layout, Box, Star, Users, Briefcase, GitBranch, GitCommit } from 'lucide-react';
+import { Github, Linkedin, Twitter, ExternalLink, Music, PenTool, Layout, Box, Star, Users, Briefcase, GitBranch, GitCommit, Camera, BookOpen, Trophy, Award, Waves, Mic } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
 import { supabase } from '../supabaseClient';
 import BehindCurtains from '../components/BehindCurtains';
 import CTASection from '../components/CTASection';
+import SkillsetSection from '../components/SkillsetSection';
 
 const AboutPage = () => {
     const [githubUser, setGithubUser] = useState(null);
@@ -296,6 +297,87 @@ const AboutPage = () => {
                                 </motion.div>
                             );
                         })}
+                    </div>
+                </section>
+
+                {/* Skillset Section */}
+                <SkillsetSection />
+
+                {/* Interests & Extracurriculars Section */}
+                <section className="space-y-24">
+                    <div className="grid lg:grid-cols-2 gap-16 md:gap-24">
+                        {/* Hobbies */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="space-y-12"
+                        >
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-accent1/60">Beyond the screen</p>
+                                <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-tight">
+                                    My <span className="animated-gradient-text italic font-serif">Hobbies</span>
+                                </h2>
+                                <p className="text-secondary text-lg font-light leading-relaxed max-w-xl">
+                                    When I'm not architecting systems, you'll find me in the water, behind a lens, or lost in a good read — balance is part of the process.
+                                </p>
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                {[
+                                    { icon: <Camera size={20} />, title: "Photography", desc: "Capturing the interplay of light, shadow, and urban geometry through a lens." },
+                                    { icon: <Music size={20} />, title: "Audio Production", desc: "Crafting ambient and lo-fi soundscapes as a form of creative expression." },
+                                    { icon: <BookOpen size={20} />, title: "Tech Research", desc: "Deep diving into startup ecosystems, AI trends, and product case studies." },
+                                    { icon: <Box size={20} />, title: "3D Modeling", desc: "Experimenting with spatial design, motion, and digital artifacts." },
+                                    { icon: <Waves size={20} />, title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." }
+                                ].map((hobby, i) => (
+                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:bg-surface/10 transition-all group">
+                                        <div className="w-12 h-12 rounded-2xl bg-accent1/10 flex items-center justify-center text-accent1 mb-6 group-hover:scale-110 group-hover:bg-accent1/20 transition-all duration-500">
+                                            {hobby.icon}
+                                        </div>
+                                        <h3 className="text-white text-lg font-bold mb-2 font-heading italic">{hobby.title}</h3>
+                                        <p className="text-secondary text-xs leading-relaxed font-light">{hobby.desc}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+
+                        {/* Extracurriculars */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="space-y-12"
+                        >
+                            <div className="space-y-4">
+                                <p className="text-[10px] font-black uppercase tracking-[0.6em] text-accent1/60">Community & Impact</p>
+                                <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-tight">
+                                    <span className="animated-gradient-text italic font-serif">Extracurricular</span> Activities
+                                </h2>
+                                <p className="text-secondary text-lg font-light leading-relaxed max-w-xl">
+                                    I believe in growing through collaboration, mentorship, and leadership — actively building, organising, and contributing to communities beyond just code.
+                                </p>
+                            </div>
+                            <div className="space-y-4">
+                                {[
+                                    { icon: <Trophy size={20} />, title: "Hackathon Enthusiast", desc: "Competed in and won multiple national-level hackathons with a focus on AI/ML solutions and real-world social impact." },
+                                    { icon: <Users size={20} />, title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public." },
+                                    { icon: <Award size={20} />, title: "Student Leader", desc: "Held leadership positions in university societies — managing cross-functional teams and coordinating large-scale tech festivals end-to-end." },
+                                    { icon: <Mic size={20} />, title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity." }
+                                ].map((act, i) => (
+                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 flex gap-8 items-start hover:border-accent1/20 transition-all group">
+                                        <div className="mt-1 w-12 h-12 rounded-2xl bg-accent1/10 flex items-center justify-center text-accent1 shrink-0 group-hover:scale-110 group-hover:bg-accent1/20 transition-all duration-500">
+                                            {act.icon}
+                                        </div>
+                                        <div className="space-y-2">
+                                            <h3 className="text-white text-lg font-bold font-heading italic">{act.title}</h3>
+                                            <p className="text-secondary text-sm leading-relaxed font-light">{act.desc}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
                     </div>
                 </section>
 

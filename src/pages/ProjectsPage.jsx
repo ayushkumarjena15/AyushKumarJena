@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Sparkles } from 'lucide-react';
+import { ArrowUpRight, Sparkles, X } from 'lucide-react';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
 import {
@@ -30,25 +30,28 @@ const getTechIcon = (tech) => {
     return <span className="w-1.5 h-1.5 rounded-full bg-current" />;
 };
 
-const ProjectImageCarousel = ({ images, name, emoji }) => {
+const ProjectImageCarousel = ({ images, name, emoji, onImageClick }) => {
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
         if (!images || images.length <= 1) return;
         const interval = setInterval(() => {
             setIndex((prev) => (prev + 1) % images.length);
-        }, 3000); // Change image every 3 seconds
+        }, 3000);
         return () => clearInterval(interval);
     }, [images]);
 
     return (
-        <div className="relative w-full h-full">
+        <div
+            className="relative w-full h-full cursor-zoom-in"
+            onClick={(e) => { e.stopPropagation(); onImageClick(images[index]); }}
+        >
             <AnimatePresence>
                 <motion.img
                     key={images[index]}
                     src={images[index]}
                     alt={`${name} screenshot ${index + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -174,6 +177,16 @@ const projects = [
 ];
 
 const ProjectsPage = () => {
+    const [lightboxSrc, setLightboxSrc] = useState(null);
+    const closeLightbox = useCallback(() => setLightboxSrc(null), []);
+
+    useEffect(() => {
+        if (!lightboxSrc) return;
+        const onKey = (e) => { if (e.key === 'Escape') closeLightbox(); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [lightboxSrc, closeLightbox]);
+
     const listRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: listRef,
@@ -232,6 +245,39 @@ const ProjectsPage = () => {
     };
 
     return (
+        <>
+        {/* Lightbox */}
+        <AnimatePresence>
+            {lightboxSrc && (
+                <motion.div
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm cursor-zoom-out"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    onClick={closeLightbox}
+                >
+                    <motion.img
+                        src={lightboxSrc}
+                        alt="Project screenshot"
+                        className="max-w-[92vw] max-h-[90vh] rounded-2xl shadow-2xl object-contain"
+                        initial={{ scale: 0.88, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.88, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    <button
+                        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                        onClick={closeLightbox}
+                        aria-label="Close"
+                    >
+                        <X size={18} />
+                    </button>
+                </motion.div>
+            )}
+        </AnimatePresence>
+
         <motion.main
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -424,15 +470,10 @@ const ProjectsPage = () => {
                                 transition={{ duration: 1.2, ease: "easeOut" }}
                             >
                                 <div className="relative z-10 rounded-[2rem] overflow-hidden shadow-[0_48px_80px_-16px_rgba(0,0,0,0.8)] border border-white/10 group-hover:scale-[1.02] transition-transform duration-1000 w-full h-full">
-                                    <ProjectImageCarousel images={project.images} name={project.name} emoji={project.emoji} />
+                                    <ProjectImageCarousel images={project.images} name={project.name} emoji={project.emoji} onImageClick={setLightboxSrc} />
                                 </div>
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
-                                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 backdrop-blur-[4px] bg-black/40">
-                                    <a href="#" className="px-10 py-5 bg-white text-black font-black uppercase tracking-widest text-xs rounded-[1.5rem] flex items-center gap-3 hover:bg-gray-100 transition-all shadow-2xl active:scale-95 translate-y-4 group-hover:translate-y-0 duration-700">
-                                        Launch Project <ArrowUpRight size={20} />
-                                    </a>
-                                </div>
                             </motion.div>
                         </motion.div>
                     ))}
@@ -454,6 +495,7 @@ const ProjectsPage = () => {
                 <GitHubActivity />
             </div>
         </motion.main>
+        </>
     );
 };
 

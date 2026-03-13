@@ -273,8 +273,9 @@ const BentoGrid = () => {
                     viewport={{ once: true, margin: "-50px" }}
                 >
                     <div>
+                        <p className="text-[10px] text-white/30 font-medium mb-1 tracking-wide">liked by <span className="text-accent1">ayush</span></p>
                         <h3 className="text-2xl font-heading font-black text-white">
-                            Ayush Kumar Jena
+                            Ayush
                         </h3>
                         <div className="flex items-center gap-2 mt-3 text-secondary text-xs">
                             <MapPin size={12} />
@@ -538,88 +539,99 @@ const AnalogClock = ({ timezone }) => {
 
     const secondDeg = (seconds + ms / 1000) * 6;
     const minuteDeg = (minutes + seconds / 60) * 6;
-    const hourDeg = ((hours % 12) + minutes / 60) * 30;
+    // 24-hour clock: full rotation = 24h, so each hour = 15deg
+    const hourDeg = (hours + minutes / 60) * 15;
+
+    // 24-hour numerals: 24,02,04,...,22 placed every 30deg (every 2 hours)
+    const hourLabels = ['24','02','04','06','08','10','12','14','16','18','20','22'];
 
     return (
         <div className="relative select-none">
-            {/* Outer Architectural Ring (The 'Cut' Look) */}
-            <div className="relative w-52 h-52 md:w-60 md:h-60 rounded-full border border-white/5 bg-black flex items-center justify-center">
+            {/* Outer dark ring */}
+            <div className="relative w-52 h-52 md:w-60 md:h-60 rounded-full bg-[#1a1a1a] flex items-center justify-center shadow-[0_0_0_4px_#0d0d0d,0_0_0_7px_#2a2a2a,0_8px_32px_rgba(0,0,0,0.8)]">
 
-                {/* Outer Shadow Ring */}
-                <div className="absolute inset-[-10px] rounded-full border border-white/[0.03] pointer-events-none" />
+                {/* Inner bezel gradient ring */}
+                <div className="relative w-[92%] h-[92%] rounded-full bg-gradient-to-br from-[#2e2e2e] via-[#141414] to-[#323232] p-[2px] shadow-inner">
 
-                {/* Watch Metal Bezel */}
-                <div className="relative w-44 h-44 md:w-52 md:h-52 rounded-full p-[2px] bg-gradient-to-br from-[#333] via-[#111] to-[#444] shadow-2xl">
+                    {/* Watch Face */}
+                    <div className="relative w-full h-full rounded-full bg-[#060606] overflow-hidden">
 
-                    {/* Bezel Highlighting */}
-                    <div className="absolute inset-0 rounded-full border border-white/10" />
-
-                    {/* Watch Face Interior */}
-                    <div className="relative w-full h-full rounded-full bg-[#050505] overflow-hidden">
-
-
-                        {/* GMT Markers (Luminous style) */}
+                        {/* Minute tick marks */}
                         {[...Array(60)].map((_, i) => (
                             <div key={i} className="absolute w-full h-full" style={{ transform: `rotate(${i * 6}deg)` }}>
                                 {i % 5 === 0 ? (
-                                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[3.5px] h-4 bg-white/90 rounded-sm shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+                                    <div className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[3px] h-[14px] bg-white/90 rounded-[1px] shadow-[0_0_6px_rgba(255,255,255,0.4)]" />
                                 ) : (
-                                    <div className="absolute top-1 left-1/2 -translate-x-1/2 w-[1.5px] h-2.5 bg-white/60" />
+                                    <div className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[1.5px] h-[8px] bg-white/50" />
                                 )}
                             </div>
                         ))}
 
-                        {/* Date Window Complication */}
-                        <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10">
-                            <div className="w-8 h-6 bg-[#111] border border-white/20 rounded-[2px] flex items-center justify-center shadow-inner">
-                                <span className="text-[10px] font-mono font-bold text-white tracking-tighter">
-                                    {tzTime.getDate().toString().padStart(2, '0')}
+                        {/* 24-hour numerals */}
+                        {hourLabels.map((label, i) => {
+                            const angleDeg = i * 30 - 90; // 0 = top, clockwise
+                            const angleRad = (angleDeg * Math.PI) / 180;
+                            const r = 42; // % radius
+                            const x = 50 + r * Math.cos(angleRad);
+                            const y = 50 + r * Math.sin(angleRad);
+                            return (
+                                <span
+                                    key={label}
+                                    className="absolute text-[9px] font-mono text-white/70 leading-none select-none"
+                                    style={{
+                                        left: `${x}%`,
+                                        top: `${y}%`,
+                                        transform: 'translate(-50%, -50%)',
+                                    }}
+                                >
+                                    {label}
                                 </span>
-                            </div>
-                        </div>
+                            );
+                        })}
 
-                        {/* Hands Component */}
+                        {/* Hands */}
                         <div className="absolute inset-0 z-20">
-                            {/* Hour Hand */}
+                            {/* Hour Hand — wide sword blade */}
                             <motion.div
-                                className="absolute bottom-1/2 left-1/2 w-[7px] h-[26%] bg-white origin-bottom"
+                                className="absolute bottom-1/2 left-1/2 origin-bottom"
                                 animate={{ rotate: hourDeg }}
-                                style={{
-                                    x: "-50%",
-                                    clipPath: 'polygon(50% 0%, 100% 15%, 100% 100%, 0% 100%, 0% 15%)',
-                                    filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.2)) drop-shadow(0 2px 5px rgba(0,0,0,0.5))'
-                                }}
-                            />
+                                style={{ x: '-50%' }}
+                            >
+                                <svg width="10" height="70" viewBox="0 0 10 70" style={{ display: 'block', filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.25))' }}>
+                                    <polygon points="5,0 10,12 10,70 0,70 0,12" fill="white" />
+                                </svg>
+                            </motion.div>
 
-                            {/* Minute Hand */}
+                            {/* Minute Hand — longer sword blade */}
                             <motion.div
-                                className="absolute bottom-1/2 left-1/2 w-[6px] h-[38%] bg-white origin-bottom"
+                                className="absolute bottom-1/2 left-1/2 origin-bottom"
                                 animate={{ rotate: minuteDeg }}
-                                style={{
-                                    x: "-50%",
-                                    clipPath: 'polygon(50% 0%, 100% 10%, 100% 100%, 0% 100%, 0% 10%)',
-                                    filter: 'drop-shadow(0 0 2px rgba(255,255,255,0.2)) drop-shadow(0 2px 5px rgba(0,0,0,0.5))'
-                                }}
-                            />
+                                style={{ x: '-50%' }}
+                            >
+                                <svg width="9" height="95" viewBox="0 0 9 95" style={{ display: 'block', filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.25))' }}>
+                                    <polygon points="4.5,0 9,10 9,95 0,95 0,10" fill="white" />
+                                </svg>
+                            </motion.div>
 
-                            {/* Second Hand */}
+                            {/* Second Hand — thin red line with tail */}
                             <motion.div
-                                className="absolute bottom-1/2 left-1/2 w-[1.5px] h-[45%] bg-accent1 origin-bottom"
-                                style={{
-                                    x: "-50%",
-                                    rotate: secondDeg,
-                                    filter: 'drop-shadow(0 0 3px rgba(194,160,122,0.6))'
-                                }}
-                            />
+                                className="absolute top-1/2 left-1/2 origin-[50%_72%]"
+                                style={{ rotate: secondDeg, x: '-50%', y: '-72%' }}
+                            >
+                                <svg width="3" height="120" viewBox="0 0 3 120" style={{ display: 'block', filter: 'drop-shadow(0 0 2px rgba(220,50,50,0.7))' }}>
+                                    {/* tail (behind center): top 28% of svg = ~34px */}
+                                    <rect x="1" y="0" width="1" height="34" rx="0.5" fill="#e03030" opacity="0.85" />
+                                    {/* shaft (forward): rest */}
+                                    <rect x="1" y="34" width="1" height="86" rx="0.5" fill="#e03030" />
+                                </svg>
+                            </motion.div>
                         </div>
 
                         {/* Center Pin */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-neutral-800 rounded-full z-30 border border-white/20 flex items-center justify-center">
-                            <div className="w-1.5 h-1.5 bg-accent1 rounded-full" />
-                        </div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#1c1c1c] rounded-full z-30 border border-white/20 shadow-[0_0_4px_rgba(0,0,0,0.8)]" />
 
-                        {/* Reflections */}
-                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-transparent via-white/[0.02] to-white/[0.05] z-40" />
+                        {/* Subtle glare */}
+                        <div className="absolute inset-0 pointer-events-none rounded-full bg-gradient-to-tr from-transparent via-white/[0.015] to-white/[0.04] z-40" />
                     </div>
                 </div>
             </div>

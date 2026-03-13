@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { Sparkles, ArrowUpRight, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import {
     SiNextdotjs, SiTypescript, SiSupabase, SiFramer, SiRadixui,
@@ -73,21 +73,24 @@ const ventures = [
     }
 ];
 
-const ProjectImageCarousel = ({ images, name, emoji }) => {
+const ProjectImageCarousel = ({ images, name, emoji, onImageClick }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentIndex((prev) => (prev + 1) % images.length);
-        }, 3000); // Rotate every 3 seconds for a more dynamic feel
+        }, 3000);
         return () => clearInterval(timer);
     }, [images.length]);
 
     return (
-        <div className="relative w-full h-full rounded-2xl overflow-hidden bg-black/20">
+        <div
+            className="relative w-full h-full rounded-2xl overflow-hidden bg-black/20 cursor-zoom-in"
+            onClick={(e) => { e.stopPropagation(); onImageClick(images[currentIndex]); }}
+        >
             {/* Background Layer (Previous Image) to prevent flicker */}
             <div
-                className="absolute inset-0 bg-cover bg-center opacity-40 transition-all duration-1000"
+                className="absolute inset-0 bg-cover bg-center opacity-40 transition-all duration-1000 pointer-events-none"
                 style={{ backgroundImage: `url(${images[(currentIndex - 1 + images.length) % images.length]})` }}
             />
 
@@ -96,7 +99,7 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
                     key={currentIndex}
                     src={images[currentIndex]}
                     alt={`${name} preview ${currentIndex + 1}`}
-                    className="absolute inset-0 w-full h-full object-cover z-10"
+                    className="absolute inset-0 w-full h-full object-cover z-10 pointer-events-none"
                     initial={{ opacity: 0, filter: 'blur(10px)' }}
                     animate={{ opacity: 1, filter: 'blur(0px)' }}
                     exit={{ opacity: 0, filter: 'blur(10px)' }}
@@ -110,17 +113,16 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
             </AnimatePresence>
 
             {/* Fallback for missing images */}
-            <div className="fallback hidden absolute inset-0 w-full h-full bg-black/30 backdrop-blur-sm items-center justify-center">
+            <div className="fallback hidden absolute inset-0 w-full h-full bg-black/30 backdrop-blur-sm items-center justify-center pointer-events-none">
                 <span className="text-6xl">{emoji}</span>
             </div>
 
             {/* Progress Indicators */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-30">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-30 pointer-events-none">
                 {images.map((_, idx) => (
                     <div
                         key={idx}
-                        className={`h-1.5 rounded-full transition-all duration-700 ${idx === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/20'
-                            }`}
+                        className={`h-1.5 rounded-full transition-all duration-700 ${idx === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/20'}`}
                     />
                 ))}
             </div>
@@ -129,6 +131,16 @@ const ProjectImageCarousel = ({ images, name, emoji }) => {
 };
 
 const VentureShowcase = () => {
+    const [lightboxSrc, setLightboxSrc] = useState(null);
+    const closeLightbox = useCallback(() => setLightboxSrc(null), []);
+
+    useEffect(() => {
+        if (!lightboxSrc) return;
+        const onKey = (e) => { if (e.key === 'Escape') closeLightbox(); };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    }, [lightboxSrc, closeLightbox]);
+
     const listRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: listRef,
@@ -173,6 +185,39 @@ const VentureShowcase = () => {
     const avatarY = useTransform(scaleY, [0, 1], [0, containerHeight - 32]);
 
     return (
+        <>
+        {/* Lightbox */}
+        <AnimatePresence>
+            {lightboxSrc && (
+                <motion.div
+                    className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm cursor-zoom-out"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    onClick={closeLightbox}
+                >
+                    <motion.img
+                        src={lightboxSrc}
+                        alt="Project screenshot"
+                        className="max-w-[92vw] max-h-[90vh] rounded-2xl shadow-2xl object-contain"
+                        initial={{ scale: 0.88, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.88, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+                        onClick={(e) => e.stopPropagation()}
+                    />
+                    <button
+                        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+                        onClick={closeLightbox}
+                        aria-label="Close"
+                    >
+                        <X size={18} />
+                    </button>
+                </motion.div>
+            )}
+        </AnimatePresence>
+
         <section className="py-16 md:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
             {/* Section Header */}
             <motion.div
@@ -280,6 +325,7 @@ const VentureShowcase = () => {
                                         images={venture.images}
                                         name={venture.name}
                                         emoji={venture.emoji}
+                                        onImageClick={setLightboxSrc}
                                     />
                                 </div>
                                 {/* Glow effect */}
@@ -291,6 +337,7 @@ const VentureShowcase = () => {
             </div>
             </div>
         </section>
+        </>
     );
 };
 
