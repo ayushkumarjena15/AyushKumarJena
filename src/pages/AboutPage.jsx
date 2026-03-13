@@ -14,6 +14,7 @@ const AboutPage = () => {
     const [githubEvents, setGithubEvents] = useState([]);
     const [guestbookAvatars, setGuestbookAvatars] = useState([]);
     const [photoIndex, setPhotoIndex] = useState(0);
+    const [leetcode, setLeetcode] = useState(null);
 
     useEffect(() => {
         const photoInterval = setInterval(() => {
@@ -33,6 +34,12 @@ const AboutPage = () => {
         fetch('https://api.github.com/users/ayushkumarjena15/events/public')
             .then(res => res.json())
             .then(data => setGithubEvents(Array.isArray(data) ? data.slice(0, 3) : []))
+            .catch(e => console.error(e));
+
+        // Fetch LeetCode Stats
+        fetch('https://leetcode-stats-api.herokuapp.com/R57Cb5EtNk')
+            .then(res => res.json())
+            .then(data => setLeetcode(data))
             .catch(e => console.error(e));
 
         const fetchAvatars = async () => {
@@ -512,19 +519,52 @@ const AboutPage = () => {
                             whileHover={{ y: -5 }}
                             className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-[450px] overflow-hidden"
                         >
-                            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                <div className="flex items-center gap-4 text-white">
-                                    <Star size={24} className="text-accent1" />
-                                    <h3 className="text-xl font-bold font-serif italic">LeetCode Stats</h3>
+                            <div className="flex items-center gap-4 mb-8 border-b border-white/5 pb-6">
+                                <Star size={24} className="text-accent1" />
+                                <h3 className="text-xl font-bold font-serif italic text-white">LeetCode Stats</h3>
+                            </div>
+                            {leetcode ? (
+                                <div className="flex-1 flex flex-col justify-center gap-6">
+                                    {/* Total solved ring */}
+                                    <div className="flex items-center justify-center gap-6">
+                                        <div className="relative flex items-center justify-center w-28 h-28">
+                                            <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
+                                                <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8"/>
+                                                <circle cx="50" cy="50" r="42" fill="none" stroke="#FF6B00" strokeWidth="8"
+                                                    strokeLinecap="round"
+                                                    strokeDasharray={`${(leetcode.totalSolved / leetcode.totalQuestions) * 264} 264`}/>
+                                            </svg>
+                                            <div className="text-center z-10">
+                                                <div className="text-2xl font-black text-white">{leetcode.totalSolved}</div>
+                                                <div className="text-[10px] text-secondary">Solved</div>
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1 text-sm">
+                                            <div className="text-secondary text-xs">of {leetcode.totalQuestions} total</div>
+                                            <div className="text-secondary text-xs">Rank <span className="text-white font-bold">#{leetcode.ranking?.toLocaleString()}</span></div>
+                                            <div className="text-secondary text-xs">Acceptance <span className="text-white font-bold">{leetcode.acceptanceRate?.toFixed(1)}%</span></div>
+                                        </div>
+                                    </div>
+                                    {/* Difficulty breakdown */}
+                                    <div className="space-y-3">
+                                        {[
+                                            { label: 'Easy', solved: leetcode.easySolved, total: leetcode.totalEasy, color: '#00b8a3' },
+                                            { label: 'Medium', solved: leetcode.mediumSolved, total: leetcode.totalMedium, color: '#ffc01e' },
+                                            { label: 'Hard', solved: leetcode.hardSolved, total: leetcode.totalHard, color: '#ff375f' },
+                                        ].map(({ label, solved, total, color }) => (
+                                            <div key={label} className="flex items-center gap-3">
+                                                <span className="text-xs w-14 font-bold" style={{ color }}>{label}</span>
+                                                <div className="flex-1 h-1.5 rounded-full bg-white/5 overflow-hidden">
+                                                    <div className="h-full rounded-full" style={{ width: `${(solved / total) * 100}%`, backgroundColor: color }}/>
+                                                </div>
+                                                <span className="text-xs text-secondary w-14 text-right">{solved}/{total}</span>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="flex-1 flex items-center justify-center">
-                                <img
-                                    src="https://leetcard.vercel.app/R57Cb5EtNk?theme=dark&border=FF6B00&ring=FF6B00&fire=FF4500&animation=true&hide_border=true&background=00000000"
-                                    alt="LeetCode Stats"
-                                    className="w-full h-auto object-contain scale-[1.10]"
-                                />
-                            </div>
+                            ) : (
+                                <div className="flex-1 flex items-center justify-center text-secondary text-sm">Loading...</div>
+                            )}
                         </motion.div>
                     </div>
                 </section>
