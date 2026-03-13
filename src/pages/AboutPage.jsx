@@ -506,6 +506,26 @@ const AboutPage = () => {
                                 />
                             </div>
                         </motion.div>
+
+                        {/* LeetCode Stats Card */}
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-[450px] overflow-hidden"
+                        >
+                            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
+                                <div className="flex items-center gap-4 text-white">
+                                    <Star size={24} className="text-accent1" />
+                                    <h3 className="text-xl font-bold font-serif italic">LeetCode Stats</h3>
+                                </div>
+                            </div>
+                            <div className="flex-1 flex items-center justify-center">
+                                <img
+                                    src="https://leetcard.vercel.app/R57Cb5EtNk?theme=dark&border=FF6B00&ring=FF6B00&fire=FF4500&animation=true&hide_border=true&background=00000000"
+                                    alt="LeetCode Stats"
+                                    className="w-full h-auto object-contain scale-[1.10]"
+                                />
+                            </div>
+                        </motion.div>
                     </div>
                 </section>
 
