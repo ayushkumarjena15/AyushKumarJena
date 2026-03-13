@@ -42,23 +42,48 @@ const LeetCodeHeatmap = ({ leetcode }) => {
     }
 
     const getColor = (count) => {
-        if (count === 0) return '#1a1a1a';
+        if (count === 0) return '#1e1e1e';
         if (count <= 2) return '#0e4429';
         if (count <= 5) return '#006d32';
         if (count <= 9) return '#26a641';
         return '#39d353';
     };
 
+    const showTooltip = (e, day) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const label = day.count === 0
+            ? `No submissions on ${day.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+            : `${day.count} submission${day.count > 1 ? 's' : ''} on ${day.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+        setTooltip({ x: rect.left + rect.width / 2, y: rect.top, label });
+    };
+
     return (
         <div className="relative">
-            {/* Custom tooltip */}
+            {/* GitHub-style tooltip */}
             {tooltip && (
                 <div
-                    className="pointer-events-none fixed z-50 px-3 py-1.5 rounded-lg text-xs font-medium text-white"
-                    style={{ left: tooltip.x, top: tooltip.y, background: '#1a1a1a', border: '1px solid rgba(255,255,255,0.12)', transform: 'translate(-50%, -130%)', whiteSpace: 'nowrap', boxShadow: '0 4px 16px rgba(0,0,0,0.6)' }}
+                    className="pointer-events-none fixed z-[9999] text-[11px] font-medium text-white"
+                    style={{
+                        left: tooltip.x,
+                        top: tooltip.y - 8,
+                        transform: 'translate(-50%, -100%)',
+                        background: '#1b1f23',
+                        border: '1px solid rgba(255,255,255,0.15)',
+                        borderRadius: '6px',
+                        padding: '4px 10px',
+                        whiteSpace: 'nowrap',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.8)',
+                    }}
                 >
                     {tooltip.label}
-                    <div style={{ position: 'absolute', bottom: '-5px', left: '50%', transform: 'translateX(-50%)', width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '5px solid #1a1a1a' }} />
+                    <div style={{
+                        position: 'absolute', bottom: '-5px', left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: 0, height: 0,
+                        borderLeft: '5px solid transparent',
+                        borderRight: '5px solid transparent',
+                        borderTop: '5px solid #1b1f23',
+                    }} />
                 </div>
             )}
             <div className="min-w-[600px]">
@@ -75,13 +100,7 @@ const LeetCodeHeatmap = ({ leetcode }) => {
                             {week.map((day, di) => (
                                 <div
                                     key={di}
-                                    onMouseEnter={(e) => {
-                                        const label = day.count === 0
-                                            ? `No submissions on ${day.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-                                            : `${day.count} submission${day.count > 1 ? 's' : ''} on ${day.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-                                        setTooltip({ x: e.clientX, y: e.clientY, label });
-                                    }}
-                                    onMouseMove={(e) => setTooltip(t => t ? { ...t, x: e.clientX, y: e.clientY } : null)}
+                                    onMouseEnter={(e) => showTooltip(e, day)}
                                     onMouseLeave={() => setTooltip(null)}
                                     style={{
                                         width: '11px', height: '11px', borderRadius: '2px', cursor: 'default',
@@ -95,7 +114,7 @@ const LeetCodeHeatmap = ({ leetcode }) => {
                 {/* Legend */}
                 <div className="flex items-center gap-1.5 mt-3 justify-end">
                     <span className="text-[10px] text-secondary">Less</span>
-                    {['#1a1a1a', '#0e4429', '#006d32', '#26a641', '#39d353'].map(c => (
+                    {['#1e1e1e', '#0e4429', '#006d32', '#26a641', '#39d353'].map(c => (
                         <div key={c} style={{ width: '11px', height: '11px', borderRadius: '2px', backgroundColor: c }} />
                     ))}
                     <span className="text-[10px] text-secondary">More</span>
