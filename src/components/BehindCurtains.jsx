@@ -254,7 +254,7 @@ const BehindCurtains = () => {
                                 style={{ filter: 'blur(6px) brightness(0.55) saturate(1.6)' }}
                             />
                         ) : (
-                            <div className="w-full h-full bg-white/[0.03]" />
+                            <div className="w-full h-full bg-gradient-to-br from-green-900/40 via-black to-purple-900/30" />
                         )}
                     </motion.div>
                     {/* Ambient glow */}
@@ -311,8 +311,10 @@ const BehindCurtains = () => {
                                             className="w-full h-full object-cover scale-[1.05]"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-gradient-to-br from-[#1a3320] via-[#0d1f14] to-[#0a1a0f] flex items-center justify-center text-2xl">
-                                            🎵
+                                        <div className="w-full h-full bg-gradient-to-br from-[#1a3320] via-[#0d1f14] to-[#0a1a0f] flex items-center justify-center">
+                                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1DB954" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.7">
+                                                <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+                                            </svg>
                                         </div>
                                     )}
                                 </motion.div>
