@@ -323,15 +323,19 @@ const AboutPage = () => {
                                     When I'm not coding, I'm in the pool, cutting a video, or animating something with Framer Motion — creativity runs across everything I do.
                                 </p>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="space-y-4">
                                 {[
-                                    { title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." },
-                                    { title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion." },
-                                    { title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life." }
+                                    { title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens.", img: "https://images.unsplash.com/photo-1530549387789-4c1017266635?w=800&q=80" },
+                                    { title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion.", img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&q=80" },
+                                    { title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" }
                                 ].map((hobby, i) => (
-                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:bg-surface/10 transition-all">
-                                        <h3 className="text-white text-lg font-bold mb-2 font-heading italic">{hobby.title}</h3>
-                                        <p className="text-secondary text-xs leading-relaxed font-light">{hobby.desc}</p>
+                                    <div key={i} className="relative rounded-[2rem] overflow-hidden border border-white/5 h-36 flex items-end group">
+                                        <img src={hobby.img} alt={hobby.title} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+                                        <div className="relative z-10 p-6">
+                                            <h3 className="text-white text-lg font-bold font-heading italic">{hobby.title}</h3>
+                                            <p className="text-secondary text-xs leading-relaxed font-light">{hobby.desc}</p>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
