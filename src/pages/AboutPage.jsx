@@ -37,9 +37,14 @@ const AboutPage = () => {
             .catch(e => console.error(e));
 
         // Fetch LeetCode Stats
-        fetch('https://leetcode-stats-api.herokuapp.com/R57Cb5EtNk')
+        fetch('https://leetcode-api-faisalshohag.vercel.app/R57Cb5EtNk')
             .then(res => res.json())
-            .then(data => setLeetcode(data))
+            .then(data => {
+                const totalSub = data.matchedUserStats?.totalSubmissionNum?.[0]?.submissions || data.totalSubmissions?.[0]?.submissions || 0;
+                const acSub = data.matchedUserStats?.acSubmissionNum?.[0]?.submissions || 0;
+                const acceptanceRate = totalSub > 0 ? (acSub / totalSub) * 100 : null;
+                setLeetcode({ ...data, acceptanceRate });
+            })
             .catch(e => console.error(e));
 
         const fetchAvatars = async () => {
