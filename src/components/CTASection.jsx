@@ -103,31 +103,31 @@ const CTASection = () => {
                         <motion.g
                             animate={{ scale: [1, 1.04, 1], opacity: [0.95, 1, 0.95] }}
                             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                            style={{ transformOrigin: '185px -55px' }}
+                            style={{ transformOrigin: '140px -20px' }}
                         >
-                            {/* Cloud shape */}
+                            {/* Cloud shape — shifted left and down */}
                             <path d="
-                                M 155 -20
-                                Q 130 -20 128 -42
-                                Q 118 -58 132 -70
-                                Q 128 -92 146 -96
-                                Q 155 -115 172 -107
-                                Q 182 -122 200 -114
-                                Q 215 -124 228 -110
-                                Q 246 -108 244 -90
-                                Q 258 -80 250 -62
-                                Q 258 -44 244 -36
-                                Q 242 -20 224 -22
-                                Q 212 -12 196 -22
-                                Q 182 -12 166 -22
-                                Q 155 -12 155 -20 Z
-                            " fill="white" stroke="#ddd" strokeWidth="1.5" opacity="0.95"/>
+                                M 90 15
+                                Q 65 15 63 -7
+                                Q 53 -23 67 -35
+                                Q 63 -57 81 -61
+                                Q 90 -80 107 -72
+                                Q 117 -87 135 -79
+                                Q 150 -89 163 -75
+                                Q 181 -73 179 -55
+                                Q 193 -45 185 -27
+                                Q 193 -9 179 -1
+                                Q 177 15 159 13
+                                Q 147 23 131 13
+                                Q 117 23 101 13
+                                Q 90 23 90 15 Z
+                            " fill="#0c0a09" stroke="white" strokeWidth="1.8" opacity="0.97"/>
                             {/* "Hi there!" text */}
-                            <text x="188" y="-62" textAnchor="middle" fontSize="13" fontWeight="700" fill="#0c0a09" fontFamily="sans-serif">Hi there!</text>
+                            <text x="122" y="-27" textAnchor="middle" fontSize="13" fontWeight="700" fill="white" fontFamily="sans-serif">Hi there!</text>
                             {/* Thought dots */}
-                            <circle cx="152" cy="-8" r="5" fill="white" stroke="#ddd" strokeWidth="1.2"/>
-                            <circle cx="144" cy="6" r="4" fill="white" stroke="#ddd" strokeWidth="1.2"/>
-                            <circle cx="138" cy="18" r="3" fill="white" stroke="#ddd" strokeWidth="1.2"/>
+                            <circle cx="88" cy="27" r="5" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
+                            <circle cx="80" cy="40" r="4" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
+                            <circle cx="74" cy="52" r="3" fill="#0c0a09" stroke="white" strokeWidth="1.5"/>
                         </motion.g>
 
                         {/* Ground shadow */}
