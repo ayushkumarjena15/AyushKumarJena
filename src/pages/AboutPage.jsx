@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Twitter, ExternalLink, Star, Users, Briefcase, GitBranch, GitCommit, Waves, Mic } from 'lucide-react';
-import { SiFramer, SiDavinciresolve, SiDevpost } from 'react-icons/si';
+import { Github, Linkedin, Twitter, ExternalLink, Star, Users, Briefcase, GitBranch, GitCommit } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
@@ -326,14 +325,11 @@ const AboutPage = () => {
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[
-                                    { icon: <Waves size={20} />, title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." },
-                                    { icon: <SiDavinciresolve size={20} />, title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion." },
-                                    { icon: <SiFramer size={20} />, title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life." }
+                                    { title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." },
+                                    { title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion." },
+                                    { title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life." }
                                 ].map((hobby, i) => (
-                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:bg-surface/10 transition-all group">
-                                        <div className="w-12 h-12 rounded-2xl bg-accent1/10 flex items-center justify-center text-accent1 mb-6 group-hover:scale-110 group-hover:bg-accent1/20 transition-all duration-500">
-                                            {hobby.icon}
-                                        </div>
+                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:bg-surface/10 transition-all">
                                         <h3 className="text-white text-lg font-bold mb-2 font-heading italic">{hobby.title}</h3>
                                         <p className="text-secondary text-xs leading-relaxed font-light">{hobby.desc}</p>
                                     </div>
@@ -360,18 +356,13 @@ const AboutPage = () => {
                             </div>
                             <div className="space-y-4">
                                 {[
-                                    { icon: <SiDevpost size={20} />, title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact." },
-                                    { icon: <Mic size={20} />, title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity." },
-                                    { icon: <Users size={20} />, title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public." }
+                                    { title: "Hackathon Enthusiast", desc: "Competed in and won multiple hackathons, building solutions aimed at creating meaningful world impact." },
+                                    { title: "Stage Anchor", desc: "Anchored major college tech fests, cultural events, and student summit panels — commanding the stage with confidence and clarity." },
+                                    { title: "Community Organiser", desc: "Organised technical workshops, coding sprints, and knowledge-sharing sessions at GIETU, nurturing a culture of building in public." }
                                 ].map((act, i) => (
-                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 flex gap-8 items-start hover:border-accent1/20 transition-all group">
-                                        <div className="mt-1 w-12 h-12 rounded-2xl bg-accent1/10 flex items-center justify-center text-accent1 shrink-0 group-hover:scale-110 group-hover:bg-accent1/20 transition-all duration-500">
-                                            {act.icon}
-                                        </div>
-                                        <div className="space-y-2">
-                                            <h3 className="text-white text-lg font-bold font-heading italic">{act.title}</h3>
-                                            <p className="text-secondary text-sm leading-relaxed font-light">{act.desc}</p>
-                                        </div>
+                                    <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:border-accent1/20 transition-all">
+                                        <h3 className="text-white text-lg font-bold font-heading italic mb-2">{act.title}</h3>
+                                        <p className="text-secondary text-sm leading-relaxed font-light">{act.desc}</p>
                                     </div>
                                 ))}
                             </div>
