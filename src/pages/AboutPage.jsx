@@ -436,43 +436,45 @@ const AboutPage = () => {
                     </div>
 
                     <div className="flex flex-col gap-8">
-                        {/* Live Profile Card — full width */}
+                        {/* Live Profile Card — full width compact */}
                         <motion.div
                             whileHover={{ y: -5 }}
-                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center w-full"
+                            className="glass-card px-8 py-6 bg-surface/5 border border-white/5 w-full"
                         >
                             {githubUser ? (
-                                <div className="space-y-8">
-                                    <div className="flex items-center gap-6">
-                                        <img src={githubUser.avatar_url} alt="GitHub Avatar" className="w-24 h-24 rounded-full border-2 border-accent1/50 shadow-xl shadow-accent1/20" />
+                                <div className="flex items-center gap-8">
+                                    {/* Avatar */}
+                                    <img src={githubUser.avatar_url} alt="GitHub Avatar" className="w-16 h-16 rounded-full border-2 border-accent1/50 shadow-xl shadow-accent1/20 flex-shrink-0" />
+                                    {/* All info on the right */}
+                                    <div className="flex flex-1 items-center gap-10 flex-wrap">
                                         <div>
-                                            <h3 className="text-3xl font-bold font-serif italic text-white">{githubUser.name || githubUser.login}</h3>
-                                            <a href={githubUser.html_url} target="_blank" rel="noopener noreferrer" className="text-accent1 hover:text-white transition-colors text-sm font-mono flex items-center gap-2 mt-2">
-                                                @{githubUser.login} <ExternalLink size={14} />
+                                            <h3 className="text-xl font-bold font-serif italic text-white leading-tight">{githubUser.name || githubUser.login}</h3>
+                                            <a href={githubUser.html_url} target="_blank" rel="noopener noreferrer" className="text-accent1 hover:text-white transition-colors text-xs font-mono flex items-center gap-1 mt-1">
+                                                @{githubUser.login} <ExternalLink size={12} />
                                             </a>
                                         </div>
-                                    </div>
-                                    <p className="text-secondary/90 text-sm leading-relaxed max-w-sm">
-                                        {githubUser.bio || "Building things that matter on the internet."}
-                                    </p>
-                                    <div className="grid grid-cols-3 gap-4 pt-6 mt-6 border-t border-white/10">
-                                        <div className="space-y-2">
-                                            <p className="text-[10px] uppercase font-black tracking-widest text-secondary flex items-center gap-2"><Briefcase size={12} className="text-accent1" /> Repos</p>
-                                            <p className="text-2xl font-mono text-white tracking-tighter">{githubUser.public_repos}</p>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <p className="text-[10px] uppercase font-black tracking-widest text-secondary flex items-center gap-2"><Users size={12} className="text-accent1" /> Followers</p>
-                                            <p className="text-2xl font-mono text-white tracking-tighter">{githubUser.followers}</p>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <p className="text-[10px] uppercase font-black tracking-widest text-secondary flex items-center gap-2"><Star size={12} className="text-accent1" /> Following</p>
-                                            <p className="text-2xl font-mono text-white tracking-tighter">{githubUser.following}</p>
+                                        <p className="text-secondary/80 text-xs leading-relaxed max-w-xs hidden md:block">
+                                            {githubUser.bio || "Building things that matter on the internet."}
+                                        </p>
+                                        <div className="flex items-center gap-8 ml-auto">
+                                            <div className="text-center">
+                                                <p className="text-lg font-mono font-black text-white">{githubUser.public_repos}</p>
+                                                <p className="text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Briefcase size={10} className="text-accent1" /> Repos</p>
+                                            </div>
+                                            <div className="text-center">
+                                                <p className="text-lg font-mono font-black text-white">{githubUser.followers}</p>
+                                                <p className="text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Users size={10} className="text-accent1" /> Followers</p>
+                                            </div>
+                                            <div className="text-center">
+                                                <p className="text-lg font-mono font-black text-white">{githubUser.following}</p>
+                                                <p className="text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Star size={10} className="text-accent1" /> Following</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center text-secondary gap-6 animate-pulse">
-                                    <Github size={48} className="opacity-50 text-accent1" />
+                                <div className="flex items-center justify-center text-secondary gap-4 py-4 animate-pulse">
+                                    <Github size={32} className="opacity-50 text-accent1" />
                                     <p className="text-xs uppercase tracking-[0.3em] font-black">Connecting to GitHub...</p>
                                 </div>
                             )}
