@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, Twitter, ExternalLink, Star, Users, Briefcase, GitBranch, GitCommit, Waves, Mic } from 'lucide-react';
-import { SiFramer, SiAdobepremierepro, SiDevpost } from 'react-icons/si';
+import { SiFramer, SiDavinciresolve, SiDevpost } from 'react-icons/si';
 import { Link } from 'react-router-dom';
 import ScrollIndicator from '../components/ScrollIndicator';
 import GitHubActivity from '../components/GitHubActivity';
@@ -327,7 +327,7 @@ const AboutPage = () => {
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[
                                     { icon: <Waves size={20} />, title: "Swimming", desc: "Finding focus and calm in the water — my reset button away from screens." },
-                                    { icon: <SiAdobepremierepro size={20} />, title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion." },
+                                    { icon: <SiDavinciresolve size={20} />, title: "Video Editing", desc: "Crafting compelling visual stories through cuts, transitions, and motion." },
                                     { icon: <SiFramer size={20} />, title: "Framer Motion", desc: "Building fluid, expressive animations and interactions that bring UI to life." }
                                 ].map((hobby, i) => (
                                     <div key={i} className="p-8 rounded-[2rem] glass-card border border-white/5 bg-surface/5 hover:bg-surface/10 transition-all group">
