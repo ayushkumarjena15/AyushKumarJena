@@ -1099,7 +1099,7 @@ const BookingStatusUI = () => {
     }, [fetchBookings]);
 
     const handleLogin = async (provider) => {
-        localStorage.setItem('auth_redirect', '/book?tab=history');
+        localStorage.setItem('auth_return_path', '/book?tab=history');
         await supabase.auth.signInWithOAuth({
             provider,
             options: { redirectTo: window.location.origin + '/book?tab=history' },
@@ -1277,7 +1277,7 @@ const AdminPanel = () => {
     }, [fetchBookings]);
 
     const handleAdminLogin = async (provider) => {
-        localStorage.setItem('auth_redirect', '/book?panel=true');
+        localStorage.setItem('auth_return_path', '/book?panel=true');
         await supabase.auth.signInWithOAuth({
             provider,
             options: { redirectTo: window.location.origin + '/book?panel=true' },
@@ -1593,19 +1593,8 @@ const BookCallPage = () => {
     const contentRef = useRef(null);
 
     useEffect(() => {
-        const redirect = localStorage.getItem('auth_redirect');
-        if (redirect) {
-            localStorage.removeItem('auth_redirect');
-            const url = new URL(redirect, window.location.origin);
-            const tab = url.searchParams.get('tab');
-            const panel = url.searchParams.get('panel');
-            if (panel === 'true') {
-                setSearchParams({ panel: 'true' });
-            } else if (tab) {
-                setActiveTab(tab);
-                setSearchParams({ tab });
-            }
-        }
+        // auth_return_path redirect is handled globally in App.jsx
+        // URL query params (?tab=history, ?panel=true) already set initialTab / isAdminPanel above
     }, []);
 
     const switchTab = (tab) => {
