@@ -50,6 +50,15 @@
     rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/ethnocentric" rel="stylesheet">
   <style>
+    * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    input, textarea {
+      -webkit-user-select: text;
+      user-select: text;
+    }
     #devtools-screen {
       display: none;
       position: fixed;
@@ -231,6 +240,21 @@
       if (ctrl && [85,83,80].includes(c)) { e.preventDefault(); e.stopPropagation(); return false; }
       if (alt && [73,67,74].includes(c)) { e.preventDefault(); e.stopPropagation(); return false; }
     }, true);
+
+    // Block mobile long-press context menu
+    document.addEventListener('touchstart', function(e) {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    var longPressTimer;
+    document.addEventListener('touchstart', function(e) {
+      longPressTimer = setTimeout(function() { e.preventDefault(); }, 500);
+    }, { passive: false });
+    document.addEventListener('touchend', function() {
+      clearTimeout(longPressTimer);
+    });
+    document.addEventListener('touchmove', function() {
+      clearTimeout(longPressTimer);
+    });
 
   </script>
 </head>
