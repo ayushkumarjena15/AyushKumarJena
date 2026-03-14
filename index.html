@@ -213,43 +213,21 @@
     }, true);
 
     // Detection Logic
-    (function () {
-      const devtoolsScreen = () => document.getElementById('devtools-screen');
+    window.addEventListener('DOMContentLoaded', function() {
+      const devtoolsScreen = document.getElementById('devtools-screen');
 
-      // Continuous debugger trap — makes devtools unusable when open
-      setInterval(function() { (function(){}).constructor('debugger')(); }, 50);
-
-      // Override console methods to noop
-      const noop = () => {};
-      ['log','warn','error','info','debug','table','dir','dirxml','trace','group','groupCollapsed','groupEnd','time','timeEnd','assert','profile','profileEnd','count','clear'].forEach(function(m) {
-        try { console[m] = noop; } catch(e) {}
-      });
-
-      const show = () => {
-        devtoolsScreen().style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-      };
-      const hide = () => {
-        devtoolsScreen().style.display = 'none';
-        document.body.style.overflow = 'auto';
-      };
+      const show = () => { devtoolsScreen.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
+      const hide = () => { devtoolsScreen.style.display = 'none'; document.body.style.overflow = 'auto'; };
 
       const detect = () => {
-        const threshold = 100;
-        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-
-        if (widthThreshold || heightThreshold) {
-          show();
-        } else {
-          hide();
-        }
+        const w = window.outerWidth - window.innerWidth > 200;
+        const h = window.outerHeight - window.innerHeight > 200;
+        w || h ? show() : hide();
       };
 
-      setInterval(detect, 200);
       window.addEventListener('resize', detect);
-      detect();
-    })();
+      setInterval(detect, 500);
+    });
 
   </script>
 </head>
