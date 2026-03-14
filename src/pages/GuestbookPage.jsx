@@ -109,7 +109,7 @@ const GuestbookPage = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingInitial, setIsLoadingInitial] = useState(true);
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-    const [profileData, setProfileData] = useState({ full_name: '', user_name: '' });
+    const [profileData, setProfileData] = useState({ full_name: '' });
     const [isSavingProfile, setIsSavingProfile] = useState(false);
     const [deleteConfirmationId, setDeleteConfirmationId] = useState(null);
     const [avatarPreview, setAvatarPreview] = useState(null);
@@ -157,8 +157,7 @@ const GuestbookPage = () => {
             } else {
                 setUser(user);
                 setProfileData({
-                    full_name: user.user_metadata?.full_name || user.user_metadata?.user_name || '',
-                    user_name: user.user_metadata?.user_name || user.user_metadata?.preferred_username || ''
+                    full_name: user.user_metadata?.full_name || user.user_metadata?.user_name || ''
                 });
             }
         });
@@ -168,8 +167,7 @@ const GuestbookPage = () => {
             setUser(user);
             if (user) {
                 setProfileData({
-                    full_name: user.user_metadata?.full_name || user.user_metadata?.user_name || '',
-                    user_name: user.user_metadata?.user_name || user.user_metadata?.preferred_username || ''
+                    full_name: user.user_metadata?.full_name || user.user_metadata?.user_name || ''
                 });
             }
         });
@@ -272,7 +270,6 @@ const GuestbookPage = () => {
         try {
             const updates = {
                 full_name: profileData.full_name,
-                user_name: profileData.user_name,
             };
 
             // Upload avatar if a new file was selected
@@ -356,11 +353,7 @@ const GuestbookPage = () => {
 
     const visibleSignatures = signatures.filter(sig => isAdmin || !sig.is_hidden);
 
-    const userNameDisplay = user?.user_metadata?.full_name || user?.user_metadata?.user_name || 'Guest';
-    let userHandleDisplay = user?.user_metadata?.user_name || user?.user_metadata?.preferred_username || '';
-    if (userHandleDisplay && !userHandleDisplay.startsWith('@')) {
-        userHandleDisplay = `@${userHandleDisplay}`;
-    }
+    const userNameDisplay = user?.user_metadata?.full_name || 'Guest';
 
     return (
         <motion.main
@@ -422,7 +415,6 @@ const GuestbookPage = () => {
                             <img src={user.user_metadata?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.id}&backgroundColor=transparent`} alt="Profile" className="w-12 h-12 rounded-full border border-white/10" />
                             <div>
                                 <p className="text-white text-lg font-bold whitespace-nowrap leading-tight tracking-tight">Hello {userNameDisplay}!</p>
-                                {userHandleDisplay && <p className="text-[#3b82f6] text-sm leading-tight tracking-wide">{userHandleDisplay}</p>}
                             </div>
                         </div>
                     )}
@@ -437,7 +429,7 @@ const GuestbookPage = () => {
                                 <textarea
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
-                                    placeholder="Leave a message for Ayush, @ayushkumarjena15..."
+                                    placeholder="Leave a message for Ayush..."
                                     className="w-full bg-transparent border-none text-white text-[15px] md:text-base font-medium placeholder:text-[#52525b] focus:outline-none focus:ring-0 resize-none h-24 pt-2"
                                     maxLength={500}
                                     required
@@ -623,18 +615,6 @@ const GuestbookPage = () => {
                                             onChange={(e) => setProfileData(p => ({ ...p, full_name: e.target.value }))}
                                             className="bg-[#141414] border border-white/5 rounded-2xl px-5 py-4 text-white text-[15px] font-bold focus:outline-none focus:border-white/20 transition-colors"
                                         />
-                                    </div>
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] pl-1">Username</label>
-                                        <div className="relative">
-                                            <span className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-[15px] font-bold">@</span>
-                                            <input
-                                                type="text"
-                                                value={profileData.user_name}
-                                                onChange={(e) => setProfileData(p => ({ ...p, user_name: e.target.value.replace('@', '') }))}
-                                                className="w-full bg-[#141414] border border-white/5 rounded-2xl pl-10 pr-5 py-4 text-white text-[15px] font-bold focus:outline-none focus:border-white/20 transition-colors"
-                                            />
-                                        </div>
                                     </div>
                                 </div>
 
