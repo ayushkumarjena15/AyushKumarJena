@@ -159,6 +159,9 @@ const GuestbookPage = () => {
                 setProfileData({
                     full_name: user.user_metadata?.full_name || user.user_metadata?.user_name || ''
                 });
+                if (!user.user_metadata?.profile_setup_complete) {
+                    setIsProfileModalOpen(true);
+                }
             }
         });
 
@@ -169,6 +172,9 @@ const GuestbookPage = () => {
                 setProfileData({
                     full_name: user.user_metadata?.full_name || user.user_metadata?.user_name || ''
                 });
+                if (!user.user_metadata?.profile_setup_complete) {
+                    setIsProfileModalOpen(true);
+                }
             }
         });
 
@@ -270,6 +276,7 @@ const GuestbookPage = () => {
         try {
             const updates = {
                 full_name: profileData.full_name,
+                profile_setup_complete: true,
             };
 
             // Upload avatar if a new file was selected
