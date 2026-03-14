@@ -215,18 +215,14 @@
     window.addEventListener('DOMContentLoaded', function() {
       var devtoolsScreen = document.getElementById('devtools-screen');
       var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      // All Chrome DevTools device emulation widths
-      var deviceWidths = [344,360,375,390,412,414,430,540,768,820,853,882,912,1024,1280];
-      var deviceHeights = [600,667,720,740,800,844,882,896,914,915,932,1024,1180,1280,1366,1368];
+      // Only clearly mobile widths — no tablet/laptop sizes to avoid false positives
+      var mobileWidths = [344,360,375,390,412,414,430,540];
       function isDevToolsOpen() {
         // Docked DevTools (side or bottom)
         if (window.outerWidth - window.innerWidth > 150) return true;
         if (window.outerHeight - window.innerHeight > 150) return true;
-        // Device emulation: desktop machine but viewport matches a known device size
-        if (!isMobileDevice && screen.width >= 1024) {
-          if (deviceWidths.indexOf(window.innerWidth) !== -1) return true;
-          if (deviceHeights.indexOf(window.innerHeight) !== -1) return true;
-        }
+        // Device emulation: big screen but mobile-width viewport
+        if (!isMobileDevice && screen.width >= 1200 && mobileWidths.indexOf(window.innerWidth) !== -1) return true;
         return false;
       }
       function check() {
