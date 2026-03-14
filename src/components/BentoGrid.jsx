@@ -138,19 +138,76 @@ const BentoGrid = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const quotes = useMemo(() => [
-        { text: "Design is not just what it looks like and feels like. Design is how it works.", author: "Steve Jobs" },
-        { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
-        { text: "Good design is obvious. Great design is transparent.", author: "Joe Sparano" },
-        { text: "Digital design is like painting, except the paint never dries.", author: "Neville Brody" },
-        { text: "The details are not the details. They make the design.", author: "Charles Eames" },
-        { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-        { text: "Everything is designed. Few things are designed well.", author: "Brian Reed" }
+        const quotes = useMemo(() => [
+        { text: 'Be the change that you wish to see in the world.', author: 'Mahatma Gandhi' },
+        { text: 'The only thing we have to fear is fear itself.', author: 'Franklin D. Roosevelt' },
+        { text: "That's one small step for man, one giant leap for mankind.", author: 'Neil Armstrong' },
+        { text: 'I think, therefore I am.', author: 'René Descartes' },
+        { text: 'The unexamined life is not worth living.', author: 'Socrates' },
+        { text: 'To be, or not to be, that is the question.', author: 'William Shakespeare' },
+        { text: 'Knowledge is power.', author: 'Francis Bacon' },
+        { text: 'The journey of a thousand miles begins with one step.', author: 'Lao Tzu' },
+        { text: "Life is what happens when you're busy making other plans.", author: 'John Lennon' },
+        { text: 'The purpose of our lives is to be happy.', author: 'Dalai Lama' },
+        { text: 'Stay hungry, stay foolish.', author: 'Steve Jobs' },
+        { text: 'In the middle of difficulty lies opportunity.', author: 'Albert Einstein' },
+        { text: 'Success is not final, failure is not fatal.', author: 'Winston Churchill' },
+        { text: 'If you judge people, you have no time to love them.', author: 'Mother Teresa' },
+        { text: 'Turn your wounds into wisdom.', author: 'Oprah Winfrey' },
+        { text: 'Float like a butterfly, sting like a bee.', author: 'Muhammad Ali' },
+        { text: 'Imagination is more important than knowledge.', author: 'Albert Einstein' },
+        { text: 'Education is the most powerful weapon which you can use to change the world.', author: 'Nelson Mandela' },
+        { text: 'An eye for an eye makes the whole world blind.', author: 'Mahatma Gandhi' },
+        { text: 'The secret of getting ahead is getting started.', author: 'Mark Twain' },
+        { text: 'Genius is one percent inspiration and ninety-nine percent perspiration.', author: 'Thomas Edison' },
+        { text: "If opportunity doesn't knock, build a door.", author: 'Milton Berle' },
+        { text: "You miss 100% of the shots you don't take.", author: 'Wayne Gretzky' },
+        { text: 'Everything you can imagine is real.', author: 'Pablo Picasso' },
+        { text: 'Do what you can, with what you have, where you are.', author: 'Theodore Roosevelt' },
+        { text: "It always seems impossible until it's done.", author: 'Nelson Mandela' },
+        { text: 'The best revenge is massive success.', author: 'Frank Sinatra' },
+        { text: 'What we think, we become.', author: 'Gautama Buddha' },
+        { text: 'Happiness depends upon ourselves.', author: 'Aristotle' },
+        { text: 'Where there is love there is life.', author: 'Mahatma Gandhi' },
+        { text: 'The only true wisdom is in knowing you know nothing.', author: 'Socrates' },
+        { text: 'Act as if what you do makes a difference. It does.', author: 'William James' },
+        { text: "Dream as if you'll live forever.", author: 'James Dean' },
+        { text: 'Everything has beauty, but not everyone sees it.', author: 'Confucius' },
+        { text: 'Life is really simple, but we insist on making it complicated.', author: 'Confucius' },
+        { text: "If you tell the truth, you don't have to remember anything.", author: 'Mark Twain' },
+        { text: 'Well done is better than well said.', author: 'Benjamin Franklin' },
+        { text: 'Make each day your masterpiece.', author: 'John Wooden' },
+        { text: 'Turn your face to the sun and the shadows fall behind you.', author: 'Walt Whitman' },
+        { text: 'Do one thing every day that scares you.', author: 'Eleanor Roosevelt' },
+        { text: "Believe you can and you're halfway there.", author: 'Theodore Roosevelt' },
+        { text: 'Quality is not an act, it is a habit.', author: 'Aristotle' },
+        { text: 'If you can dream it, you can do it.', author: 'Walt Disney' },
+        { text: "Whether you think you can or you think you can't, you're right.", author: 'Henry Ford' },
+        { text: "Everything you've ever wanted is on the other side of fear.", author: 'George Addair' },
+        { text: 'Fortune favors the bold.', author: 'Virgil' },
+        { text: 'A person who never made a mistake never tried anything new.', author: 'Albert Einstein' },
+        { text: 'Simplicity is the ultimate sophistication.', author: 'Leonardo da Vinci' },
+        { text: 'To live is the rarest thing in the world.', author: 'Oscar Wilde' },
     ], []);
 
-    const dailyQuote = useMemo(() => {
-        const day = new Date().getDate();
-        return quotes[day % quotes.length];
+    const [currentQuote, setCurrentQuote] = useState(() => {
+        const hour = new Date().getHours();
+        return quotes[hour % quotes.length];
+    });
+
+    useEffect(() => {
+        const updateQuote = () => {
+            const hour = new Date().getHours();
+            setCurrentQuote(quotes[hour % quotes.length]);
+        };
+        const now = new Date();
+        const msUntilNextHour = (60 - now.getMinutes()) * 60000 - now.getSeconds() * 1000;
+        const timeout = setTimeout(() => {
+            updateQuote();
+            const interval = setInterval(updateQuote, 3600000);
+            return () => clearInterval(interval);
+        }, msUntilNextHour);
+        return () => clearTimeout(timeout);
     }, [quotes]);
 
     const handleCopyEmail = () => {
@@ -499,12 +556,12 @@ const BentoGrid = () => {
                 >
 
                     <div className="relative z-10">
-                        <p className="text-[10px] uppercase tracking-[0.3em] text-accent1 font-bold mb-3">Quote of the day</p>
+                        <p className="text-[10px] uppercase tracking-[0.3em] text-accent1 font-bold mb-3">Quote of the Hour</p>
                         <p className="text-sm md:text-base text-white font-serif italic leading-relaxed">
-                            "{dailyQuote.text}"
+                            "{currentQuote.text}"
                         </p>
                         <p className="text-[10px] text-secondary uppercase tracking-widest mt-3 font-bold">
-                            — {dailyQuote.author}
+                            — {currentQuote.author}
                         </p>
                     </div>
                 </motion.div>
