@@ -273,9 +273,8 @@ const BentoGrid = () => {
                     viewport={{ once: true, margin: "-50px" }}
                 >
                     <div>
-                        <p className="text-[10px] text-white/30 font-medium mb-1 tracking-wide">liked by <span className="text-accent1">ayush</span></p>
                         <h3 className="text-2xl font-heading font-black text-white">
-                            Ayush
+                            Ayush Kumar Jena
                         </h3>
                         <div className="flex items-center gap-2 mt-3 text-secondary text-xs">
                             <MapPin size={12} />
