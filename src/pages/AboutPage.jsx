@@ -439,16 +439,16 @@ const AboutPage = () => {
                         {/* Live Profile Card — full width compact */}
                         <motion.div
                             whileHover={{ y: -5 }}
-                            className="glass-card px-8 py-6 bg-surface/5 border border-white/5 w-full"
+                            className="glass-card px-5 py-4 md:px-8 md:py-6 bg-surface/5 border border-white/5 w-full"
                         >
                             {githubUser ? (
-                                <div className="flex items-center gap-8">
+                                <div className="flex items-center gap-4 md:gap-8 flex-wrap sm:flex-nowrap">
                                     {/* Avatar */}
-                                    <img src={githubUser.avatar_url} alt="GitHub Avatar" className="w-16 h-16 rounded-full border-2 border-accent1/50 shadow-xl shadow-accent1/20 flex-shrink-0" />
+                                    <img src={githubUser.avatar_url} alt="GitHub Avatar" className="w-12 h-12 md:w-16 md:h-16 rounded-full border-2 border-accent1/50 shadow-xl shadow-accent1/20 flex-shrink-0" />
                                     {/* All info on the right */}
-                                    <div className="flex flex-1 items-center gap-10 flex-wrap">
+                                    <div className="flex flex-1 items-center gap-6 md:gap-10 flex-wrap">
                                         <div>
-                                            <h3 className="text-xl font-bold font-serif italic text-white leading-tight">{githubUser.name || githubUser.login}</h3>
+                                            <h3 className="text-base md:text-xl font-bold font-serif italic text-white leading-tight">{githubUser.name || githubUser.login}</h3>
                                             <a href={githubUser.html_url} target="_blank" rel="noopener noreferrer" className="text-accent1 hover:text-white transition-colors text-xs font-mono flex items-center gap-1 mt-1">
                                                 @{githubUser.login} <ExternalLink size={12} />
                                             </a>
@@ -456,18 +456,18 @@ const AboutPage = () => {
                                         <p className="text-secondary/80 text-xs leading-relaxed max-w-xs hidden md:block">
                                             {githubUser.bio || "Building things that matter on the internet."}
                                         </p>
-                                        <div className="flex items-center gap-8 ml-auto">
+                                        <div className="flex items-center gap-5 md:gap-8 ml-auto">
                                             <div className="text-center">
-                                                <p className="text-lg font-mono font-black text-white">{githubUser.public_repos}</p>
-                                                <p className="text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Briefcase size={10} className="text-accent1" /> Repos</p>
+                                                <p className="text-base md:text-lg font-mono font-black text-white">{githubUser.public_repos}</p>
+                                                <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Briefcase size={10} className="text-accent1" /> Repos</p>
                                             </div>
                                             <div className="text-center">
-                                                <p className="text-lg font-mono font-black text-white">{githubUser.followers}</p>
-                                                <p className="text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Users size={10} className="text-accent1" /> Followers</p>
+                                                <p className="text-base md:text-lg font-mono font-black text-white">{githubUser.followers}</p>
+                                                <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Users size={10} className="text-accent1" /> Followers</p>
                                             </div>
                                             <div className="text-center">
-                                                <p className="text-lg font-mono font-black text-white">{githubUser.following}</p>
-                                                <p className="text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Star size={10} className="text-accent1" /> Following</p>
+                                                <p className="text-base md:text-lg font-mono font-black text-white">{githubUser.following}</p>
+                                                <p className="text-[9px] md:text-[10px] uppercase tracking-widest text-secondary flex items-center gap-1"><Star size={10} className="text-accent1" /> Following</p>
                                             </div>
                                         </div>
                                     </div>
@@ -481,17 +481,17 @@ const AboutPage = () => {
                         </motion.div>
 
                         {/* Bottom 3 cards in a row */}
-                        <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
 
                         {/* Recent Activity Feed */}
                         <motion.div
                             whileHover={{ y: -5 }}
-                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col h-[450px] overflow-hidden"
+                            className="glass-card p-6 md:p-10 bg-surface/5 border border-white/5 flex flex-col h-[380px] sm:h-[420px] md:h-[450px] overflow-hidden"
                         >
-                            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                <div className="flex items-center gap-4 text-white">
-                                    <GitBranch size={24} className="text-accent1" />
-                                    <h3 className="text-xl font-bold font-serif italic">Terminal Activity</h3>
+                            <div className="flex items-center justify-between mb-5 md:mb-8 border-b border-white/5 pb-4 md:pb-6">
+                                <div className="flex items-center gap-3 md:gap-4 text-white">
+                                    <GitBranch size={20} className="text-accent1" />
+                                    <h3 className="text-base md:text-xl font-bold font-serif italic">Terminal Activity</h3>
                                 </div>
                                 <span className="text-[10px] font-black uppercase tracking-widest text-red-500 animate-pulse flex items-center gap-2">
                                     <div className="w-2 h-2 rounded-full bg-red-500"></div> Live
@@ -542,19 +542,19 @@ const AboutPage = () => {
                         {/* GitHub Streak Card */}
                         <motion.div
                             whileHover={{ y: -5 }}
-                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-[450px] overflow-hidden"
+                            className="glass-card p-6 md:p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-[300px] sm:h-[350px] md:h-[450px] overflow-hidden"
                         >
-                            <div className="flex items-center justify-between mb-8 border-b border-white/5 pb-6">
-                                <div className="flex items-center gap-4 text-white">
-                                    <Star size={24} className="text-accent1" />
-                                    <h3 className="text-xl font-bold font-serif italic">Contribution Streak</h3>
+                            <div className="flex items-center justify-between mb-5 md:mb-8 border-b border-white/5 pb-4 md:pb-6">
+                                <div className="flex items-center gap-3 md:gap-4 text-white">
+                                    <Star size={20} className="text-accent1" />
+                                    <h3 className="text-base md:text-xl font-bold font-serif italic">Contribution Streak</h3>
                                 </div>
                             </div>
                             <div className="flex-1 flex items-center justify-center">
                                 <img
                                     src="https://github-readme-streak-stats.herokuapp.com/?user=ayushkumarjena15&theme=transparent&hide_border=true&stroke=FF6B00&ring=FF6B00&fire=FF4500&currStreakNum=e7e5e4&sideNums=e7e5e4&sideLabels=a8a29e&dates=a8a29e"
                                     alt="GitHub Streak"
-                                    className="w-full h-auto object-contain scale-[1.10]"
+                                    className="w-full h-auto object-contain md:scale-[1.10]"
                                 />
                             </div>
                         </motion.div>
@@ -562,17 +562,17 @@ const AboutPage = () => {
                         {/* LeetCode Stats Card */}
                         <motion.div
                             whileHover={{ y: -5 }}
-                            className="glass-card p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-[450px] overflow-hidden"
+                            className="glass-card p-6 md:p-10 bg-surface/5 border border-white/5 flex flex-col justify-center h-auto md:h-[450px] overflow-hidden md:col-span-2 lg:col-span-1"
                         >
-                            <div className="flex items-center gap-4 mb-8 border-b border-white/5 pb-6">
-                                <Star size={24} className="text-accent1" />
-                                <h3 className="text-xl font-bold font-serif italic text-white">LeetCode Stats</h3>
+                            <div className="flex items-center gap-3 md:gap-4 mb-5 md:mb-8 border-b border-white/5 pb-4 md:pb-6">
+                                <Star size={20} className="text-accent1" />
+                                <h3 className="text-base md:text-xl font-bold font-serif italic text-white">LeetCode Stats</h3>
                             </div>
                             {leetcode ? (
                                 <div className="flex-1 flex flex-col justify-center gap-6">
                                     {/* Total solved ring */}
-                                    <div className="flex items-center justify-center gap-6">
-                                        <div className="relative flex items-center justify-center w-28 h-28">
+                                    <div className="flex items-center justify-center gap-4 md:gap-6">
+                                        <div className="relative flex items-center justify-center w-24 h-24 md:w-28 md:h-28">
                                             <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="8"/>
                                                 <circle cx="50" cy="50" r="42" fill="none" stroke="#FF6B00" strokeWidth="8"
