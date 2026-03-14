@@ -82,7 +82,7 @@ const FounderCard = ({ cardVariants, selectedTimezone, onTimezoneChange }) => {
                                 : 'border-white/10 text-secondary hover:border-white/30'
                                 }`}
                         >
-                            <img src={`https://flagcdn.com/20x15/${zone.flag}.png`} alt={zone.label} className="w-4 h-3 rounded-[1px] object-cover" />
+                            <img src={`https://flagcdn.com/20x15/${zone.flag}.webp`} alt={zone.label} className="w-4 h-3 rounded-[1px] object-cover" />
                             <span>{zone.label}</span>
                         </button>
                     ))}
@@ -227,14 +227,14 @@ const BentoGrid = () => {
     const [activeTag, setActiveTag] = useState(0);
 
     const galleryItems = [
-        { id: 1, type: 'image', content: '/gallery/photo1.jpg', gradient: 'from-blue-600/20 to-indigo-600/10', imageScale: 1.3 },
-        { id: 2, type: 'image', content: '/gallery/photo2.jpeg', gradient: 'from-purple-600/20 to-purple-800/10' },
-        { id: 3, type: 'image', content: '/gallery/photo3.jpg', gradient: 'from-red-700/20 to-red-800/10' },
-        { id: 4, type: 'image', content: '/gallery/photo4.jpg', gradient: 'from-green-600/20 to-emerald-600/10' },
-        { id: 5, type: 'image', content: '/gallery/photo5.jpg', gradient: 'from-yellow-600/20 to-amber-600/10', objectPosition: 'right center' },
-        { id: 6, type: 'image', content: '/gallery/photo6.png', gradient: 'from-pink-600/20 to-rose-600/10' },
-        { id: 7, type: 'image', content: '/gallery/photo7.jpg', gradient: 'from-cyan-600/20 to-sky-600/10' },
-        { id: 8, type: 'image', content: '/gallery/photo8.jpeg', gradient: 'from-orange-600/20 to-amber-600/20' },
+        { id: 1, type: 'image', content: '/gallery/photo1.webp', gradient: 'from-blue-600/20 to-indigo-600/10', imageScale: 1.3 },
+        { id: 2, type: 'image', content: '/gallery/photo2.webp', gradient: 'from-purple-600/20 to-purple-800/10' },
+        { id: 3, type: 'image', content: '/gallery/photo3.webp', gradient: 'from-red-700/20 to-red-800/10' },
+        { id: 4, type: 'image', content: '/gallery/photo4.webp', gradient: 'from-green-600/20 to-emerald-600/10' },
+        { id: 5, type: 'image', content: '/gallery/photo5.webp', gradient: 'from-yellow-600/20 to-amber-600/10', objectPosition: 'right center' },
+        { id: 6, type: 'image', content: '/gallery/photo6.webp', gradient: 'from-pink-600/20 to-rose-600/10' },
+        { id: 7, type: 'image', content: '/gallery/photo7.webp', gradient: 'from-cyan-600/20 to-sky-600/10' },
+        { id: 8, type: 'image', content: '/gallery/photo8.webp', gradient: 'from-orange-600/20 to-amber-600/20' },
     ];
 
     const dragRef = useRef(null);

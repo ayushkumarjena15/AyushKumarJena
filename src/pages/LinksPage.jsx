@@ -60,7 +60,7 @@ const LinksPage = () => {
                         className="mt-10 md:mt-0 relative w-[250px] h-[250px] md:w-[350px] md:h-[350px] rounded-full overflow-hidden border border-white/10 flex-shrink-0 group"
                     >
                         <img
-                            src="/profile.jpg"
+                            src="/profile.webp"
                             alt="Profile"
                             className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                         />

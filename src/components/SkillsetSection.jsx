@@ -2,7 +2,7 @@ import { motion, useMotionValue, useAnimationFrame, useScroll, useVelocity, useS
 import * as SiIcons from 'react-icons/si';
 import { VscGraph } from 'react-icons/vsc';
 import { FaJava, FaTerminal } from 'react-icons/fa';
-import propeller from '../assets/propeller.png';
+import propeller from '../assets/propeller.webp';
 
 const skillRows = [
     ['C', 'Python', 'Java', 'HTML5', 'CSS3', 'JavaScript', 'TypeScript'],

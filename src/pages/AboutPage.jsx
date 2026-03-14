@@ -279,19 +279,19 @@ const AboutPage = () => {
                     <div className="relative h-[450px] md:h-[600px] w-full flex items-center justify-center overflow-visible" style={{ perspective: 1500 }}>
                         {[
                             {
-                                src: "/profile.jpg",
+                                src: "/profile.webp",
                                 alt: "Ayush Kumar Jena",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
-                                src: "/gallery/photo4.jpg",
+                                src: "/gallery/photo4.webp",
                                 alt: "Ayush in the mountains",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
-                                src: "/gallery/photo1.jpg",
+                                src: "/gallery/photo1.webp",
                                 alt: "Ayush hiking",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"

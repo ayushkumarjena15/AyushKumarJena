@@ -9,6 +9,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import LinksPage from './pages/LinksPage';
 import UsesPage from './pages/UsesPage';
 import BlogsPage from './pages/BlogsPage';
+import BlogPostPage from './pages/BlogPostPage';
 import LabsPage from './pages/LabsPage';
 import GuestbookPage from './pages/GuestbookPage';
 import BookCallPage from './pages/BookCallPage';
@@ -74,6 +75,7 @@ function App() {
           <Route path="/links" element={<LinksPage />} />
           <Route path="/uses" element={<UsesPage />} />
           <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/blogs/:slug" element={<BlogPostPage />} />
           <Route path="/labs" element={<LabsPage />} />
           <Route path="/guestbook" element={<GuestbookPage />} />
           <Route path="/book" element={<BookCallPage />} />

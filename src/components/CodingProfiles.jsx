@@ -3,21 +3,21 @@ import { motion } from 'framer-motion';
 
 // Custom SVG Icons for accurate brand logos
 const LeetCodeIcon = ({ size, className }) => (
-    <img src="/leetcode.png" alt="LeetCode" style={{ width: size, height: size }} className={className + " object-contain"} />
+    <img src="/leetcode.webp" alt="LeetCode" style={{ width: size, height: size }} className={className + " object-contain"} />
 );
 
 
 
 const HackerRankIcon = ({ size, className }) => (
-    <img src="/hackerrank.png" alt="HackerRank" style={{ width: size, height: size }} className={className + " object-contain"} />
+    <img src="/hackerrank.webp" alt="HackerRank" style={{ width: size, height: size }} className={className + " object-contain"} />
 );
 
 const GeeksForGeeksIcon = ({ size, className }) => (
-    <img src="/gfg.png" alt="GeeksForGeeks" style={{ width: size, height: size }} className={className + " object-contain"} />
+    <img src="/gfg.webp" alt="GeeksForGeeks" style={{ width: size, height: size }} className={className + " object-contain"} />
 );
 
 const GithubIcon = ({ size, className }) => (
-    <img src="/github.png" alt="GitHub" style={{ width: size, height: size }} className={className + " object-contain"} />
+    <img src="/github.webp" alt="GitHub" style={{ width: size, height: size }} className={className + " object-contain"} />
 );
 
 const profiles = [

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Github, ArrowRight, Music, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import shivOfficial from '../assets/shiv_official.png';
+import shivOfficial from '../assets/shiv_official.webp';
 
 const BehindCurtains = () => {
     const [guestbookAvatars, setGuestbookAvatars] = useState([]);

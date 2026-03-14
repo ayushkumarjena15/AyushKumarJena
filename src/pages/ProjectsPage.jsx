@@ -89,11 +89,11 @@ const projects = [
         description: 'A high-performance, AI-driven career intelligence platform designed to bridge the gap between academic education and industry requirements. It creates a "Digital Skill Twin" of the user to identify weaknesses and provide a hyper-personalized path to employability.',
         color: 'from-orange-600 to-red-800',
         images: [
-            '/skilltwin/hero.png',
-            '/skilltwin/features.png',
-            '/skilltwin/roadmap.png',
-            '/skilltwin/problem.png',
-            '/skilltwin/sdg.png'
+            '/skilltwin/hero.webp',
+            '/skilltwin/features.webp',
+            '/skilltwin/roadmap.webp',
+            '/skilltwin/problem.webp',
+            '/skilltwin/sdg.webp'
         ],
         overview: {
             problem: 'The "Employability Gap" caused by stagnant curriculums lagging 2-5 years behind industry trends and skill fragmentation where students lack structured paths.',
@@ -120,11 +120,11 @@ const projects = [
         description: 'An AI-Powered Medical Report Intelligence System designed to bridge the gap between complex clinical data and patient understanding. It transforms raw medical documents into structured, actionable health insights.',
         color: 'from-blue-600 to-indigo-800',
         images: [
-            '/d-liver/hero.png',
-            '/d-liver/dashboard.png',
-            '/d-liver/features.png',
-            '/d-liver/howitworks.png',
-            '/d-liver/login.png'
+            '/d-liver/hero.webp',
+            '/d-liver/dashboard.webp',
+            '/d-liver/features.webp',
+            '/d-liver/howitworks.webp',
+            '/d-liver/login.webp'
         ],
         overview: {
             problem: 'The Medical Literacy Gap and anxiety caused by patients Googling complex lab terms they don\'t understand.',
@@ -151,10 +151,10 @@ const projects = [
         description: 'A comprehensive agricultural technology platform bridging the gap between traditional farming and modern data science. It leverages IoT, machine learning, and generative AI to provide farmers with actionable insights.',
         color: 'from-green-600 to-emerald-800',
         images: [
-            '/agri-sahayak/hero.png',
-            '/agri-sahayak/dashboard.png',
-            '/agri-sahayak/features.png',
-            '/agri-sahayak/technology.png'
+            '/agri-sahayak/hero.webp',
+            '/agri-sahayak/dashboard.webp',
+            '/agri-sahayak/features.webp',
+            '/agri-sahayak/technology.webp'
         ],
         overview: {
             problem: 'Eliminating guesswork in irrigation/fertilization and predicting pest/disease outbreaks before they happen.',
@@ -356,7 +356,7 @@ const ProjectsPage = () => {
                                 boxShadow: avatarBoxShadow
                             }}
                         >
-                            <img src="/profile.jpg" className="w-full h-full object-cover" alt="Ayush" />
+                            <img src="/profile.webp" className="w-full h-full object-cover" alt="Ayush" />
                         </motion.div>
                     </motion.div>
                 </div>

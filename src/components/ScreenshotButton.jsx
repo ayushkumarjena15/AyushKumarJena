@@ -37,7 +37,7 @@ const ScreenshotButton = () => {
   const downloadScreenshot = () => {
     if (!screenshot) return;
     const link = document.createElement('a');
-    link.download = `ayush-portfolio-screenshot-${new Date().getTime()}.png`;
+    link.download = `ayush-portfolio-screenshot-${new Date().getTime()}.webp`;
     link.href = screenshot;
     link.click();
     setShowPreview(false);

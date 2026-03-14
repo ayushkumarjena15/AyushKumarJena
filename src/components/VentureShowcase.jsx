@@ -36,11 +36,11 @@ const ventures = [
         description: 'An AI-first career intelligence platform that creates a "Digital Skill Twin" by analyzing resumes and GitHub profiles, detecting skill gaps, and generating personalized learning roadmaps using state-of-the-art LLMs.',
         techStack: ['Next.js 15', 'TypeScript', 'Groq (Llama-3)', 'Supabase', 'Framer Motion', 'Radix UI'],
         images: [
-            '/skilltwin/hero.png',
-            '/skilltwin/features.png',
-            '/skilltwin/roadmap.png',
-            '/skilltwin/problem.png',
-            '/skilltwin/sdg.png'
+            '/skilltwin/hero.webp',
+            '/skilltwin/features.webp',
+            '/skilltwin/roadmap.webp',
+            '/skilltwin/problem.webp',
+            '/skilltwin/sdg.webp'
         ],
         color: 'from-orange-600 to-red-800',
     },
@@ -50,11 +50,11 @@ const ventures = [
         description: 'An AI-Powered Medical Report Intelligence System designed to bridge the gap between complex clinical data and patient understanding. It transforms raw medical documents into structured, actionable health insights.',
         techStack: ['Next.js 15', 'Ollama', 'Supabase', 'Three.js', 'Tesseract.js', 'PubMed API'],
         images: [
-            '/d-liver/hero.png',
-            '/d-liver/dashboard.png',
-            '/d-liver/features.png',
-            '/d-liver/howitworks.png',
-            '/d-liver/login.png'
+            '/d-liver/hero.webp',
+            '/d-liver/dashboard.webp',
+            '/d-liver/features.webp',
+            '/d-liver/howitworks.webp',
+            '/d-liver/login.webp'
         ],
         color: 'from-blue-600 to-indigo-800',
     },
@@ -64,10 +64,10 @@ const ventures = [
         description: 'A comprehensive agricultural technology platform bridging the gap between traditional farming and modern data science. It leverages IoT, machine learning, and generative AI to provide farmers with actionable insights.',
         techStack: ['Python', 'FastAPI', 'Firebase', 'Groq API', 'Scikit-learn', 'Twilio API'],
         images: [
-            '/agri-sahayak/hero.png',
-            '/agri-sahayak/dashboard.png',
-            '/agri-sahayak/features.png',
-            '/agri-sahayak/technology.png'
+            '/agri-sahayak/hero.webp',
+            '/agri-sahayak/dashboard.webp',
+            '/agri-sahayak/features.webp',
+            '/agri-sahayak/technology.webp'
         ],
         color: 'from-green-600 to-emerald-800',
     }
@@ -263,7 +263,7 @@ const VentureShowcase = () => {
                                 boxShadow: avatarBoxShadow
                             }}
                         >
-                            <img src="/profile.jpg" className="w-full h-full object-cover" alt="Ayush" />
+                            <img src="/profile.webp" className="w-full h-full object-cover" alt="Ayush" />
                         </motion.div>
                     </motion.div>
                 </div>
