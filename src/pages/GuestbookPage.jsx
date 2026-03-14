@@ -69,7 +69,7 @@ const SignatureCard = ({ id, name, created_at, message, is_pinned, liked_by, is_
                     {liked_by && (
                         <div className="flex items-center gap-1.5">
                             <Heart size={12} className="text-[#ec4899] fill-[#ec4899]" />
-                            <span className="text-[#ec4899] text-[10px] font-medium whitespace-nowrap">Liked By {liked_by.split(' ')[0].toLowerCase()}</span>
+                            <span className="text-[#ec4899] text-[10px] font-medium whitespace-nowrap">Liked by {liked_by.split(' ')[0].charAt(0).toUpperCase() + liked_by.split(' ')[0].slice(1).toLowerCase()}</span>
                         </div>
                     )}
                     {is_hidden && (
