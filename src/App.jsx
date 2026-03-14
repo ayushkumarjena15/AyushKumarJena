@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { supabase } from './supabaseClient';
 import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
@@ -27,8 +28,23 @@ function ScrollHandler() {
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Security disabled for search engine crawling
+  // After OAuth login, redirect back to the page the user logged in from
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        const returnPath = localStorage.getItem('auth_return_path');
+        if (returnPath) {
+          localStorage.removeItem('auth_return_path');
+          if (returnPath !== window.location.pathname + window.location.search) {
+            navigate(returnPath, { replace: true });
+          }
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [navigate]);
 
   return (
     <div className="bg-background min-h-screen text-gray-200 font-sans selection:bg-primary/30 overflow-x-hidden">

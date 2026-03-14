@@ -182,9 +182,10 @@ const GuestbookPage = () => {
 
     const handleLogin = async (provider) => {
         try {
+            localStorage.setItem('auth_return_path', window.location.pathname + window.location.search);
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: provider,
-                options: { redirectTo: window.location.origin + '/guestbook' }
+                options: { redirectTo: window.location.origin + window.location.pathname }
             });
             if (error) throw error;
         } catch (error) {
