@@ -206,12 +206,7 @@
     window.addEventListener('DOMContentLoaded', function() {
       var devtoolsScreen = document.getElementById('devtools-screen');
       function isDevToolsOpen() {
-        // Only use console toString trick — avoids false positives from mobile browser UI
-        var open = false;
-        var re = /./;
-        re.toString = function() { open = true; };
-        console.log('%c', re);
-        return open;
+        return window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200;
       }
       function check() {
         devtoolsScreen.style.display = isDevToolsOpen() ? 'flex' : 'none';
