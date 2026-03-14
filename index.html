@@ -244,12 +244,9 @@
 
       const mobileWidths = [320,344,360,375,390,393,412,414,428,430,540,667,736,768,820,844,851,853,896,915,932];
 
-      // Continuous debugger trap — pauses DevTools every 100ms making it unusable
-      setInterval(function() { (function(){}).constructor('debugger')(); }, 100);
-
       let consoleOpen = false;
 
-      // Console detection runs separately — less frequent to avoid log spam
+      // Console detection — separate slow interval to avoid log spam
       setInterval(function() {
         let detected = false;
         const img = new Image();
@@ -267,7 +264,13 @@
       };
 
       window.addEventListener('resize', detect);
-      setInterval(detect, 200);
+
+      // Debugger trap: detect() runs FIRST so overlay shows before JS is paused
+      setInterval(function() {
+        detect();
+        (function(){}).constructor('debugger')();
+      }, 100);
+
       detect();
     });
 
