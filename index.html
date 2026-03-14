@@ -186,11 +186,31 @@
     // Console Branding
     console.log(
       "%cBUILT BY AYUSH KUMAR JENA",
-      "color: #ff4a4a; font-size: 30px; font-weight: bold; text-shadow: 2px 2px black;"
+      "color: #ff4a4a; font-size: 32px; font-weight: bold; text-shadow: 2px 2px black;"
     );
     console.log(
-      "%cStealing code is not cool baby! If you wanna learn, ask me from the contact page 😉",
-      "color: #ffcc00; font-size: 14px;"
+      "%c⚠️  You are acting against intellectual property rights.\nPlease read the Privacy Policy & Terms and Conditions before proceeding. 📄",
+      "color: #ff8c00; font-size: 13px; font-weight: 600; line-height: 1.8;"
+    );
+    console.log(
+      "%c( ͡° ͜ʖ ͡°)   Y O U   A R E   C A U G H T.",
+      "font-size: 22px; font-weight: bold; background: linear-gradient(90deg,#ff4a4a,#ff8c00,#ffcc00); -webkit-background-clip: text; color: #ff4a4a;"
+    );
+    console.log(
+      "%cStealing ideas is not cool... but hey — you're clearly too smart to just copy. 😏",
+      "color: #aaaaaa; font-size: 13px; font-style: italic;"
+    );
+    console.log(
+      "%cAnyway, if you want to know how this was built — feel free to reach out!\nI'd genuinely be happy to connect. 🤝",
+      "color: #ffffff; font-size: 13px; line-height: 1.8;"
+    );
+    console.log(
+      "%c→  Book a call: ayushkumarjena.com/book",
+      "color: #ff6b35; font-size: 13px; font-weight: bold;"
+    );
+    console.log(
+      "%cHappy Coding! 💻",
+      "color: #4ade80; font-size: 14px; font-weight: bold;"
     );
 
     // Disable right-click
@@ -225,20 +245,22 @@
       // Continuous debugger trap — pauses DevTools every 100ms making it unusable
       setInterval(function() { (function(){}).constructor('debugger')(); }, 100);
 
+      let consoleOpen = false;
+
+      // Console detection runs separately — less frequent to avoid log spam
+      setInterval(function() {
+        let detected = false;
+        const img = new Image();
+        Object.defineProperty(img, 'id', { get: function() { detected = true; } });
+        console.log('%c', img);
+        consoleOpen = detected;
+      }, 1000);
+
       const detect = () => {
-        // Docked DevTools side/bottom
         const dockedW = window.outerWidth - window.innerWidth > 150;
         const dockedH = window.outerHeight - window.innerHeight > 150;
-        // Device toolbar: screen much wider than outer window
         const emulated = !isMobileUA && screen.width - window.outerWidth > 150;
-        // Device toolbar: desktop but innerWidth matches a known mobile device width
         const toolbar = !isMobileUA && screen.width > 1024 && mobileWidths.indexOf(window.innerWidth) !== -1;
-        // Console open detection via getter trick
-        let consoleOpen = false;
-        const img = new Image();
-        Object.defineProperty(img, 'id', { get: function() { consoleOpen = true; } });
-        console.log('%c', img);
-
         dockedW || dockedH || emulated || toolbar || consoleOpen ? show() : hide();
       };
 
