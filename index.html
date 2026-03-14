@@ -215,18 +215,23 @@
     // Detection Logic
     window.addEventListener('DOMContentLoaded', function() {
       const devtoolsScreen = document.getElementById('devtools-screen');
+      const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
       const show = () => { devtoolsScreen.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
       const hide = () => { devtoolsScreen.style.display = 'none'; document.body.style.overflow = 'auto'; };
 
       const detect = () => {
-        const w = window.outerWidth - window.innerWidth > 200;
-        const h = window.outerHeight - window.innerHeight > 200;
-        w || h ? show() : hide();
+        // Docked DevTools (normal mode) — outer vs inner diff
+        const dockedW = window.outerWidth - window.innerWidth > 200;
+        const dockedH = window.outerHeight - window.innerHeight > 200;
+        // Device emulation mode — screen vs outer diff (Chrome sets outerWidth = device width)
+        const emulated = !isMobileUA && screen.width - window.outerWidth > 200;
+        dockedW || dockedH || emulated ? show() : hide();
       };
 
       window.addEventListener('resize', detect);
       setInterval(detect, 500);
+      detect();
     });
 
   </script>
