@@ -60,17 +60,17 @@ alter table public.blog_stats enable row level security;
 create policy "Anyone can read blog stats" on public.blog_stats for select using (true);
 create policy "Anyone can upsert blog stats" on public.blog_stats for all using (true) with check (true);
 
--- Function to increment a stat atomically
-CREATE OR REPLACE FUNCTION increment_blog_stat(p_slug TEXT, p_field TEXT)
+-- Function to increment/decrement a stat atomically (p_delta = 1 or -1)
+CREATE OR REPLACE FUNCTION increment_blog_stat(p_slug TEXT, p_field TEXT, p_delta INT DEFAULT 1)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER AS $$
 BEGIN
     INSERT INTO public.blog_stats (blog_slug) VALUES (p_slug) ON CONFLICT (blog_slug) DO NOTHING;
     IF p_field = 'views' THEN
-        UPDATE public.blog_stats SET views = views + 1 WHERE blog_slug = p_slug;
+        UPDATE public.blog_stats SET views = GREATEST(0, views + p_delta) WHERE blog_slug = p_slug;
     ELSIF p_field = 'likes' THEN
-        UPDATE public.blog_stats SET likes = likes + 1 WHERE blog_slug = p_slug;
+        UPDATE public.blog_stats SET likes = GREATEST(0, likes + p_delta) WHERE blog_slug = p_slug;
     ELSIF p_field = 'claps' THEN
-        UPDATE public.blog_stats SET claps = claps + 1 WHERE blog_slug = p_slug;
+        UPDATE public.blog_stats SET claps = GREATEST(0, claps + p_delta) WHERE blog_slug = p_slug;
     END IF;
 END;
 $$;

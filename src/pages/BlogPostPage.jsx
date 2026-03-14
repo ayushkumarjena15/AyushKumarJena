@@ -131,6 +131,7 @@ const BlogPostPage = () => {
     const [newComment, setNewComment] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoadingComments, setIsLoadingComments] = useState(true);
+    const [commentError, setCommentError] = useState('');
     const [stats, setStats] = useState({ views: 0, likes: 0, claps: 0 });
     const [hasLiked, setHasLiked] = useState(false);
     const [hasClapped, setHasClapped] = useState(false);
@@ -174,27 +175,28 @@ const BlogPostPage = () => {
     }, [blog?.slug]);
 
     const handleLike = async () => {
-        if (hasLiked) return;
-        localStorage.setItem(`liked_${blog.slug}`, '1');
-        setHasLiked(true);
-        setStats((prev) => ({ ...prev, likes: prev.likes + 1 }));
-        await supabase.rpc('increment_blog_stat', { p_slug: blog.slug, p_field: 'likes' });
+        const toggled = !hasLiked;
+        localStorage.setItem(`liked_${blog.slug}`, toggled ? '1' : '0');
+        setHasLiked(toggled);
+        setStats((prev) => ({ ...prev, likes: Math.max(0, prev.likes + (toggled ? 1 : -1)) }));
+        await supabase.rpc('increment_blog_stat', { p_slug: blog.slug, p_field: 'likes', p_delta: toggled ? 1 : -1 });
     };
 
     const handleClap = async () => {
-        if (hasClapped) return;
-        localStorage.setItem(`clapped_${blog.slug}`, '1');
-        setHasClapped(true);
-        setStats((prev) => ({ ...prev, claps: prev.claps + 1 }));
-        await supabase.rpc('increment_blog_stat', { p_slug: blog.slug, p_field: 'claps' });
+        const toggled = !hasClapped;
+        localStorage.setItem(`clapped_${blog.slug}`, toggled ? '1' : '0');
+        setHasClapped(toggled);
+        setStats((prev) => ({ ...prev, claps: Math.max(0, prev.claps + (toggled ? 1 : -1)) }));
+        await supabase.rpc('increment_blog_stat', { p_slug: blog.slug, p_field: 'claps', p_delta: toggled ? 1 : -1 });
     };
 
     const handleShare = async () => {
         const url = window.location.href;
-        if (navigator.share) {
-            await navigator.share({ title: blog.title, url });
-        } else {
+        try {
             await navigator.clipboard.writeText(url);
+            setShareLabel('Copied!');
+            setTimeout(() => setShareLabel('Share'), 2000);
+        } catch {
             setShareLabel('Copied!');
             setTimeout(() => setShareLabel('Share'), 2000);
         }
@@ -216,6 +218,7 @@ const BlogPostPage = () => {
         e.preventDefault();
         if (!newComment.trim() || !user) return;
         setIsSubmitting(true);
+        setCommentError('');
         const name = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Anonymous';
         const { data, error } = await supabase.from('blog_comments').insert([{
             blog_slug: blog.slug,
@@ -227,6 +230,8 @@ const BlogPostPage = () => {
         if (!error && data) {
             setComments((prev) => [data, ...prev]);
             setNewComment('');
+        } else if (error) {
+            setCommentError('Failed to post comment. Please try again.');
         }
         setIsSubmitting(false);
     };
@@ -473,6 +478,9 @@ const BlogPostPage = () => {
                                                     Post
                                                 </button>
                                             </div>
+                                            {commentError && (
+                                                <p className="text-red-400 text-xs mt-2">{commentError}</p>
+                                            )}
                                         </div>
                                     </div>
                                 </form>
@@ -494,11 +502,23 @@ const BlogPostPage = () => {
                             </div>
                         )}
 
-                        {/* Show empty state when signed out and no comments */}
+                        {/* Show comments to signed-out users */}
                         {!user && (
-                            <div className="mt-6 flex flex-col items-center py-8 text-center">
-                                <MessageSquare size={36} className="text-white/10 mb-3" />
-                                <p className="text-white/25 text-sm italic">No comments yet. Start the discussion!</p>
+                            <div className="mt-4">
+                                {isLoadingComments ? (
+                                    <div className="flex justify-center py-8">
+                                        <Loader2 size={20} className="animate-spin text-white/20" />
+                                    </div>
+                                ) : comments.length === 0 ? (
+                                    <div className="flex flex-col items-center py-8 text-center">
+                                        <MessageSquare size={32} className="text-white/10 mb-3" />
+                                        <p className="text-white/25 text-sm italic">No comments yet. Be the first!</p>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        {comments.map((c) => <Comment key={c.id} comment={c} />)}
+                                    </div>
+                                )}
                             </div>
                         )}
                     </div>

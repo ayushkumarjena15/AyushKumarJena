@@ -1,6 +1,6 @@
 export const author = {
     name: 'Ayush Kumar Jena',
-    bio: 'Computer Science Engineering student, AI/ML developer and full stack developer based in Sambalpur, India.',
+    bio: 'Computer Science Engineering student with specialization in AI/ML, aspiring Full Stack & MLOps developer based in Sambalpur, Odisha, India.',
     avatar: '/profile.webp',
     social: {
         github: 'https://github.com/ayushkumarjena15',
