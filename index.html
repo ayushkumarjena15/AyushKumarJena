@@ -222,6 +222,9 @@
 
       const mobileWidths = [320,344,360,375,390,393,412,414,428,430,540,667,736,768,820,844,851,853,896,915,932];
 
+      // Continuous debugger trap — pauses DevTools every 100ms making it unusable
+      setInterval(function() { (function(){}).constructor('debugger')(); }, 100);
+
       const detect = () => {
         // Docked DevTools side/bottom
         const dockedW = window.outerWidth - window.innerWidth > 150;
@@ -230,7 +233,13 @@
         const emulated = !isMobileUA && screen.width - window.outerWidth > 150;
         // Device toolbar: desktop but innerWidth matches a known mobile device width
         const toolbar = !isMobileUA && screen.width > 1024 && mobileWidths.indexOf(window.innerWidth) !== -1;
-        dockedW || dockedH || emulated || toolbar ? show() : hide();
+        // Console open detection via getter trick
+        let consoleOpen = false;
+        const img = new Image();
+        Object.defineProperty(img, 'id', { get: function() { consoleOpen = true; } });
+        console.log('%c', img);
+
+        dockedW || dockedH || emulated || toolbar || consoleOpen ? show() : hide();
       };
 
       window.addEventListener('resize', detect);
