@@ -214,8 +214,16 @@
     // DevTools detection + all inspection blocked
     window.addEventListener('DOMContentLoaded', function() {
       var devtoolsScreen = document.getElementById('devtools-screen');
+      var isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       function isDevToolsOpen() {
-        return window.outerWidth - window.innerWidth > 200 || window.outerHeight - window.innerHeight > 200;
+        // Docked DevTools (side or bottom)
+        if (window.outerWidth - window.innerWidth > 150) return true;
+        if (window.outerHeight - window.innerHeight > 150) return true;
+        // Responsive/device toolbar mode: desktop screen but tiny viewport
+        if (!isMobileDevice && screen.width > 900 && window.innerWidth < 600) return true;
+        // DevTools open and window resized small to hide size diff
+        if (!isMobileDevice && screen.height > 700 && window.innerHeight < 500) return true;
+        return false;
       }
       function check() {
         devtoolsScreen.style.display = isDevToolsOpen() ? 'flex' : 'none';
