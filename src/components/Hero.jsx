@@ -97,7 +97,7 @@ const Hero = () => {
                         Full Stack Dev
                     </p>
                     <p className="text-[10px] tracking-[0.2em] uppercase text-secondary text-center">
-                        & MLOps Engineer
+                        & MLOps
                     </p>
                 </div>
             </motion.div>
