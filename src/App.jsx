@@ -32,13 +32,28 @@ function App() {
 
   // After OAuth login, redirect back to the page the user logged in from
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') {
-        const returnPath = localStorage.getItem('auth_return_path');
-        if (returnPath) {
+    const returnPath = localStorage.getItem('auth_return_path');
+
+    // Check immediately on mount (handles race where SIGNED_IN fired before listener registered)
+    if (returnPath) {
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        if (session) {
           localStorage.removeItem('auth_return_path');
           if (returnPath !== window.location.pathname + window.location.search) {
             navigate(returnPath, { replace: true });
+          }
+        }
+      });
+    }
+
+    // Also catch future SIGNED_IN events
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        const path = localStorage.getItem('auth_return_path');
+        if (path) {
+          localStorage.removeItem('auth_return_path');
+          if (path !== window.location.pathname + window.location.search) {
+            navigate(path, { replace: true });
           }
         }
       }
