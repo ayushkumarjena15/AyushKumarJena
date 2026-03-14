@@ -285,13 +285,13 @@ const AboutPage = () => {
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
-                                src: "/gallery/photo4.jpeg",
+                                src: "/gallery/photo4.jpg",
                                 alt: "Ayush in the mountains",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
                             },
                             {
-                                src: "/gallery/photo5.jpeg",
+                                src: "/gallery/photo1.jpg",
                                 alt: "Ayush hiking",
                                 size: "w-[70vw] h-[400px] md:w-80 md:h-[480px]",
                                 rounded: "rounded-[2rem] md:rounded-[2.5rem]"
@@ -608,16 +608,20 @@ const AboutPage = () => {
                                     </div>
                                     {/* Streak stats */}
                                     <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5">
-                                        {[
-                                            { label: 'Current Streak', value: leetcode.currentStreak, suffix: 'd' },
-                                            { label: 'Max Streak', value: leetcode.maxStreak, suffix: 'd' },
-                                            { label: 'Active Days', value: leetcode.totalActiveDays, suffix: '' },
-                                        ].map(({ label, value, suffix }) => (
-                                            <div key={label} className="text-center">
-                                                <div className="text-lg font-black text-accent1">{value}{suffix}</div>
-                                                <div className="text-[9px] text-secondary uppercase tracking-wider">{label}</div>
-                                            </div>
-                                        ))}
+                                        <div className="text-center">
+                                            <div className="text-lg font-black text-accent1">{leetcode.currentStreak}d</div>
+                                            <div className="text-[9px] text-secondary uppercase tracking-wider">Current Streak</div>
+                                            <div className="text-[8px] text-secondary/60 mt-0.5">Mar 12 – {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-lg font-black text-accent1">{leetcode.maxStreak}d</div>
+                                            <div className="text-[9px] text-secondary uppercase tracking-wider">Max Streak</div>
+                                            <div className="text-[8px] text-secondary/60 mt-0.5">Jan 1 – Mar 10</div>
+                                        </div>
+                                        <div className="text-center">
+                                            <div className="text-lg font-black text-accent1">{leetcode.totalActiveDays}</div>
+                                            <div className="text-[9px] text-secondary uppercase tracking-wider">Active Days</div>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (

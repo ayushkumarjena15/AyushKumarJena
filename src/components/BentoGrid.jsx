@@ -170,13 +170,13 @@ const BentoGrid = () => {
     const [activeTag, setActiveTag] = useState(0);
 
     const galleryItems = [
-        { id: 1, type: 'image', content: '/gallery/photo1.jpeg', gradient: 'from-blue-600/20 to-indigo-600/10' },
+        { id: 1, type: 'image', content: '/gallery/photo1.jpg', gradient: 'from-blue-600/20 to-indigo-600/10', imageScale: 1.3 },
         { id: 2, type: 'image', content: '/gallery/photo2.jpeg', gradient: 'from-purple-600/20 to-purple-800/10' },
         { id: 3, type: 'image', content: '/gallery/photo3.jpg', gradient: 'from-red-700/20 to-red-800/10' },
-        { id: 4, type: 'image', content: '/gallery/photo4.jpeg', gradient: 'from-green-600/20 to-emerald-600/10' },
-        { id: 5, type: 'image', content: '/gallery/photo5.jpeg', gradient: 'from-yellow-600/20 to-amber-600/10' },
+        { id: 4, type: 'image', content: '/gallery/photo4.jpg', gradient: 'from-green-600/20 to-emerald-600/10' },
+        { id: 5, type: 'image', content: '/gallery/photo5.jpg', gradient: 'from-yellow-600/20 to-amber-600/10', objectPosition: 'right center' },
         { id: 6, type: 'image', content: '/gallery/photo6.png', gradient: 'from-pink-600/20 to-rose-600/10' },
-        { id: 7, type: 'image', content: '/gallery/photo7.jpeg', gradient: 'from-cyan-600/20 to-sky-600/10' },
+        { id: 7, type: 'image', content: '/gallery/photo7.jpg', gradient: 'from-cyan-600/20 to-sky-600/10' },
         { id: 8, type: 'image', content: '/gallery/photo8.jpeg', gradient: 'from-orange-600/20 to-amber-600/20' },
     ];
 
@@ -667,6 +667,7 @@ const GalleryItem = ({ item, containerX, index }) => {
                     src={item.content}
                     alt="Gallery item"
                     className="w-full h-full object-cover z-10 transition-all duration-700 group-hover:scale-105"
+                    style={{ objectPosition: item.objectPosition || 'center', transform: item.imageScale ? `scale(${item.imageScale})` : undefined }}
                 />
             ) : (
                 <span className="text-4xl z-10 transition-all transform group-hover:scale-110 duration-700">
