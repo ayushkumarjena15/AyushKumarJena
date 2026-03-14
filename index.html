@@ -220,17 +220,21 @@
       const show = () => { devtoolsScreen.style.display = 'flex'; document.body.style.overflow = 'hidden'; };
       const hide = () => { devtoolsScreen.style.display = 'none'; document.body.style.overflow = 'auto'; };
 
+      const mobileWidths = [320,344,360,375,390,393,412,414,428,430,540,667,736,768,820,844,851,853,896,915,932];
+
       const detect = () => {
-        // Docked DevTools (normal mode) — outer vs inner diff
-        const dockedW = window.outerWidth - window.innerWidth > 200;
-        const dockedH = window.outerHeight - window.innerHeight > 200;
-        // Device emulation mode — screen vs outer diff (Chrome sets outerWidth = device width)
-        const emulated = !isMobileUA && screen.width - window.outerWidth > 200;
-        dockedW || dockedH || emulated ? show() : hide();
+        // Docked DevTools side/bottom
+        const dockedW = window.outerWidth - window.innerWidth > 150;
+        const dockedH = window.outerHeight - window.innerHeight > 150;
+        // Device toolbar: screen much wider than outer window
+        const emulated = !isMobileUA && screen.width - window.outerWidth > 150;
+        // Device toolbar: desktop but innerWidth matches a known mobile device width
+        const toolbar = !isMobileUA && screen.width > 1024 && mobileWidths.indexOf(window.innerWidth) !== -1;
+        dockedW || dockedH || emulated || toolbar ? show() : hide();
       };
 
       window.addEventListener('resize', detect);
-      setInterval(detect, 500);
+      setInterval(detect, 200);
       detect();
     });
 
