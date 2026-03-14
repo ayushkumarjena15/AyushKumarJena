@@ -239,14 +239,7 @@
         const widthThreshold = window.outerWidth - window.innerWidth > threshold;
         const heightThreshold = window.outerHeight - window.innerHeight > threshold;
 
-        // Debugger timing trick
-        let devOpen = false;
-        const start = performance.now();
-        (function(){}).constructor('debugger')();
-        const elapsed = performance.now() - start;
-        if (elapsed > 100) devOpen = true;
-
-        if (widthThreshold || heightThreshold || devOpen) {
+        if (widthThreshold || heightThreshold) {
           show();
         } else {
           hide();
