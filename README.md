@@ -3,6 +3,9 @@
   
   <h1 align="center">Hi, I'm Ayush Kumar Jena 👋</h1>
   <p align="center">
+    <a href="https://ayushkumarjena.in"><strong>🌐 Live Portfolio: ayushkumarjena.in</strong></a>
+  </p>
+  <p align="center">
     <strong>A breathtakingly beautiful, high-performance portfolio crafted with React & Vite.</strong>
   </p>
 
