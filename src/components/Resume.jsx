@@ -65,7 +65,7 @@ const Resume = () => {
                     </div>
 
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 bg-background/80 backdrop-blur-md">
-                        <a href="/resume.pdf" target="_blank" rel="noreferrer" className="flex items-center gap-4 px-8 py-4 bg-accent1 text-background font-black rounded-2xl transition-all duration-500 hover:scale-105 shadow-2xl uppercase tracking-widest text-xs">
+                        <a href="/Ayush Resume.pdf" target="_blank" rel="noreferrer" className="flex items-center gap-4 px-8 py-4 bg-accent1 text-background font-black rounded-2xl transition-all duration-500 hover:scale-105 shadow-2xl uppercase tracking-widest text-xs">
                             <Eye size={20} />
                             View Full Dossier
                         </a>
@@ -90,7 +90,7 @@ const Resume = () => {
                 </div>
 
                 <div className="pt-6 flex flex-wrap gap-6 justify-center lg:justify-start">
-                    <a href="/resume.pdf" download className="px-10 py-5 bg-accent1 text-background font-black rounded-2xl hover:bg-gold-light hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 group shadow-2xl shadow-accent1/20 uppercase tracking-widest text-xs">
+                    <a href="/Ayush Resume.pdf" download className="px-10 py-5 bg-accent1 text-background font-black rounded-2xl hover:bg-gold-light hover:-translate-y-1 transition-all duration-500 flex items-center gap-4 group shadow-2xl shadow-accent1/20 uppercase tracking-widest text-xs">
                         <Download size={20} className="group-hover:translate-y-1 transition-transform" />
                         Download Archive
                     </a>
