@@ -32,6 +32,7 @@ Welcome to my digital presence! This repository houses the source code for my pe
 
 <br />
 
+<a id="features"></a>
 ## ✨ Features
 
 - 🌌 **Immersive Interactions:** Advanced animations using `framer-motion` for a smooth, premium feel.
@@ -47,6 +48,7 @@ Welcome to my digital presence! This repository houses the source code for my pe
 
 ---
 
+<a id="tech-stack"></a>
 ## 🛠 Tech Stack
 
 | Domain | Technology |
@@ -61,6 +63,7 @@ Welcome to my digital presence! This repository houses the source code for my pe
 
 ---
 
+<a id="uiux-highlights"></a>
 ## 🎨 UI/UX Highlights
 
 This project was built with **Aesthetics & Performance** at its core. 
@@ -72,6 +75,7 @@ This project was built with **Aesthetics & Performance** at its core.
 
 ---
 
+<a id="getting-started"></a>
 ## 🚀 Getting Started
 
 Want to run this project locally to explore the architecture or spin up something similar? Follow these steps:
@@ -111,6 +115,7 @@ Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
 
 ---
 
+<a id="directory-structure-overview"></a>
 ## 📁 Directory Structure Overview
 
 ```text
@@ -127,6 +132,7 @@ Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
 
 ---
 
+<a id="connect-with-me"></a>
 ## 🤝 Connect With Me
 
 I am always **happy to collaborate and connect with you!** Whether you have a project idea, want to talk tech, or just say hi, my inbox is open.
