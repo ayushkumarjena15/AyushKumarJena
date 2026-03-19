@@ -4,11 +4,11 @@ import CTASection from '../components/CTASection';
 
 const links = [
     { id: '01', name: 'GITHUB', url: 'https://github.com/ayushkumarjena15' },
-    { id: '02', name: 'X', url: 'https://x.com/Aksj_15' },
-    { id: '03', name: 'LINKEDIN', url: 'https://linkedin.com/in/ayush-kumar-jena' },
+    { id: '02', name: 'X', url: 'https://x.com/AyushJena1504' },
+    { id: '03', name: 'LINKEDIN', url: 'https://www.linkedin.com/in/ayush-kumar-jena-b19151321/' },
     { id: '04', name: 'EMAIL', url: 'mailto:ahalyajena28@gmail.com' },
-    { id: '05', name: 'INSTAGRAM', url: 'https://instagram.com/ayushkumarjena15' },
-    { id: '06', name: 'LEETCODE', url: 'https://leetcode.com/u/ayushkumarjena15' },
+    { id: '05', name: 'INSTAGRAM', url: 'https://www.instagram.com/ig_ayush099/' },
+    { id: '06', name: 'LEETCODE', url: 'https://leetcode.com/u/R57Cb5EtNk/' },
     { id: '07', name: 'LAST.FM', url: 'https://www.last.fm/user/ayush099' },
 ];
 
