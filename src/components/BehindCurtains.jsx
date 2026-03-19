@@ -60,7 +60,7 @@ const BehindCurtains = () => {
         };
 
         fetchMusic();
-        const musicInterval = setInterval(fetchMusic, 30000);
+        const musicInterval = setInterval(fetchMusic, 10000);
         return () => clearInterval(musicInterval);
     }, []);
 
