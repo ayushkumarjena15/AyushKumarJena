@@ -8,18 +8,41 @@ const OWNER_EMAIL              = 'ahalyajena28@gmail.com';
 const OWNER_NAME               = 'Ayush Kumar Jena';
 const SITE_URL                 = 'https://ayushkumarjena.in';
 
-function htmlPage(title: string, headline: string, sub: string, color: string, emoji: string) {
-  return new Response(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:-apple-system,sans-serif;background:#080808;color:#e5e5e5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.card{background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:52px 40px;max-width:480px;width:100%;text-align:center;}
-.emoji{font-size:52px;margin-bottom:22px;display:block;}
-.badge{display:inline-block;background:${color}18;border:1px solid ${color}35;color:${color};font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:20px;}
-h1{font-size:26px;font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:-0.5px;}
-p{font-size:14px;color:rgba(255,255,255,0.35);line-height:1.7;margin-bottom:24px;}
-a{display:inline-block;color:rgba(255,255,255,0.25);text-decoration:none;font-size:12px;border:1px solid rgba(255,255,255,0.08);padding:10px 20px;border-radius:10px;}</style></head>
-<body><div class="card"><span class="emoji">${emoji}</span><div class="badge">${title}</div><h1>${headline}</h1><p>${sub}</p>
-<a href="${SITE_URL}">← Back to portfolio</a></div></body></html>`,
-    { headers: { 'Content-Type': 'text/html' } });
+// Returns a simple HTML confirmation page for email button clicks
+function htmlPage(badge: string, heading: string, description: string, color: string, emoji: string) {
+  return new Response(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${badge}</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #030303; color: #e5e5e5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .container { position: relative; max-width: 480px; width: 100%; }
+    .glow { position: absolute; inset: 0; background: radial-gradient(circle at center, ${color}33 0%, transparent 70%); filter: blur(40px); opacity: 0.6; z-index: 0; }
+    .card { position: relative; z-index: 1; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 56px 40px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; }
+    .icon-wrapper { width: 80px; height: 80px; border-radius: 50%; background: ${color}15; border: 1px solid ${color}30; display: inline-flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 32px; box-shadow: 0 0 30px ${color}20; }
+    .badge { display: inline-block; background: ${color}15; border: 1px solid ${color}30; color: ${color}; font-size: 10px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 24px; }
+    h1 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 16px; letter-spacing: -0.5px; line-height: 1.2; }
+    p { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 8px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 13px; font-weight: 700; transition: all 0.2s; margin-top: 32px; letter-spacing: 0.5px; }
+    .btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="glow"></div>
+    <div class="card">
+      <div class="icon-wrapper">${emoji}</div>
+      <div class="badge">${badge}</div>
+      <h1>${heading}</h1>
+      <p>${description}</p>
+      <a href="${SITE_URL}" class="btn">Return to Website</a>
+    </div>
+  </div>
+</body>
+</html>`, { headers: { 'Content-Type': 'text/html' } });
 }
 
 serve(async (req) => {

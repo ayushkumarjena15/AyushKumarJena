@@ -25,19 +25,40 @@ const corsHeaders = {
 };
 
 // Returns a simple HTML confirmation page for email button clicks
-function htmlPage(title: string, message: string, color: string, emoji: string) {
-  return new Response(`<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>
-<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:-apple-system,sans-serif;background:#0c0a09;color:#e5e5e5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-.card{background:#141414;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:48px 40px;max-width:480px;width:100%;text-align:center;}
-.emoji{font-size:56px;margin-bottom:24px;}
-.badge{display:inline-block;background:${color}22;border:1px solid ${color}44;color:${color};font-size:10px;font-weight:800;letter-spacing:0.3em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px;}
-h1{font-size:26px;font-weight:900;color:#fff;margin-bottom:12px;letter-spacing:-0.5px;}
-p{font-size:14px;color:rgba(255,255,255,0.4);line-height:1.7;}
-a{color:#60a5fa;text-decoration:none;margin-top:24px;display:inline-block;font-size:13px;}</style></head>
-<body><div class="card"><div class="emoji">${emoji}</div><div class="badge">${title}</div><h1>${message}</h1>
-<p>The booking status has been updated and the guest has been notified by email.</p>
-<a href="${SITE_URL}/book?panel=true">← View all bookings</a></div></body></html>`,
-    { headers: { 'Content-Type': 'text/html' } });
+function htmlPage(badge: string, heading: string, description: string, color: string, emoji: string) {
+  return new Response(`<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>${badge}</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #030303; color: #e5e5e5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+    .container { position: relative; max-width: 480px; width: 100%; }
+    .glow { position: absolute; inset: 0; background: radial-gradient(circle at center, ${color}33 0%, transparent 70%); filter: blur(40px); opacity: 0.6; z-index: 0; }
+    .card { position: relative; z-index: 1; background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 56px 40px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05); overflow: hidden; }
+    .icon-wrapper { width: 80px; height: 80px; border-radius: 50%; background: ${color}15; border: 1px solid ${color}30; display: inline-flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 32px; box-shadow: 0 0 30px ${color}20; }
+    .badge { display: inline-block; background: ${color}15; border: 1px solid ${color}30; color: ${color}; font-size: 10px; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; margin-bottom: 24px; }
+    h1 { font-size: 28px; font-weight: 900; color: #fff; margin-bottom: 16px; letter-spacing: -0.5px; line-height: 1.2; }
+    p { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 8px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 13px; font-weight: 700; transition: all 0.2s; margin-top: 32px; letter-spacing: 0.5px; }
+    .btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="glow"></div>
+    <div class="card">
+      <div class="icon-wrapper">${emoji}</div>
+      <div class="badge">${badge}</div>
+      <h1>${heading}</h1>
+      <p>${description}</p>
+      <a href="${SITE_URL}/book?panel=true" class="btn">← View all bookings</a>
+    </div>
+  </div>
+</body>
+</html>`, { headers: { 'Content-Type': 'text/html' } });
 }
 
 serve(async (req) => {
@@ -53,10 +74,10 @@ serve(async (req) => {
     const secret    = url.searchParams.get('secret');
 
     if (!secret || secret !== ADMIN_SECRET) {
-      return htmlPage('Unauthorized', 'Invalid or expired link.', '#ef4444', '🔒');
+      return htmlPage('Unauthorized', 'Action Denied', 'Invalid or expired secure link.', '#ef4444', '🔒');
     }
     if (!bookingId || !action || !['accepted', 'rejected', 'rescheduled'].includes(action)) {
-      return htmlPage('Error', 'Invalid request.', '#ef4444', '⚠️');
+      return htmlPage('Error', 'Invalid Request', 'The request could not be processed.', '#ef4444', '⚠️');
     }
 
     // Check if booking was already actioned
@@ -72,7 +93,8 @@ serve(async (req) => {
         const statusEmojis: Record<string, string> = { accepted: '✅', rejected: '❌', rescheduled: '📅' };
         return htmlPage(
           'Already Responded',
-          `Booking already ${statusLabels[status] ?? status}.`,
+          'Response Already Recorded',
+          `Booking already ${statusLabels[status] ?? status}. No further action needed.`,
           statusColors[status] ?? '#888',
           statusEmojis[status] ?? 'ℹ️'
         );
@@ -88,16 +110,16 @@ serve(async (req) => {
 
     const result = await handleAction(syntheticReq);
     if (!result.ok) {
-      return htmlPage('Error', 'Something went wrong. Try the admin panel.', '#ef4444', '⚠️');
+      return htmlPage('Error', 'Action Failed', 'Something went wrong processing your response. Try the admin panel.', '#ef4444', '⚠️');
     }
 
-    const labels: Record<string, [string, string, string, string]> = {
-      accepted:    ['Confirmed', 'Booking accepted!', '#22c55e', '✅'],
-      rejected:    ['Declined',  'Booking rejected.',  '#ef4444', '❌'],
-      rescheduled: ['Rescheduled', 'Reschedule sent!', '#3b82f6', '📅'],
+    const labels: Record<string, [string, string, string, string, string]> = {
+      accepted:    ['Confirmed', 'Response Recorded!', 'Thank you! The booking has been successfully accepted and the guest has been notified via email.', '#22c55e', '✅'],
+      rejected:    ['Declined',  'Response Recorded.', 'Thank you! The booking was declined and the guest has been notified.', '#ef4444', '❌'],
+      rescheduled: ['Rescheduled', 'Response Recorded!', 'Thank you! The new time proposal has been sent to the guest.', '#3b82f6', '📅'],
     };
-    const [badge, msg, color, emoji] = labels[action];
-    return htmlPage(badge, msg, color, emoji);
+    const [badge, heading, desc, color, emoji] = labels[action];
+    return htmlPage(badge, heading, desc, color, emoji);
   }
 
   return handleAction(req);
