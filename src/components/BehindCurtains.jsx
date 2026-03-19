@@ -60,8 +60,8 @@ const BehindCurtains = () => {
         };
 
         fetchMusic();
-        const musicInterval = setInterval(fetchMusic, 10000);
-        return () => clearInterval(musicInterval);
+        const interval = setInterval(fetchMusic, 5000); // 5 seconds
+        return () => clearInterval(interval);
     }, []);
 
     const getTimeAgo = (dateString) => {

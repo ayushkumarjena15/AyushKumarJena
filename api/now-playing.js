@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     const USERNAME = process.env.VITE_LASTFM_USERNAME;
 
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cache-Control', 's-maxage=5, stale-while-revalidate=5');
+    res.setHeader('Cache-Control', 's-maxage=2, stale-while-revalidate=3');
 
     if (!API_KEY || !USERNAME) {
         return res.status(500).json({ error: 'Last.fm credentials not found' });
