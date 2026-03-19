@@ -230,7 +230,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(34,197,94,.22) 0%,transparent 65%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.5),transparent);"></div>
     <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
-      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(34,197,94,.35);display:block;margin:0 auto;background:#0a1a0e;" onerror="this.style.background='#0a1a0e'" />
+      <img src="https://github.com/ayushkumarjena15.png" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(34,197,94,.35);display:block;margin:0 auto;background:#0a1a0e;" onerror="this.style.background='#0a1a0e'" />
       <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#22c55e;border-radius:50%;border:2.5px solid #071a0e;display:flex;align-items:center;justify-content:center;font-size:13px;color:#000;font-weight:900;">&#x2713;</div>
     </div>
     <div style="display:inline-block;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.22);color:#4ade80;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
@@ -287,7 +287,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(239,68,68,.18) 0%,transparent 65%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(239,68,68,.45),transparent);"></div>
     <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
-      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(239,68,68,.2);display:block;margin:0 auto;background:#1a0808;" onerror="this.style.background='#1a0808'" />
+      <img src="https://github.com/ayushkumarjena15.png" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(239,68,68,.2);display:block;margin:0 auto;background:#1a0808;" onerror="this.style.background='#1a0808'" />
     </div>
     <div style="display:inline-block;background:rgba(239,68,68,.09);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Unable to Accommodate</div>
     <h1 style="font-size:34px;font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-1px;">Sorry about this.</h1>
@@ -343,7 +343,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(59,130,246,.2) 0%,transparent 65%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(59,130,246,.5),transparent);"></div>
     <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
-      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(59,130,246,.25);display:block;margin:0 auto;background:#080f1a;" onerror="this.style.background='#080f1a'" />
+      <img src="https://github.com/ayushkumarjena15.png" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(59,130,246,.25);display:block;margin:0 auto;background:#080f1a;" onerror="this.style.background='#080f1a'" />
       <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#3b82f6;border-radius:50%;border:2.5px solid #07101e;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:900;">&#x21BB;</div>
     </div>
     <div style="display:inline-block;background:rgba(59,130,246,.09);border:1px solid rgba(59,130,246,.2);color:#60a5fa;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">Reschedule Proposed</div>
