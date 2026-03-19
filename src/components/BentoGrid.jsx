@@ -623,6 +623,13 @@ const AnalogClock = ({ timezone }) => {
                             </div>
                         ))}
 
+                        {/* Date Window */}
+                        <div className="absolute right-[22%] top-1/2 -translate-y-1/2 bg-[#121212] border border-white/10 rounded-[3px] px-1.5 py-0.5 z-10 flex items-center justify-center shadow-[inset_0_1px_3px_rgba(0,0,0,0.8)]">
+                            <span className="text-[10px] font-mono text-white/90 font-bold tracking-widest leading-none pt-[1px]">
+                                {tzTime.getDate().toString().padStart(2, '0')}
+                            </span>
+                        </div>
+
                         {/* 24-hour numerals */}
                         {hourLabels.map((label, i) => {
                             const angleDeg = i * 30 - 90; // 0 = top, clockwise
