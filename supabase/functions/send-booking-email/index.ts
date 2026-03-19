@@ -75,7 +75,10 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   <div style="background:#0b0b18;padding:56px 44px 48px;text-align:center;position:relative;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.05);">
     <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(99,102,241,.22) 0%,transparent 65%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,102,241,.5),transparent);"></div>
-    <div style="width:56px;height:56px;border-radius:50%;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);display:inline-flex;align-items:center;justify-content:center;margin:0 auto 22px;font-size:22px;">&#x1F4C5;</div>
+    <div style="width:58px;height:58px;border-radius:12px;background:#1e1e2d;border:1px solid rgba(99,102,241,.3);display:inline-flex;flex-direction:column;align-items:center;margin:0 auto 22px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,0.5);">
+      <div style="background:#4f46e5;color:#fff;font-size:10px;font-weight:bold;text-transform:uppercase;width:100%;text-align:center;padding:4px 0;">${date.split(' ')[0].substring(0,3)}</div>
+      <div style="color:#fff;font-size:22px;font-weight:900;flex-grow:1;display:flex;align-items:center;justify-content:center;padding-bottom:2px;">${date.split(' ').length > 1 ? parseInt(date.split(' ')[1]) : '🔔'}</div>
+    </div>
     <div style="display:inline-block;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.22);color:#a5b4fc;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">
       <span style="display:inline-block;width:5px;height:5px;background:#6366f1;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:0 0 8px #6366f1;"></span>New Booking
     </div>
@@ -131,7 +134,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
     <div style="position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:360px;background:radial-gradient(ellipse,rgba(16,185,129,.2) 0%,transparent 65%);pointer-events:none;"></div>
     <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(16,185,129,.5),transparent);"></div>
     <div style="position:relative;display:block;width:80px;margin:0 auto 24px;">
-      <img src="${SITE_URL}/profile.jpg" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(16,185,129,.3);display:block;margin:0 auto;background:#0a1a12;" onerror="this.style.background='#0a1a12'" />
+      <img src="https://github.com/ayushkumarjena15.png" alt="${OWNER_NAME}" style="width:80px;height:80px;border-radius:50%;border:2.5px solid rgba(16,185,129,.3);display:block;margin:0 auto;background:#0a1a12;" onerror="this.style.background='#0a1a12'" />
       <div style="position:absolute;bottom:-2px;right:-2px;width:26px;height:26px;background:#10b981;border-radius:50%;border:2.5px solid #080f0b;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:900;">&#x2713;</div>
     </div>
     <div style="display:inline-block;background:rgba(16,185,129,.09);border:1px solid rgba(16,185,129,.2);color:#34d399;font-size:9px;font-weight:900;letter-spacing:.45em;text-transform:uppercase;padding:7px 18px;border-radius:100px;margin-bottom:20px;">&#x2713;&nbsp; Booking Received</div>
@@ -171,7 +174,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
         from: `${OWNER_NAME} <contact@ayushkumarjena.in>`,
         to: [OWNER_EMAIL],
         reply_to: email,
-        subject: `📅 New Call Request from ${name} — ${date}`,
+        subject: `🔔 New Call Request from ${name} — ${date}`,
         html: ownerEmailHtml,
       }),
     });
